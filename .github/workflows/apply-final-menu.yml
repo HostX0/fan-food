@@ -1,0 +1,146 @@
+name: Publish final Iraqi menu refresh
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-final-menu.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: fanfood-final-release
+  cancel-in-progress: false
+jobs:
+  validate-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Apply reviewed source changes with exact preimage checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import os,json,base64,zlib,hashlib,urllib.request
+          from pathlib import Path
+          parts=['d62e03289efeaaa79a2a8556b338036bffcdf1ce','e24908813cfb87c1320ed47ab8c38f5da59989e8','bde8f516ce3f1050884686b457cc0eb4dbdba5b6','3be79d63a5c3a69a66f858985fb3da4359b242b2','68006bbdb5a5cdabd2479b3da0b5723ffd930240']
+          packed=b''
+          for sha in parts:
+            req=urllib.request.Request('https://api.github.com/repos/HostX0/fan-food/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+            with urllib.request.urlopen(req,timeout=45) as r: data=json.load(r)
+            chunk=base64.b64decode(data['content'])
+            assert hashlib.sha1(b'blob '+str(len(chunk)).encode()+b'\0'+chunk).hexdigest()==sha
+            packed+=chunk
+          raw=zlib.decompress(packed)
+          assert hashlib.sha256(raw).hexdigest()=='10d55747015764698e19b4981667bf0c8b38116139cbc05e4814d3cdedbf24c0'
+          changes=json.loads(raw);root=Path.cwd()
+          for change in changes:
+            rel=change['path'];p=root/rel
+            assert rel.startswith(('src/','public/','tests/','docs/')) and p.resolve().is_relative_to(root) and not p.is_symlink()
+            before=p.read_bytes() if p.exists() else None
+            if change['before']:
+              assert before is not None and hashlib.sha1(b'blob '+str(len(before)).encode()+b'\0'+before).hexdigest()==change['before'],'Concurrent edit: '+rel
+            else: assert before is None,'Path already exists: '+rel
+            lines=before.decode().splitlines(keepends=True) if before is not None else []
+            for start,end,replacement in reversed(change['edits']): lines[start:end]=[replacement]
+            after=''.join(lines).encode();assert hashlib.sha256(after).hexdigest()==change['after']
+            p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(after)
+          Path(os.environ['RUNNER_TEMP']+'/final-paths.json').write_text(json.dumps([c['path'] for c in changes]))
+          PY
+      - name: Install the visually reviewed immutable photo assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl -fsSL --retry 3 --max-time 120 -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/HostX0/fan-food/actions/artifacts/10521047078/zip' -o "$RUNNER_TEMP/photos.zip"
+          echo "36230f6bfda768005b4e8af856636cb97fc60675f4243f135fdf27891343ddc9  $RUNNER_TEMP/photos.zip" | sha256sum -c -
+          python3 - <<'PY'
+          import os,json,hashlib,zipfile
+          from pathlib import Path
+          root=Path.cwd()
+          with zipfile.ZipFile(Path(os.environ['RUNNER_TEMP'])/'photos.zip') as z:
+            manifest=json.loads(z.read('manifest.json'));assert len(manifest)==59
+            for image in manifest:
+              for asset in image['files']:
+                rel=asset['path'];dest=root/rel
+                assert rel.startswith('public/images/menu-v4/') and dest.resolve().is_relative_to(root) and not dest.exists()
+                data=z.read(rel);assert hashlib.sha256(data).hexdigest()==asset['sha256']
+                dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
+          Path('docs/menu-v4-photo-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+          PY
+      - name: Locked installation, unit tests, TypeScript and production build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          npm run typecheck
+          npm run build
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: fanfood-playwright-1.63.0-ubuntu-v1
+      - name: Prepare real browser engines
+        run: |
+          npm install --prefix "$RUNNER_TEMP/qa" --no-audit --no-fund playwright@1.63.0
+          "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium webkit firefox
+      - name: Test the new menu and every preserved ordering interaction before publishing
+        env:
+          BASE_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_REQUIRE_FROM: ${{ runner.temp }}/qa/package.json
+        run: |
+          PORT=3000 node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
+          REPORT_DIR=test-results/final-local node tests/final-menu-browser.mjs
+          REPORT_DIR=test-results/quick-local node tests/quick-controls.mjs
+          REPORT_DIR=test-results/browser-local node tests/browser-smoke.mjs
+          REPORT_DIR=test-results/checkout-local node tests/checkout-enhancements.mjs
+          REPORT_DIR=test-results/style-local node tests/production-style.mjs
+      - name: Publish only validated application files, preserving workflows and concurrent work
+        run: |
+          git fetch origin main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || { echo 'Main changed during validation; refusing to overwrite'; exit 1; }
+          python3 - <<'PY'
+          import json,subprocess,os
+          from pathlib import Path
+          paths=json.loads(Path(os.environ['RUNNER_TEMP']+'/final-paths.json').read_text())
+          paths+=['public/images/menu-v4','docs/menu-v4-photo-manifest.json']
+          assert all(not p.startswith('.github/') for p in paths)
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'HostX0'
+          git config user.email '42905848+HostX0@users.noreply.github.com'
+          git commit -m 'Refresh all 58 Iraqi dish photos, ingredient descriptions, Iraqi copy and responsive menu experience'
+          git push origin HEAD:main
+          git archive --format=zip --output="$RUNNER_TEMP/FanFood_Final_Source.zip" HEAD
+      - name: Verify the updated real Vercel production menu without sending an order
+        env:
+          BASE_URL: https://fan-food.vercel.app
+          PLAYWRIGHT_REQUIRE_FROM: ${{ runner.temp }}/qa/package.json
+        run: |
+          ready=0
+          for i in $(seq 1 90); do
+            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'iraqi-photo-menu-20260918-v4'; then ready=1; break; fi
+            sleep 5
+          done
+          test "$ready" = 1 || { echo 'Updated production release not ready'; exit 1; }
+          QUICK_SMOKE=1 REPORT_DIR=test-results/final-live node tests/final-menu-browser.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/quick-live node tests/quick-controls.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/checkout-live node tests/checkout-enhancements.mjs
+          REPORT_DIR=test-results/style-live node tests/production-style.mjs
+      - name: Save actual test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fanfood-final-menu-${{ github.run_id }}
+          path: |
+            test-results/
+            ${{ runner.temp }}/FanFood_Final_Source.zip
+            ${{ runner.temp }}/serve.log
+          retention-days: 14
+          if-no-files-found: warn
