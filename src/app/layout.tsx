@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+// Vercel supplies this hostname automatically; no manual environment setup is required.
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || 'fan-food.vercel.app';
 export const metadata: Metadata = {
+    metadataBase: new URL(`https://${productionHost}`),
     title: 'فن فود | من مطبخنا إلى لمّتكم',
     description: 'منيو فن فود: دولمة، رز وولائم، كبة، معجنات وحلويات. اختار أكلاتك وأحجامها، واجمع طلبك بسلة واحدة وارسله عبر واتساب.',
     applicationName: 'فن فود',
