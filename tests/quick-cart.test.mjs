@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {addLine} from '../src/lib/core.mjs';
+import {CURATED_PRODUCT_IDS,isSingleSelection,quickCount,changeQuickQuantity} from '../src/lib/quick-cart.mjs';
+const menu=JSON.parse(fs.readFileSync('src/data/menu.json','utf8'));
+const p=menu.products.find(p=>p.id==='p016');
+test('Featured section has six actual products without duplicating catalog entries',()=>{assert.equal(CURATED_PRODUCT_IDS.length,6);assert.equal(new Set(CURATED_PRODUCT_IDS).size,6);assert.ok(CURATED_PRODUCT_IDS.every(id=>menu.products.some(p=>p.id===id)));});
+test('Quick controls add, increment to five, decrement to four, then remove at zero',()=>{let cart=[];for(let i=0;i<5;i++)cart=changeQuickQuantity(cart,p,1);assert.equal(quickCount(cart,p),5);cart=changeQuickQuantity(cart,p,-1);assert.equal(quickCount(cart,p),4);for(let i=0;i<4;i++)cart=changeQuickQuantity(cart,p,-1);assert.deepEqual(cart,[]);});
+test('Quick decrement also works when all existing lines have notes',()=>{const cart=addLine([],p,p.variants[0].id,2,'','بدون فلفل');const next=changeQuickQuantity(cart,p,-1);assert.equal(quickCount(next,p),1);assert.equal(next[0].note,'بدون فلفل');assert.equal(cart[0].quantity,2);assert.deepEqual(changeQuickQuantity(next,p,-1),[]);});
+test('Quick controls preserve sibling customizations and cap total quantity at 99',()=>{let cart=addLine([],p,p.variants[0].id,1,'','ملاحظة');cart=changeQuickQuantity(cart,p,1);assert.equal(cart.length,2);cart=changeQuickQuantity(cart,p,-1);assert.equal(cart.length,1);assert.equal(cart[0].note,'ملاحظة');for(let i=0;i<120;i++)cart=changeQuickQuantity(cart,p,1);assert.equal(quickCount(cart,p),99);});
+test('Multiple sizes and pasta choices always require the selector',()=>{for(const id of ['p002','p047']){const product=menu.products.find(p=>p.id===id);assert.equal(isSingleSelection(product),false);assert.deepEqual(changeQuickQuantity([],product,1),[]);}});
+test('Half chicken uses new illustrative image, not the old lamb image',()=>{const p=menu.products.find(p=>p.id==='p008');assert.equal(p.image,'/images/products/p008-half-chicken.webp');assert.equal(p.imageRepresentative,true);});

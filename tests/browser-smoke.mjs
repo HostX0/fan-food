@@ -32,7 +32,8 @@ try {
   page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)failedAssets.push(`${r.status()} ${r.url()}`);});
   const response=await page.goto(base,{waitUntil:'domcontentloaded',timeout:45000});
   assert.equal(response.status(),200);
-  await hydrate(page);await count(page,menu.products.length);
+  await hydrate(page);await count(page,6);
+  await page.locator('.category-nav').getByRole('button',{name:'كل المنيو',exact:true}).click();await count(page,menu.products.length);
   assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
   assert.equal(await page.locator('html').getAttribute('lang'),'ar');
   await fits(page,'initial');
@@ -74,6 +75,7 @@ try {
   await product.waitFor({state:'detached'});
   await page.waitForFunction(()=>document.querySelector('.header-cart b')?.textContent==='2');
   await page.reload({waitUntil:'domcontentloaded'});await hydrate(page);
+  await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('.header-cart b')?.textContent==='2');
   const pasta=menu.products.find(p=>p.choices.length);
   await page.locator(`[data-product-id="${pasta.id}"] .add-button`).click();

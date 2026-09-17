@@ -19,5 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
       <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;650;700;750;800;850;900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet"/>
       <link rel="stylesheet" href="/menu-enhancements-v2.css"/>
+      <link rel="stylesheet" href="/menu-ux-v3.css"/>
     </head><body>{children}</body></html>;
 }

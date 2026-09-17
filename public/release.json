@@ -1,1 +1,9 @@
-{"release":"fanfood-baghdad-v2","products":58,"options":73,"deliveryCity":"Baghdad","generatedImagesDisclosed":true,"styleRevision":"checkout-20260917-1"}
+{
+  "release": "fanfood-baghdad-v2",
+  "products": 58,
+  "options": 73,
+  "deliveryCity": "Baghdad",
+  "generatedImagesDisclosed": true,
+  "styleRevision": "checkout-20260917-1",
+  "ux": "quick-controls-20260917-1"
+}

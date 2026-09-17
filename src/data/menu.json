@@ -265,9 +265,9 @@
       "id": "p008",
       "categoryId": "rice",
       "name": "نصف دجاجة مع الرز",
-      "image": "/images/products/p008.webp",
-      "imageRepresentative": false,
-      "description": "طبق للّمة، بطعم البيت.",
+      "image": "/images/products/p008-half-chicken.webp",
+      "imageRepresentative": true,
+      "description": "نصف دجاجة مع الرز.",
       "variants": [
         {
           "id": "v018",
