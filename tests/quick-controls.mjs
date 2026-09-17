@@ -57,8 +57,8 @@ try {
   await page.getByRole('searchbox').fill('نصف دجاجة');
   await page.waitForFunction(()=>document.querySelectorAll('.product-card').length===1);
   const half=page.locator('[data-product-id="p008"] .photo-button img');
-  assert.equal(await half.getAttribute('src'),'/images/products/p008-half-chicken.webp');
-  const response=await page.request.get(base+'/images/products/p008-half-chicken.webp');
+  assert.equal(await half.getAttribute('src'),'/images/menu-v4/p008.webp');
+  const response=await page.request.get(base+'/images/menu-v4/p008.webp');
   assert.equal(response.status(),200);assert.ok((await response.body()).length>10000);
   assert.deepEqual(errors,[]);
   results.push({engine,width,height,status:'passed',checks:['six-featured-products','single-variant-in-place','five-to-four','one-to-zero','note-preservation','multi-variant-sheet','cart-decrement','touch-targets','global-search','correct-image-path'],realOrdersSent:0});

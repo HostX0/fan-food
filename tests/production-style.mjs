@@ -27,7 +27,7 @@ try{
   const box=await page.locator('.location-map').boundingBox();assert.ok(box.height>=240&&box.width>=200,JSON.stringify(box));
   await page.locator('.location-map').scrollIntoViewIfNeeded();await page.screenshot({path:`${dir}/${width}-map.png`});
   await page.locator('.location-map').click({position:{x:140,y:110}});await page.locator('[data-testid="confirm-location"]').click();
-  await dialog.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();assert.ok((await page.locator('#order-message').inputValue()).includes('https://www.waze.com/ul?ll='));
+  await dialog.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();assert.ok((await page.locator('#order-message').inputValue()).includes('https://www.waze.com/ul?ll='));
   assert.deepEqual(failures,[]);
   results.push({width,status:'passed',mapBox:box,phoneDisplay:'flex',realOrdersSent:0});await page.close();
  }

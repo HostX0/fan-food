@@ -3,57 +3,57 @@
     {
       "id": "dolma",
       "name": "الدولمة والمحاشي",
-      "description": "لَمّة تبدأ بطعم عراقي أصيل.",
-      "image": "/images/dolma.webp",
+      "description": "دولمة ومحاشي بطعم البيت.",
+      "image": "/images/menu-v4/p002.webp",
       "icon": "leaf"
     },
     {
       "id": "rice",
       "name": "أطباق الرز والولائم",
-      "description": "أطباق للبيت… وللّمة الكبيرة.",
-      "image": "/images/rice.webp",
+      "description": "تمن وبرياني وصواني للّمة.",
+      "image": "/images/menu-v4/p007.webp",
       "icon": "bowl"
     },
     {
       "id": "kubba",
       "name": "الكبة",
-      "description": "أشكال مختلفة، ونكهة من بيتنا.",
-      "image": "/images/kubba.webp",
+      "description": "كبة عراقية، كل نوع إله طعمه.",
+      "image": "/images/menu-v4/p018.webp",
       "icon": "wheat"
     },
     {
       "id": "pastries",
       "name": "المعجنات والمقبلات",
-      "description": "لقمات صغيرة، تكمّل السفرة.",
-      "image": "/images/pastries.webp",
+      "description": "معجنات ولقمات خفيفة.",
+      "image": "/images/menu-v4/p026.webp",
       "icon": "bread"
     },
     {
       "id": "samosa",
       "name": "السمبوسة والبورك",
-      "description": "حشوات على ذوق كل واحد.",
-      "image": "/images/samosa.webp",
+      "description": "حشوات متنوعة وقرمشة خفيفة.",
+      "image": "/images/menu-v4/p028.webp",
       "icon": "triangle"
     },
     {
       "id": "grills",
       "name": "اللحوم والمشاوي",
-      "description": "اختار النوع والكمية اللي تناسبك.",
-      "image": "/images/grills.webp",
+      "description": "أصناف لحم ودجاج على ذوقك.",
+      "image": "/images/menu-v4/p041.webp",
       "icon": "fire"
     },
     {
       "id": "specials",
       "name": "الأطباق الخاصة",
-      "description": "من وصفات مطبخ فن فود.",
-      "image": "/images/pasta.webp",
+      "description": "أكلات تغيّر بيها سفرتك.",
+      "image": "/images/menu-v4/p047.webp",
       "icon": "cloche"
     },
     {
       "id": "sweets",
       "name": "الحلويات والمخبوزات",
-      "description": "والختام… حلو من بيتنا.",
-      "image": "/images/sweets.webp",
+      "description": "حلو وكليجة، ويّا استكان چاي.",
+      "image": "/images/menu-v4/p048.webp",
       "icon": "cookie"
     }
   ],
@@ -62,9 +62,9 @@
       "id": "p001",
       "categoryId": "dolma",
       "name": "ورق عنب",
-      "image": "/images/products/p001.webp",
+      "image": "/images/menu-v4/p001.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "ورق عنب ملفوف بحشوة تمن وخضرة وبهارات.",
       "variants": [
         {
           "id": "v002",
@@ -90,15 +90,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "ورق عنب الدولمة والمحاشي اختار الحجم المناسب للمّة. ورق عنب 20 حبة ورق عنب 40 حبة ورق عنب 60 حبة"
+      "searchText": "ورق عنب الدولمة والمحاشي ورق عنب ملفوف بحشوة تمن وخضرة وبهارات. ورق عنب 20 حبة ورق عنب 40 حبة ورق عنب 60 حبة",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p002",
       "categoryId": "dolma",
       "name": "دولمة",
-      "image": "/images/products/p002.webp",
-      "imageRepresentative": false,
-      "description": "اختار الحجم المناسب للمّة.",
+      "image": "/images/menu-v4/p002.webp",
+      "imageRepresentative": true,
+      "description": "خضرة مشكلة محشية تمن وبصل وخضرة، بطعم حامض.",
       "variants": [
         {
           "id": "v005",
@@ -122,17 +123,18 @@
           "sourceRow": 7
         }
       ],
-      "note": "يمكن طلب إضافة الضلوع؛ يُؤكّد سعر الإضافة عبر واتساب.",
+      "note": "تگدر تطلب ضلوع إضافية؛ سعرها نأكده وياك عالواتساب.",
       "choices": [],
-      "searchText": "دولمة الدولمة والمحاشي اختار الحجم المناسب للمّة. دولمة 3 أشخاص دولمة 5 أشخاص دولمة 7 أشخاص"
+      "searchText": "دولمة الدولمة والمحاشي خضرة مشكلة محشية تمن وبصل وخضرة، بطعم حامض. دولمة 3 أشخاص دولمة 5 أشخاص دولمة 7 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p003",
       "categoryId": "dolma",
       "name": "دولمة كوردية",
-      "image": "/images/products/p003.webp",
+      "image": "/images/menu-v4/p003.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "دولمة بخضرة مشكلة وحشوة تمن وبهارات عالطريقة الكوردية.",
       "variants": [
         {
           "id": "v008",
@@ -156,17 +158,18 @@
           "sourceRow": 10
         }
       ],
-      "note": "يمكن طلب إضافة الضلوع؛ يُؤكّد سعر الإضافة عبر واتساب.",
+      "note": "تگدر تطلب ضلوع إضافية؛ سعرها نأكده وياك عالواتساب.",
       "choices": [],
-      "searchText": "دولمة كوردية الدولمة والمحاشي اختار الحجم المناسب للمّة. دولمة كوردية 3 أشخاص دولمة كوردية 5 أشخاص دولمة كوردية 7 أشخاص"
+      "searchText": "دولمة كوردية الدولمة والمحاشي دولمة بخضرة مشكلة وحشوة تمن وبهارات عالطريقة الكوردية. دولمة كوردية 3 أشخاص دولمة كوردية 5 أشخاص دولمة كوردية 7 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p004",
       "categoryId": "dolma",
       "name": "تبسي باذنجان بالكبة",
-      "image": "/images/products/p004.webp",
+      "image": "/images/menu-v4/p004.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "باذنجان وكبة محشية لحم، ويا طماطة وصلصة حمراء.",
       "variants": [
         {
           "id": "v011",
@@ -185,15 +188,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "تبسي باذنجان بالكبة الدولمة والمحاشي اختار الحجم المناسب للمّة. تبسي باذنجان بالكبة 3 أشخاص تبسي باذنجان بالكبة 6 أشخاص"
+      "searchText": "تبسي باذنجان بالكبة الدولمة والمحاشي باذنجان وكبة محشية لحم، ويا طماطة وصلصة حمراء. تبسي باذنجان بالكبة 3 أشخاص تبسي باذنجان بالكبة 6 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p005",
       "categoryId": "dolma",
       "name": "ملفوف بالباذنجان",
-      "image": "/images/products/p005.webp",
+      "image": "/images/menu-v4/p005.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "لفائف باذنجان بحشوة لحم وبصل وصلصة طماطة.",
       "variants": [
         {
           "id": "v013",
@@ -212,15 +216,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "ملفوف بالباذنجان الدولمة والمحاشي اختار الحجم المناسب للمّة. ملفوف بالباذنجان 3 أشخاص ملفوف بالباذنجان 6 أشخاص"
+      "searchText": "ملفوف بالباذنجان الدولمة والمحاشي لفائف باذنجان بحشوة لحم وبصل وصلصة طماطة. ملفوف بالباذنجان 3 أشخاص ملفوف بالباذنجان 6 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p006",
       "categoryId": "dolma",
       "name": "شيخ محشي عائلي مع رز",
-      "image": "/images/products/p006.webp",
+      "image": "/images/menu-v4/p006.webp",
       "imageRepresentative": true,
-      "description": "عائلي، من مطبخ فن فود.",
+      "description": "باذنجان محشي لحم وبصل بصلصة طماطة، وياه تمن.",
       "variants": [
         {
           "id": "v015",
@@ -232,15 +237,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "شيخ محشي عائلي مع رز الدولمة والمحاشي عائلي، من مطبخ فن فود. شيخ محشي عائلي مع رز عائلي"
+      "searchText": "شيخ محشي عائلي مع رز الدولمة والمحاشي باذنجان محشي لحم وبصل بصلصة طماطة، وياه تمن. شيخ محشي عائلي مع رز عائلي",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p007",
       "categoryId": "rice",
       "name": "صينية برياني",
-      "image": "/images/products/p007.webp",
-      "imageRepresentative": false,
-      "description": "اختار الحجم المناسب للمّة.",
+      "image": "/images/menu-v4/p007.webp",
+      "imageRepresentative": true,
+      "description": "تمن وشعيرية وبزاليا وبطاطا، ويا دجاج وبهارات برياني.",
       "variants": [
         {
           "id": "v016",
@@ -259,15 +265,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "صينية برياني أطباق الرز والولائم اختار الحجم المناسب للمّة. صينية برياني وسط وسط • 4-5 أشخاص صينية برياني كبيرة كبيرة • 6-7 أشخاص"
+      "searchText": "صينية برياني أطباق الرز والولائم تمن وشعيرية وبزاليا وبطاطا، ويا دجاج وبهارات برياني. صينية برياني وسط وسط • 4-5 أشخاص صينية برياني كبيرة كبيرة • 6-7 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p008",
       "categoryId": "rice",
       "name": "نصف دجاجة مع الرز",
-      "image": "/images/products/p008-half-chicken.webp",
+      "image": "/images/menu-v4/p008.webp",
       "imageRepresentative": true,
-      "description": "نصف دجاجة مع الرز.",
+      "description": "نص دجاجة محمّرة وياه تمن بالشعيرية.",
       "variants": [
         {
           "id": "v018",
@@ -279,15 +286,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "نصف دجاجة مع الرز أطباق الرز والولائم طبق للّمة، بطعم البيت. نصف دجاجة مع الرز الطبق"
+      "searchText": "نصف دجاجة مع الرز أطباق الرز والولائم نص دجاجة محمّرة وياه تمن بالشعيرية. نصف دجاجة مع الرز الطبق",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p009",
       "categoryId": "rice",
       "name": "دجاجة كاملة مع الرز",
-      "image": "/images/products/p009.webp",
-      "imageRepresentative": false,
-      "description": "طبق للّمة، بطعم البيت.",
+      "image": "/images/menu-v4/p009.webp",
+      "imageRepresentative": true,
+      "description": "دجاجة كاملة محمّرة وياه تمن بالشعيرية.",
       "variants": [
         {
           "id": "v019",
@@ -299,15 +307,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "دجاجة كاملة مع الرز أطباق الرز والولائم طبق للّمة، بطعم البيت. دجاجة كاملة مع الرز الطبق"
+      "searchText": "دجاجة كاملة مع الرز أطباق الرز والولائم دجاجة كاملة محمّرة وياه تمن بالشعيرية. دجاجة كاملة مع الرز الطبق",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p010",
       "categoryId": "rice",
       "name": "مقلوبة دجاج",
-      "image": "/images/products/p010.webp",
+      "image": "/images/menu-v4/p010.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "طبقات تمن وباذنجان وطماطة ودجاج، مقلوبة بصحن واحد.",
       "variants": [
         {
           "id": "v020",
@@ -333,15 +342,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "مقلوبة دجاج أطباق الرز والولائم اختار الحجم المناسب للمّة. مقلوبة دجاج 4 أشخاص مقلوبة دجاج 6 أشخاص مقلوبة دجاج 10 أشخاص"
+      "searchText": "مقلوبة دجاج أطباق الرز والولائم طبقات تمن وباذنجان وطماطة ودجاج، مقلوبة بصحن واحد. مقلوبة دجاج 4 أشخاص مقلوبة دجاج 6 أشخاص مقلوبة دجاج 10 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p011",
       "categoryId": "rice",
       "name": "مقلوبة لحم",
-      "image": "/images/products/p011.webp",
+      "image": "/images/menu-v4/p011.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "طبقات تمن وباذنجان وطماطة ولحم، مقلوبة بصحن واحد.",
       "variants": [
         {
           "id": "v023",
@@ -367,15 +377,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "مقلوبة لحم أطباق الرز والولائم اختار الحجم المناسب للمّة. مقلوبة لحم 4 أشخاص مقلوبة لحم 6 أشخاص مقلوبة لحم 10 أشخاص"
+      "searchText": "مقلوبة لحم أطباق الرز والولائم طبقات تمن وباذنجان وطماطة ولحم، مقلوبة بصحن واحد. مقلوبة لحم 4 أشخاص مقلوبة لحم 6 أشخاص مقلوبة لحم 10 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p012",
       "categoryId": "rice",
       "name": "كبسة خليجية بالدجاج",
-      "image": "/images/products/p012.webp",
+      "image": "/images/menu-v4/p012.webp",
       "imageRepresentative": true,
-      "description": "طبق للّمة، بطعم البيت.",
+      "description": "تمن بصلصة طماطة ولومي وبهارات كبسة، وياه دجاج.",
       "variants": [
         {
           "id": "v026",
@@ -387,15 +398,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبسة خليجية بالدجاج أطباق الرز والولائم طبق للّمة، بطعم البيت. كبسة خليجية بالدجاج الطبق"
+      "searchText": "كبسة خليجية بالدجاج أطباق الرز والولائم تمن بصلصة طماطة ولومي وبهارات كبسة، وياه دجاج. كبسة خليجية بالدجاج الطبق",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p013",
       "categoryId": "rice",
       "name": "بخاري عماني بالدجاج",
-      "image": "/images/products/p013.webp",
+      "image": "/images/menu-v4/p013.webp",
       "imageRepresentative": true,
-      "description": "طبق للّمة، بطعم البيت.",
+      "description": "تمن بالجزر والزبيب وبهارات البخاري، وياه دجاج.",
       "variants": [
         {
           "id": "v027",
@@ -407,15 +419,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بخاري عماني بالدجاج أطباق الرز والولائم طبق للّمة، بطعم البيت. بخاري عماني بالدجاج الطبق"
+      "searchText": "بخاري عماني بالدجاج أطباق الرز والولائم تمن بالجزر والزبيب وبهارات البخاري، وياه دجاج. بخاري عماني بالدجاج الطبق",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p014",
       "categoryId": "rice",
       "name": "قوزي لحم",
-      "image": "/images/products/p014.webp",
-      "imageRepresentative": false,
-      "description": "اختار الحجم المناسب للمّة.",
+      "image": "/images/menu-v4/p014.webp",
+      "imageRepresentative": true,
+      "description": "لحم مطبوخ على راحته، وياه تمن وحشوة القوزي.",
       "variants": [
         {
           "id": "v028",
@@ -434,15 +447,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "قوزي لحم أطباق الرز والولائم اختار الحجم المناسب للمّة. قوزي لحم 1 كيلو قوزي لحم 2 كيلو"
+      "searchText": "قوزي لحم أطباق الرز والولائم لحم مطبوخ على راحته، وياه تمن وحشوة القوزي. قوزي لحم 1 كيلو قوزي لحم 2 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p015",
       "categoryId": "rice",
       "name": "مطبق سمك على الطريقة البغدادية",
-      "image": "/images/products/p015.webp",
+      "image": "/images/menu-v4/p015.webp",
       "imageRepresentative": true,
-      "description": "اختار الحجم المناسب للمّة.",
+      "description": "سمك متبّل ومحمّر، وياه تمن وبصل عالطريقة البغدادية.",
       "variants": [
         {
           "id": "v030",
@@ -461,15 +475,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "مطبق سمك على الطريقة البغدادية أطباق الرز والولائم اختار الحجم المناسب للمّة. مطبق سمك على الطريقة البغدادية 3 أشخاص مطبق سمك على الطريقة البغدادية 6 أشخاص"
+      "searchText": "مطبق سمك على الطريقة البغدادية أطباق الرز والولائم سمك متبّل ومحمّر، وياه تمن وبصل عالطريقة البغدادية. مطبق سمك على الطريقة البغدادية 3 أشخاص مطبق سمك على الطريقة البغدادية 6 أشخاص",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p016",
       "categoryId": "kubba",
       "name": "كبة حلب",
-      "image": "/images/products/p016.webp",
+      "image": "/images/menu-v4/p016.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "قشرة تمن ذهبية ومقرمشة، محشية لحم وبصل.",
       "variants": [
         {
           "id": "v032",
@@ -481,15 +496,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة حلب الكبة 10 قطع، من مطبخ فن فود. كبة حلب 10 قطع"
+      "searchText": "كبة حلب الكبة قشرة تمن ذهبية ومقرمشة، محشية لحم وبصل. كبة حلب 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p017",
       "categoryId": "kubba",
       "name": "كبة التمن",
-      "image": "/images/products/p017.webp",
+      "image": "/images/menu-v4/p017.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "كبة بعجينة تمن وحشوة لحم وبصل وبهارات.",
       "variants": [
         {
           "id": "v033",
@@ -501,15 +517,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة التمن الكبة 10 قطع، من مطبخ فن فود. كبة التمن 10 قطع"
+      "searchText": "كبة التمن الكبة كبة بعجينة تمن وحشوة لحم وبصل وبهارات. كبة التمن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p018",
       "categoryId": "kubba",
       "name": "كبة الجريش",
-      "image": "/images/products/p018.webp",
+      "image": "/images/menu-v4/p018.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "أقراص جريش طرية، محشية لحم مفروم وبصل.",
       "variants": [
         {
           "id": "v034",
@@ -521,15 +538,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة الجريش الكبة 10 قطع، من مطبخ فن فود. كبة الجريش 10 قطع"
+      "searchText": "كبة الجريش الكبة أقراص جريش طرية، محشية لحم مفروم وبصل. كبة الجريش 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p019",
       "categoryId": "kubba",
       "name": "كبة طرابلسية",
-      "image": "/images/products/p019.webp",
+      "image": "/images/menu-v4/p019.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "قشرة برغل محمّرة، محشية لحم مفروم وبصل.",
       "variants": [
         {
           "id": "v035",
@@ -541,15 +559,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة طرابلسية الكبة 10 قطع، من مطبخ فن فود. كبة طرابلسية 10 قطع"
+      "searchText": "كبة طرابلسية الكبة قشرة برغل محمّرة، محشية لحم مفروم وبصل. كبة طرابلسية 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p020",
       "categoryId": "kubba",
       "name": "كبة حامض",
-      "image": "/images/products/p020.webp",
+      "image": "/images/menu-v4/p020.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "كبة مدوّرة محشية لحم، بمرگة حامضة ويا سلق وشلغم.",
       "variants": [
         {
           "id": "v036",
@@ -561,15 +580,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة حامض الكبة 10 قطع، من مطبخ فن فود. كبة حامض 10 قطع"
+      "searchText": "كبة حامض الكبة كبة مدوّرة محشية لحم، بمرگة حامضة ويا سلق وشلغم. كبة حامض 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p021",
       "categoryId": "pastries",
       "name": "مثلثات فن فود",
-      "image": "/images/products/p021.webp",
+      "image": "/images/menu-v4/p021.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "مثلثات عجين محشية بخلطة فن فود الخاصة.",
       "variants": [
         {
           "id": "v037",
@@ -581,15 +601,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "مثلثات فن فود المعجنات والمقبلات 10 قطع، من مطبخ فن فود. مثلثات فن فود 10 قطع"
+      "searchText": "مثلثات فن فود المعجنات والمقبلات مثلثات عجين محشية بخلطة فن فود الخاصة. مثلثات فن فود 10 قطع",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p022",
       "categoryId": "pastries",
       "name": "لحم بعجين",
-      "image": "/images/products/p022.webp",
-      "imageRepresentative": false,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "image": "/images/menu-v4/p022.webp",
+      "imageRepresentative": true,
+      "description": "عجينة خفيفة عليها لحم مفروم وبصل وطماطة.",
       "variants": [
         {
           "id": "v038",
@@ -601,15 +623,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "لحم بعجين المعجنات والمقبلات 10 قطع، من مطبخ فن فود. لحم بعجين 10 قطع"
+      "searchText": "لحم بعجين المعجنات والمقبلات عجينة خفيفة عليها لحم مفروم وبصل وطماطة. لحم بعجين 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p023",
       "categoryId": "pastries",
       "name": "صفيحة دجاج",
-      "image": "/images/products/p023.webp",
+      "image": "/images/menu-v4/p023.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "عجينة طرية عليها حشوة دجاج وبصل وبهارات.",
       "variants": [
         {
           "id": "v039",
@@ -621,15 +644,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "صفيحة دجاج المعجنات والمقبلات 10 قطع، من مطبخ فن فود. صفيحة دجاج 10 قطع"
+      "searchText": "صفيحة دجاج المعجنات والمقبلات عجينة طرية عليها حشوة دجاج وبصل وبهارات. صفيحة دجاج 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p024",
       "categoryId": "pastries",
       "name": "ميني بيتزا",
-      "image": "/images/products/p024.webp",
-      "imageRepresentative": false,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "image": "/images/menu-v4/p024.webp",
+      "imageRepresentative": true,
+      "description": "دوائر بيتزا صغيرة بصلصة طماطة وجبن وخضرة.",
       "variants": [
         {
           "id": "v040",
@@ -641,15 +665,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "ميني بيتزا المعجنات والمقبلات 10 قطع، من مطبخ فن فود. ميني بيتزا 10 قطع"
+      "searchText": "ميني بيتزا المعجنات والمقبلات دوائر بيتزا صغيرة بصلصة طماطة وجبن وخضرة. ميني بيتزا 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p025",
       "categoryId": "pastries",
       "name": "صفيحة جبن",
-      "image": "/images/products/p025.webp",
+      "image": "/images/menu-v4/p025.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "عجينة طرية بحشوة جبن، محمّرة بالفرن.",
       "variants": [
         {
           "id": "v041",
@@ -661,15 +686,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "صفيحة جبن المعجنات والمقبلات 10 قطع، من مطبخ فن فود. صفيحة جبن 10 قطع"
+      "searchText": "صفيحة جبن المعجنات والمقبلات عجينة طرية بحشوة جبن، محمّرة بالفرن. صفيحة جبن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p026",
       "categoryId": "pastries",
       "name": "صينية معجنات مشكل",
-      "image": "/images/products/p026.webp",
+      "image": "/images/menu-v4/p026.webp",
       "imageRepresentative": true,
-      "description": "25 قطعة، من مطبخ فن فود.",
+      "description": "تشكيلة معجنات صغيرة بحشوات لحم ودجاج وجبن.",
       "variants": [
         {
           "id": "v042",
@@ -681,15 +707,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "صينية معجنات مشكل المعجنات والمقبلات 25 قطعة، من مطبخ فن فود. صينية معجنات مشكل 25 قطعة"
+      "searchText": "صينية معجنات مشكل المعجنات والمقبلات تشكيلة معجنات صغيرة بحشوات لحم ودجاج وجبن. صينية معجنات مشكل 25 قطعة",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p027",
       "categoryId": "pastries",
       "name": "المسخن",
-      "image": "/images/products/p027.webp",
+      "image": "/images/menu-v4/p027.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "لفائف خبز رقيق بحشوة دجاج وبصل وسماق.",
       "variants": [
         {
           "id": "v043",
@@ -701,15 +729,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "المسخن المعجنات والمقبلات 10 قطع، من مطبخ فن فود. المسخن 10 قطع"
+      "searchText": "المسخن المعجنات والمقبلات لفائف خبز رقيق بحشوة دجاج وبصل وسماق. المسخن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p028",
       "categoryId": "samosa",
       "name": "سمبوسة لحم",
-      "image": "/images/products/p028.webp",
+      "image": "/images/menu-v4/p028.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "عجينة سمبوسة مقرمشة، محشية لحم وبصل.",
       "variants": [
         {
           "id": "v044",
@@ -721,15 +750,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة لحم السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة لحم 10 قطع"
+      "searchText": "سمبوسة لحم السمبوسة والبورك عجينة سمبوسة مقرمشة، محشية لحم وبصل. سمبوسة لحم 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p029",
       "categoryId": "samosa",
       "name": "سمبوسة دجاج بالخضار",
-      "image": "/images/products/p029.webp",
+      "image": "/images/menu-v4/p029.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "سمبوسة محشية دجاج وخضرة مشكلة.",
       "variants": [
         {
           "id": "v045",
@@ -741,15 +771,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة دجاج بالخضار السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة دجاج بالخضار 10 قطع"
+      "searchText": "سمبوسة دجاج بالخضار السمبوسة والبورك سمبوسة محشية دجاج وخضرة مشكلة. سمبوسة دجاج بالخضار 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p030",
       "categoryId": "samosa",
       "name": "سمبوسة خضار",
-      "image": "/images/products/p030.webp",
+      "image": "/images/menu-v4/p030.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "سمبوسة محشية بطاطا وبزاليا وجزر.",
       "variants": [
         {
           "id": "v046",
@@ -761,15 +792,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة خضار السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة خضار 10 قطع"
+      "searchText": "سمبوسة خضار السمبوسة والبورك سمبوسة محشية بطاطا وبزاليا وجزر. سمبوسة خضار 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p031",
       "categoryId": "samosa",
       "name": "سمبوسة جبن",
-      "image": "/images/products/p031.webp",
+      "image": "/images/menu-v4/p031.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "عجينة سمبوسة خفيفة ومقرمشة بحشوة جبن.",
       "variants": [
         {
           "id": "v047",
@@ -781,15 +813,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة جبن السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة جبن 10 قطع"
+      "searchText": "سمبوسة جبن السمبوسة والبورك عجينة سمبوسة خفيفة ومقرمشة بحشوة جبن. سمبوسة جبن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p032",
       "categoryId": "samosa",
       "name": "سمبوسة سبانغ",
-      "image": "/images/products/p032.webp",
+      "image": "/images/menu-v4/p032.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "سمبوسة محشية سبانغ وبصل وبهارات.",
       "variants": [
         {
           "id": "v048",
@@ -801,15 +834,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة سبانغ السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة سبانغ 10 قطع"
+      "searchText": "سمبوسة سبانغ السمبوسة والبورك سمبوسة محشية سبانغ وبصل وبهارات. سمبوسة سبانغ 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p033",
       "categoryId": "samosa",
       "name": "سمبوسة مسخن",
-      "image": "/images/products/p033.webp",
+      "image": "/images/menu-v4/p033.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "سمبوسة بحشوة دجاج وبصل وسماق.",
       "variants": [
         {
           "id": "v049",
@@ -821,15 +855,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سمبوسة مسخن السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة مسخن 10 قطع"
+      "searchText": "سمبوسة مسخن السمبوسة والبورك سمبوسة بحشوة دجاج وبصل وسماق. سمبوسة مسخن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p034",
       "categoryId": "samosa",
       "name": "بورك لحم",
-      "image": "/images/products/p034.webp",
+      "image": "/images/menu-v4/p034.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "لفائف بورك مقرمشة بحشوة لحم وبصل.",
       "variants": [
         {
           "id": "v050",
@@ -841,15 +876,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بورك لحم السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك لحم 10 قطع"
+      "searchText": "بورك لحم السمبوسة والبورك لفائف بورك مقرمشة بحشوة لحم وبصل. بورك لحم 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p035",
       "categoryId": "samosa",
       "name": "بورك دجاج",
-      "image": "/images/products/p035.webp",
+      "image": "/images/menu-v4/p035.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "لفائف بورك مقرمشة بحشوة دجاج متبّل.",
       "variants": [
         {
           "id": "v051",
@@ -861,15 +897,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بورك دجاج السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك دجاج 10 قطع"
+      "searchText": "بورك دجاج السمبوسة والبورك لفائف بورك مقرمشة بحشوة دجاج متبّل. بورك دجاج 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p036",
       "categoryId": "samosa",
       "name": "بورك جبن",
-      "image": "/images/products/p036.webp",
+      "image": "/images/menu-v4/p036.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "لفائف بورك مقرمشة بحشوة جبن.",
       "variants": [
         {
           "id": "v052",
@@ -881,15 +918,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بورك جبن السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك جبن 10 قطع"
+      "searchText": "بورك جبن السمبوسة والبورك لفائف بورك مقرمشة بحشوة جبن. بورك جبن 10 قطع",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p037",
       "categoryId": "grills",
       "name": "همبرغر لحم",
-      "image": "/images/products/p037.webp",
+      "image": "/images/menu-v4/p037.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "أقراص همبرغر لحم متبّل، بدون صمون.",
       "variants": [
         {
           "id": "v053",
@@ -901,15 +939,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "همبرغر لحم اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. همبرغر لحم 1 كيلو"
+      "searchText": "همبرغر لحم اللحوم والمشاوي أقراص همبرغر لحم متبّل، بدون صمون. همبرغر لحم 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p038",
       "categoryId": "grills",
       "name": "همبرغر دجاج",
-      "image": "/images/products/p038.webp",
+      "image": "/images/menu-v4/p038.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "أقراص همبرغر دجاج متبّل، بدون صمون.",
       "variants": [
         {
           "id": "v054",
@@ -921,15 +960,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "همبرغر دجاج اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. همبرغر دجاج 1 كيلو"
+      "searchText": "همبرغر دجاج اللحوم والمشاوي أقراص همبرغر دجاج متبّل، بدون صمون. همبرغر دجاج 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p039",
       "categoryId": "grills",
       "name": "كفتة فن فود",
-      "image": "/images/products/p039.webp",
+      "image": "/images/menu-v4/p039.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كفتة لحم مفروم وبصل وبهارات، بخلطة فن فود.",
       "variants": [
         {
           "id": "v055",
@@ -941,15 +981,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كفتة فن فود اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كفتة فن فود 1 كيلو"
+      "searchText": "كفتة فن فود اللحوم والمشاوي كفتة لحم مفروم وبصل وبهارات، بخلطة فن فود. كفتة فن فود 1 كيلو",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p040",
       "categoryId": "grills",
       "name": "كفتة فن فود محشية بالجبن",
-      "image": "/images/products/p040.webp",
+      "image": "/images/menu-v4/p040.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كفتة لحم متبّلة، محشية جبن من الداخل.",
       "variants": [
         {
           "id": "v056",
@@ -961,15 +1003,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كفتة فن فود محشية بالجبن اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كفتة فن فود محشية بالجبن 1 كيلو"
+      "searchText": "كفتة فن فود محشية بالجبن اللحوم والمشاوي كفتة لحم متبّلة، محشية جبن من الداخل. كفتة فن فود محشية بالجبن 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p041",
       "categoryId": "grills",
       "name": "كباب طاوة",
-      "image": "/images/products/p041.webp",
-      "imageRepresentative": false,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "image": "/images/menu-v4/p041.webp",
+      "imageRepresentative": true,
+      "description": "أقراص لحم وبصل وخضرة، محمّرة بالطاوة.",
       "variants": [
         {
           "id": "v057",
@@ -981,15 +1024,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كباب طاوة اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كباب طاوة 1/2 كيلو"
+      "searchText": "كباب طاوة اللحوم والمشاوي أقراص لحم وبصل وخضرة، محمّرة بالطاوة. كباب طاوة 1/2 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p042",
       "categoryId": "grills",
       "name": "كباب عروق",
-      "image": "/images/products/p042.webp",
+      "image": "/images/menu-v4/p042.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "لحم وبصل وخضرة ويا طحين، مقلي ومقرمش.",
       "variants": [
         {
           "id": "v058",
@@ -1001,15 +1045,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كباب عروق اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كباب عروق 1/2 كيلو"
+      "searchText": "كباب عروق اللحوم والمشاوي لحم وبصل وخضرة ويا طحين، مقلي ومقرمش. كباب عروق 1/2 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p043",
       "categoryId": "specials",
       "name": "سكالوب لحم",
-      "image": "/images/products/p043.webp",
+      "image": "/images/menu-v4/p043.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "شرائح لحم رقيقة، مغلّفة بالبقسماط ومحمّرة.",
       "variants": [
         {
           "id": "v059",
@@ -1021,15 +1066,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سكالوب لحم الأطباق الخاصة بالكيلو، حسب الكمية اللي تحتاجها. سكالوب لحم 1/2 كيلو"
+      "searchText": "سكالوب لحم الأطباق الخاصة شرائح لحم رقيقة، مغلّفة بالبقسماط ومحمّرة. سكالوب لحم 1/2 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p044",
       "categoryId": "specials",
       "name": "سكالوب دجاج",
-      "image": "/images/products/p044.webp",
+      "image": "/images/menu-v4/p044.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "شرائح صدر دجاج، مغلّفة بالبقسماط ومحمّرة.",
       "variants": [
         {
           "id": "v060",
@@ -1041,15 +1087,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "سكالوب دجاج الأطباق الخاصة بالكيلو، حسب الكمية اللي تحتاجها. سكالوب دجاج 1/2 كيلو"
+      "searchText": "سكالوب دجاج الأطباق الخاصة شرائح صدر دجاج، مغلّفة بالبقسماط ومحمّرة. سكالوب دجاج 1/2 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p045",
       "categoryId": "specials",
       "name": "أفخاذ كاذبة",
-      "image": "/images/products/p045.webp",
+      "image": "/images/menu-v4/p045.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "عجينة محشية بغطاء مقرمش، على شكل أفخاذ صغيرة.",
       "variants": [
         {
           "id": "v061",
@@ -1061,15 +1108,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "أفخاذ كاذبة الأطباق الخاصة 10 قطع، من مطبخ فن فود. أفخاذ كاذبة 10 قطع"
+      "searchText": "أفخاذ كاذبة الأطباق الخاصة عجينة محشية بغطاء مقرمش، على شكل أفخاذ صغيرة. أفخاذ كاذبة 10 قطع",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p046",
       "categoryId": "specials",
       "name": "بقجة فن فود",
-      "image": "/images/products/p046.webp",
+      "image": "/images/menu-v4/p046.webp",
       "imageRepresentative": true,
-      "description": "10 قطع، من مطبخ فن فود.",
+      "description": "بقج عجين صغيرة بحشوة فن فود الخاصة.",
       "variants": [
         {
           "id": "v062",
@@ -1081,15 +1130,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بقجة فن فود الأطباق الخاصة 10 قطع، من مطبخ فن فود. بقجة فن فود 10 قطع"
+      "searchText": "بقجة فن فود الأطباق الخاصة بقج عجين صغيرة بحشوة فن فود الخاصة. بقجة فن فود 10 قطع",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p047",
       "categoryId": "specials",
       "name": "معكرونة بشاميل عائلي",
-      "image": "/images/products/p047.webp",
+      "image": "/images/menu-v4/p047.webp",
       "imageRepresentative": true,
-      "description": "صينية بشاميل عائلية، باختيارك من اللحم أو الدجاج.",
+      "description": "معكرونة وبشاميل كريمي، باللحم أو الدجاج حسب اختيارك.",
       "variants": [
         {
           "id": "v063",
@@ -1104,15 +1155,20 @@
         "لحم",
         "دجاج"
       ],
-      "searchText": "معكرونة بشاميل عائلي الأطباق الخاصة صينية بشاميل عائلية، باختيارك من اللحم أو الدجاج. معكرونة بشاميل عائلي عائلي"
+      "searchText": "معكرونة بشاميل عائلي الأطباق الخاصة معكرونة وبشاميل كريمي، باللحم أو الدجاج حسب اختيارك. لحم دجاج معكرونة بشاميل عائلي عائلي",
+      "ingredientSource": "dish-type",
+      "choiceImages": {
+        "لحم": "/images/menu-v4/p047.webp",
+        "دجاج": "/images/menu-v4/p047-chicken.webp"
+      }
     },
     {
       "id": "p048",
       "categoryId": "sweets",
       "name": "كليجة مشكل",
-      "image": "/images/products/p048.webp",
+      "image": "/images/menu-v4/p048.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "تشكيلة كليجة بحشوات مختلفة، للچاي واللّمة.",
       "variants": [
         {
           "id": "v064",
@@ -1124,15 +1180,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كليجة مشكل الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة مشكل 1 كيلو"
+      "searchText": "كليجة مشكل الحلويات والمخبوزات تشكيلة كليجة بحشوات مختلفة، للچاي واللّمة. كليجة مشكل 1 كيلو",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p049",
       "categoryId": "sweets",
       "name": "كليجة تمر",
-      "image": "/images/products/p049.webp",
+      "image": "/images/menu-v4/p049.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كليجة بعجينة هشة وحشوة تمر.",
       "variants": [
         {
           "id": "v065",
@@ -1144,15 +1202,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كليجة تمر الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة تمر 1 كيلو"
+      "searchText": "كليجة تمر الحلويات والمخبوزات كليجة بعجينة هشة وحشوة تمر. كليجة تمر 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p050",
       "categoryId": "sweets",
       "name": "كليجة حلقوم",
-      "image": "/images/products/p050.webp",
+      "image": "/images/menu-v4/p050.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كليجة بعجينة هشة وحشوة حلقوم.",
       "variants": [
         {
           "id": "v066",
@@ -1164,15 +1223,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كليجة حلقوم الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة حلقوم 1 كيلو"
+      "searchText": "كليجة حلقوم الحلويات والمخبوزات كليجة بعجينة هشة وحشوة حلقوم. كليجة حلقوم 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p051",
       "categoryId": "sweets",
       "name": "كليجة جوز",
-      "image": "/images/products/p051.webp",
+      "image": "/images/menu-v4/p051.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كليجة بعجينة هشة وحشوة جوز.",
       "variants": [
         {
           "id": "v067",
@@ -1184,15 +1244,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كليجة جوز الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة جوز 1 كيلو"
+      "searchText": "كليجة جوز الحلويات والمخبوزات كليجة بعجينة هشة وحشوة جوز. كليجة جوز 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p052",
       "categoryId": "sweets",
       "name": "كليجة فستق حلبي",
-      "image": "/images/products/p052.webp",
+      "image": "/images/menu-v4/p052.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "كليجة بعجينة هشة وحشوة فستق حلبي.",
       "variants": [
         {
           "id": "v068",
@@ -1204,15 +1265,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "كليجة فستق حلبي الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة فستق حلبي 1 كيلو"
+      "searchText": "كليجة فستق حلبي الحلويات والمخبوزات كليجة بعجينة هشة وحشوة فستق حلبي. كليجة فستق حلبي 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p053",
       "categoryId": "sweets",
       "name": "لفة خميره بالجبن",
-      "image": "/images/products/p053.webp",
+      "image": "/images/menu-v4/p053.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "لفات بعجينة خميرة طرية ومحشية جبن.",
       "variants": [
         {
           "id": "v069",
@@ -1224,15 +1286,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "لفة خميره بالجبن الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميره بالجبن 1 كيلو"
+      "searchText": "لفة خميره بالجبن الحلويات والمخبوزات لفات بعجينة خميرة طرية ومحشية جبن. لفة خميره بالجبن 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p054",
       "categoryId": "sweets",
       "name": "لفة خميرة سادة",
-      "image": "/images/products/p054.webp",
-      "imageRepresentative": false,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "image": "/images/menu-v4/p054.webp",
+      "imageRepresentative": true,
+      "description": "لفات خميرة طرية وسادة، بدون حشوة.",
       "variants": [
         {
           "id": "v070",
@@ -1244,15 +1307,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "لفة خميرة سادة الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميرة سادة 1 كيلو"
+      "searchText": "لفة خميرة سادة الحلويات والمخبوزات لفات خميرة طرية وسادة، بدون حشوة. لفة خميرة سادة 1 كيلو",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p055",
       "categoryId": "sweets",
       "name": "لفة خميرة فن فود",
-      "image": "/images/products/p055.webp",
+      "image": "/images/menu-v4/p055.webp",
       "imageRepresentative": true,
-      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "description": "لفات بعجينة خميرة طرية، بوصفة فن فود الخاصة.",
       "variants": [
         {
           "id": "v071",
@@ -1264,15 +1328,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "لفة خميرة فن فود الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميرة فن فود 1 كيلو"
+      "searchText": "لفة خميرة فن فود الحلويات والمخبوزات لفات بعجينة خميرة طرية، بوصفة فن فود الخاصة. لفة خميرة فن فود 1 كيلو",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p056",
       "categoryId": "sweets",
       "name": "قالب بسكت مربى",
-      "image": "/images/products/p056.webp",
+      "image": "/images/menu-v4/p056.webp",
       "imageRepresentative": true,
-      "description": "قالب، من مطبخ فن فود.",
+      "description": "قالب بطبقات بسكت ومربى.",
       "variants": [
         {
           "id": "v072",
@@ -1284,15 +1350,16 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "قالب بسكت مربى الحلويات والمخبوزات قالب، من مطبخ فن فود. قالب بسكت مربى قالب"
+      "searchText": "قالب بسكت مربى الحلويات والمخبوزات قالب بطبقات بسكت ومربى. قالب بسكت مربى قالب",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p057",
       "categoryId": "sweets",
       "name": "بايركس حلويات عائلي",
-      "image": "/images/products/p057.webp",
+      "image": "/images/menu-v4/p057.webp",
       "imageRepresentative": true,
-      "description": "بايركس، من مطبخ فن فود.",
+      "description": "حلو بطبقات البسكت والكريمة، بحجم عائلي.",
       "variants": [
         {
           "id": "v073",
@@ -1304,15 +1371,17 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بايركس حلويات عائلي الحلويات والمخبوزات بايركس، من مطبخ فن فود. بايركس حلويات عائلي بايركس"
+      "searchText": "بايركس حلويات عائلي الحلويات والمخبوزات حلو بطبقات البسكت والكريمة، بحجم عائلي. بايركس حلويات عائلي بايركس",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p058",
       "categoryId": "sweets",
       "name": "بايركس حلويات وسط",
-      "image": "/images/products/p058.webp",
+      "image": "/images/menu-v4/p058.webp",
       "imageRepresentative": true,
-      "description": "بايركس، من مطبخ فن فود.",
+      "description": "حلو بطبقات البسكت والكريمة، بحجم وسط.",
       "variants": [
         {
           "id": "v074",
@@ -1324,7 +1393,9 @@
       ],
       "note": "",
       "choices": [],
-      "searchText": "بايركس حلويات وسط الحلويات والمخبوزات بايركس، من مطبخ فن فود. بايركس حلويات وسط بايركس"
+      "searchText": "بايركس حلويات وسط الحلويات والمخبوزات حلو بطبقات البسكت والكريمة، بحجم وسط. بايركس حلويات وسط بايركس",
+      "ingredientSource": "house-confirmation",
+      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     }
   ],
   "sourceRowCount": 73,

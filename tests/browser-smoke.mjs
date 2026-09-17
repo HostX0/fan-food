@@ -90,7 +90,7 @@ try {
   const total=variant.price*2+pasta.variants[0].price;
   assert.equal((await cart.locator('.total-line .price b').textContent()).replaceAll(',',''),String(total));
   await cart.getByRole('button',{name:'كمّل بيانات التوصيل',exact:true}).click();
-  await cart.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();
+  await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();
   assert.ok(await cart.locator('[aria-invalid="true"]').count()>=3);
   await page.locator('#customer-name').fill('اختبار الواجهة');
   await page.locator('#customer-phone').fill('٠٧٧٠٠٠٠٠٠٠٠');
@@ -98,7 +98,7 @@ try {
   await page.locator('#customer-address').fill('عنوان تجريبي لفحص الواجهة فقط');
   await page.locator('#customer-landmark').fill('نقطة دالة تجريبية');
   await page.locator('#customer-note').fill('اختبار محلي — لا يرسل للمطعم');
-  await cart.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();
+  await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();
   await page.locator('[data-testid="send-order"]').waitFor();
   const message=await page.locator('#order-message').inputValue();
   const link=new URL(await page.locator('[data-testid="send-order"]').getAttribute('href'));

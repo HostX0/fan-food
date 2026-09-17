@@ -11,5 +11,5 @@ export const SITE = {
     city: 'بغداد',
     storageKey: 'fanfood:cart:v1',
     favoritesKey: 'fanfood:favorites:v1',
-    orderDisclaimer: 'أجور التوصيل، التوفّر وموعد التجهيز تُؤكَّد عبر واتساب.',
+    orderDisclaimer: 'أجور التوصيل وموعد التجهيز نأكدهم وياك عالواتساب.',
 } as const;

@@ -5,5 +5,12 @@
   "deliveryCity": "Baghdad",
   "generatedImagesDisclosed": true,
   "styleRevision": "checkout-20260917-1",
-  "ux": "quick-controls-20260917-1"
+  "ux": "quick-controls-20260917-1",
+  "finalMenu": "iraqi-photo-menu-20260918-v4",
+  "uniqueDishPhotos": 58,
+  "choiceSpecificPhotos": 1,
+  "photoSizes": [
+    480,
+    960
+  ]
 }

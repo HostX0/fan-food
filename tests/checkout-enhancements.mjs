@@ -41,7 +41,7 @@ try{
   await page.locator('#customer-name').fill('زبون اختبار');await page.locator('#customer-phone').fill('+964 770 123 4567');await page.locator('#customer-area').fill('الجادرية');
   assert.equal(await page.locator('#customer-phone').inputValue(),'770 123 4567');
   // No detailed address or pin required; opening review must not fabricate coordinates.
-  await cart.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();await page.locator('#order-message').waitFor();
+  await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();await page.locator('#order-message').waitFor();
   let message=await page.locator('#order-message').inputValue();assert.ok(!message.includes('waze.com'));assert.ok(message.includes('+9647701234567'));
   await cart.getByRole('button',{name:'تعديل البيانات',exact:true}).click();
   await page.getByRole('button',{name:'حدد موقع التوصيل على الخريطة',exact:true}).click();
@@ -70,7 +70,7 @@ try{
   const href=await page.getByRole('link',{name:'شاهد الموقع على Waze',exact:true}).getAttribute('href');
   assert.equal(new URL(href).searchParams.get('ll'),mode==='granted'?'33.300000,44.400000':'33.315200,44.366100');
   if(engine==='chromium'&&[390,820,1440].includes(width)){await page.locator('dialog.cart-modal .drawer-body').evaluate(e=>{e.scrollTop=0;});await page.screenshot({path:`${dir}/${width}-checkout.png`});}
-  await cart.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();message=await page.locator('#order-message').inputValue();
+  await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();message=await page.locator('#order-message').inputValue();
   const wa=new URL(await page.locator('[data-testid="send-order"]').getAttribute('href'));
   assert.equal(wa.origin,'https://wa.me');assert.equal(wa.pathname,'/9647737773444');assert.equal(wa.searchParams.get('text'),message);
   for(const text of ['المدينة: بغداد','الجادرية','+9647701234567','ورق عنب','8,000',href])assert.ok(message.includes(text),text);
@@ -79,7 +79,7 @@ try{
   const bounds=await cart.boundingBox();assert.ok(bounds.width<=width+1&&bounds.height<=height+1);
   const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));for(const text of ['زبون اختبار','الجادرية','33.315','44.366','7701234567'])assert.ok(!saved.includes(text),'Customer data remains transient');
   await cart.getByRole('button',{name:'تعديل البيانات',exact:true}).click();await page.getByRole('button',{name:'حذف موقع التوصيل',exact:true}).click();
-  await cart.getByRole('button',{name:'عاين رسالة الطلب',exact:true}).click();assert.ok(!(await page.locator('#order-message').inputValue()).includes('waze.com'));
+  await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();assert.ok(!(await page.locator('#order-message').inputValue()).includes('waze.com'));
   assert.deepEqual(errors,[]);
   results.push({engine,width,height,mode,status:'passed',realOrdersSent:0});console.log('PASS',engine,width,mode);
   await context.close();await browser.close();active=undefined;

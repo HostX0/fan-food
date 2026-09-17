@@ -11,6 +11,9 @@ export type Product = {
     name: string;
     image: string;
     imageRepresentative: boolean;
+    choiceImages?: Record<string, string>;
+    ingredientNote?: string;
+    ingredientSource?: string;
     description: string;
     variants: Variant[];
     note: string;

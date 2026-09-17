@@ -63,7 +63,7 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
       tiles.on('tileerror',()=>{if(!cancelled)setTilesError(true);});tiles.addTo(instance);
       instance.on('click',e=>pick(e.latlng));
       setStatus('ready');setTimeout(()=>{if(!cancelled)instance.invalidateSize();},200);
-    }).catch(()=>{if(!cancelled){setStatus('error');setHint('تعذّر تحميل الخريطة. استخدم موقعي الحالي أو أدخل الإحداثيات، أو أعد المحاولة.');}});
+    }).catch(()=>{if(!cancelled){setStatus('error');setHint('الخريطة ما تحمّلت. استخدم موقعي الحالي أو أدخل الإحداثيات، أو جرّب مرة ثانية.');}});
     return()=>{cancelled=true;request.current++;map.current?.remove();map.current=null;marker.current=null;};
     // The map is created only on an explicit open, never for every form keystroke.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +78,7 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
   },[draft,status]);
   function start(){setDraft(validLocation(value)?value:null);setCoords(value?{lat:value.lat.toFixed(6),lng:value.lng.toFixed(6)}:{lat:'',lng:''});setHint('اضغط مكان التوصيل على الخريطة، أو استخدم موقعك الحالي.');setOpen(true);}
   function locate(){
-    if(!navigator.geolocation){setHint('هذا المتصفح لا يدعم تحديد الموقع. اختار موقعك على الخريطة يدوياً.');return;}
+    if(!navigator.geolocation){setHint('هذا المتصفح ما يدعم تحديد الموقع. اختار موقعك على الخريطة يدوياً.');return;}
     const id=++request.current;setBusy(true);setHint('جاري تحديد موقعك… اسمح بالوصول للموقع من رسالة المتصفح.');
     navigator.geolocation.getCurrentPosition(position=>{
       if(!mounted.current||id!==request.current)return;
@@ -86,11 +86,11 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
       if(validLocation(point))map.current?.setView([point.lat,point.lng],17);
     },failure=>{
       if(!mounted.current||id!==request.current)return;
-      setBusy(false);setHint(failure.code===1?'الوصول للموقع غير مسموح. اختار المكان يدوياً على الخريطة، أو افتح الموقع في Safari / Chrome واسمح بالموقع.':failure.code===3?'تأخر تحديد الموقع. أعد المحاولة أو اختار المكان على الخريطة.':'ما قدرنا نحدد موقعك. اختار عنوان التوصيل يدوياً على الخريطة.');
+      setBusy(false);setHint(failure.code===1?'الوصول للموقع غير مسموح. اختار المكان يدوياً على الخريطة، أو افتح الموقع في Safari / Chrome واسمح بالموقع.':failure.code===3?'تأخر تحديد الموقع. أعد المحاولة أو اختار المكان على الخريطة.':'ما گدرنا نحدد موقعك. اختار عنوان التوصيل يدوياً على الخريطة.');
     },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
   }
   function useCoordinates(){
-    if(!coords.lat.trim()||!coords.lng.trim()){setHint('اكتب خط العرض وخط الطول معاً.');return;}
+    if(!coords.lat.trim()||!coords.lng.trim()){setHint('اكتب خط العرض وخط الطول سوه.');return;}
     const point={lat:Number(westernDigits(coords.lat).replace(',','.')),lng:Number(westernDigits(coords.lng).replace(',','.'))};
     pick(point);if(validLocation(point))map.current?.setView([point.lat,point.lng],17);
   }
@@ -102,13 +102,13 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
       <p className="location-hint" role="status" aria-live="polite">{hint}</p>
       <div className="location-map-wrap"><div ref={node} className="location-map" role="region" aria-label="خريطة تحديد موقع التوصيل" data-testid="delivery-map"/>{status==='loading'&&<div className="map-loading">جاري تحميل الخريطة…</div>}</div>
       {status==='error'&&<button type="button" className="text-link" onClick={()=>setRetry(n=>n+1)}>إعادة تحميل الخريطة</button>}
-      {tilesError&&<p className="field-help">النت ضعيف وصور الخريطة ما اكتملت. لا تعتمد دبوساً غير واضح؛ تگدر تستخدم GPS أو الإحداثيات أدناه.</p>}
+      {tilesError&&<p className="field-help">النت ضعيف وصور الخريطة ما اكتملت. لا تعتمد موقع مو واضح؛ تگدر تستخدم GPS أو الإحداثيات أدناه.</p>}
       {status==='ready'&&<button type="button" className="map-center-button" onClick={()=>{if(map.current)pick(map.current.getCenter());}}>اختيار مركز الخريطة <span>حرّك وكبّر الخريطة أولاً</span></button>}
       <details className="coordinates-details"><summary>أدخل الإحداثيات يدوياً</summary><p className="field-help">الصق إحداثيات عنوانك من تطبيق الخرائط: خط العرض ثم خط الطول.</p><div className="coordinates-grid"><label>خط العرض<input aria-label="خط العرض" inputMode="decimal" dir="ltr" placeholder="33.315200" value={coords.lat} onChange={e=>setCoords(c=>({...c,lat:e.target.value}))}/></label><label>خط الطول<input aria-label="خط الطول" inputMode="decimal" dir="ltr" placeholder="44.366100" value={coords.lng} onChange={e=>setCoords(c=>({...c,lng:e.target.value}))}/></label></div><button type="button" className="text-link" onClick={useCoordinates}>استخدم الإحداثيات</button></details>
-      {draft&&<div className="pin-summary"><span dir="ltr">{draft.lat.toFixed(6)}, {draft.lng.toFixed(6)}</span>{draft.source==='gps'&&draft.accuracy&&<small>الدقة التقريبية: {Math.round(draft.accuracy)} متر. راجع الدبوس وعدّله عند الحاجة.</small>}</div>}
+      {draft&&<div className="pin-summary"><span dir="ltr">{draft.lat.toFixed(6)}, {draft.lng.toFixed(6)}</span>{draft.source==='gps'&&draft.accuracy&&<small>دقة الموقع تقريباً: {Math.round(draft.accuracy)} متر. راجع الدبوس وعدّله إذا يحتاج.</small>}</div>}
       <button type="button" className="button button-primary full" data-testid="confirm-location" disabled={!draft||busy} onClick={()=>{if(validLocation(draft)){onChange(draft);setOpen(false);}}}><Icon name="check"/>اعتمد هذا الموقع</button>
     </div>}
     {error&&<p className="field-error" role="alert">{error}</p>}
-    <p className="field-help">التوصيل داخل بغداد فقط. الموقع يُضاف كرابط Waze إلى رسالة الطلب، ولا يُحفظ على جهازك.</p>
+    <p className="field-help">التوصيل داخل بغداد فقط. اللوكيشن ينضاف كرابط Waze برسالة الطلب، وما نخزنه بجهازك.</p>
   </div>;
 }

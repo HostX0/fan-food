@@ -1,3 +1,4 @@
+import "./final-menu.test.mjs";
 import './quick-cart.test.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';

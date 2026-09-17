@@ -1,0 +1,25 @@
+/* Unified Iraqi menu: calm descriptions, complete dishes, large unobstructed controls. */
+.product-card .product-title h3{font-size:15px;line-height:1.65;letter-spacing:0;}
+.product-card .product-body>.product-description{font-size:12.5px;font-weight:400;line-height:1.75;color:#596653;margin:6px 0 5px;min-height:44px;overflow-wrap:anywhere;}
+.product-card .product-body>.product-meta{font-size:11px;font-weight:500;line-height:1.65;color:#64705b;margin:0 0 9px;}
+.product-card .product-photo{aspect-ratio:4/3;background:#eae4d5;}
+.product-card .photo-button img{object-fit:contain;object-position:center;width:100%;height:100%;aspect-ratio:4/3;}
+.product-card:hover .photo-button img{transform:none;}
+.product-card .add-button{font-size:12px;min-width:65px;min-height:44px;border-radius:10px;}
+.product-card .price b{font-size:17px;}.product-card .price small{font-size:10px;}
+.modal-photo{background:#ede6d8;}.modal-photo>img{width:100%;height:clamp(210px,33vh,340px);object-fit:contain;}
+.modal-body .dish-description{font-size:14px;font-weight:400;line-height:1.9;color:#596653;margin:8px 0 18px;}
+.ingredient-note{font-size:12px;line-height:1.8;color:#65725b;margin-top:-8px;margin-bottom:15px;}
+.menu-disclosures{margin-top:8px;}.menu-disclosures summary{display:list-item;cursor:pointer;min-height:36px;line-height:36px;color:#38502f;font-weight:600;}.menu-disclosures p{font-size:12px;line-height:1.9;max-width:760px;padding:6px 0;}
+.catalog-footnote{font-size:12px;line-height:1.85;}
+.category-nav button{font-size:12px;min-height:44px;}.section-heading p{font-size:12px;}
+.hero{min-height:420px;padding-top:30px;padding-bottom:30px;gap:36px;}.hero-copy h1{font-size:clamp(36px,3.8vw,55px);}.hero-copy>p{font-size:14px;line-height:1.9;}.hero-frame img{object-fit:contain;height:330px;background:#ede6d8;}.hero-details{margin-top:18px;}.hero-actions{margin-top:20px;}.hero-note{display:none;}
+.menu-section{padding-top:36px;}.menu-heading h2{font-size:28px;}.values-strip{display:none;}.story-section{margin-top:24px;}.story-inner{padding-top:30px;padding-bottom:30px;}.how-section{padding-top:32px;padding-bottom:38px;}
+.search-box input{font-size:16px;}.sort-box select{font-size:12px;}.hero-seal{display:none;}
+@media(max-width:767px){
+ .hero{min-height:0;padding-top:18px;padding-bottom:15px;gap:16px;}.hero-copy h1{font-size:32px;line-height:1.35;margin:7px 0 9px;letter-spacing:-.8px;}.hero-copy>p{font-size:13px;}.hero-frame img{height:170px;}.hero-frame{border-radius:16px;}.hero-image-caption{display:none;}.hero-actions{margin-top:12px;gap:16px;}.hero-copy .eyebrow{font-size:10px;}.menu-section{padding-top:24px;}.menu-heading h2{font-size:23px;}
+ .product-card{min-height:180px;}.product-card .product-photo{width:132px;min-height:166px;margin:8px;aspect-ratio:auto;}.product-card .photo-button img{min-height:0;object-fit:contain;}.product-card .product-body{padding:12px 3px 10px 12px;}.product-card .product-title h3{font-size:14px;line-height:1.65;}.product-card .product-body>.product-description{font-size:12px;line-height:1.65;min-height:0;margin:5px 0;}.product-card .product-body>.product-meta{font-size:10.5px;margin-bottom:7px;}.product-card .price b{font-size:16px;}.product-card .price small{font-size:9px;}.product-card .add-button{font-size:11px;min-width:59px;min-height:44px;}.product-card .product-bottom{gap:6px;}.card-stepper{left:4px;right:4px;bottom:6px;max-width:124px;}.inline-stepper button{height:44px;width:44px;}
+ .category-nav button{font-size:11px;}.section-heading p{font-size:11px;}.menu-disclosures p{font-size:12px;}.how-title h2{font-size:24px;}.story-copy h2{font-size:26px;}.site-footer .footer-note{display:none;}
+}
+@media(max-width:359px){.product-card .product-photo{width:124px;margin:6px;}.product-card .product-body{padding-left:8px;}.product-card .product-title h3{font-size:13.5px;}.product-card .product-body>.product-description{font-size:11.5px;}.product-card .product-bottom{row-gap:3px;}.hero-frame img{height:150px;}.inline-stepper{grid-template-columns:44px minmax(24px,1fr) 44px;}}
+@media(prefers-reduced-motion:reduce){.product-card,.photo-button img{transition:none;}}
