@@ -62,7 +62,7 @@ export function validateCustomer(customer) {
   if(cleanText(customer.name,70).length<2) errors.name='اكتب الاسم، حرفين على الأقل.';
   if(!normalizePhone(customer.phone)) errors.phone='اكتب رقم موبايل عراقي صحيح، مثل 770 123 4567.';
   if(normalizeSearch(customer.city)!=='بغداد') errors.city='التوصيل متوفر داخل بغداد فقط.';
-  if(cleanText(customer.area,80).length<2) errors.area='اكتب اسم المنطقة.';
+  if(cleanText(customer.address,200).trim().length<5) errors.address='اكتب المنطقة وأقرب نقطة دالة، مثل المنصور قرب مول المنصور.';
   if(customer.location && !validLocation(customer.location)) errors.location='اختار موقع توصيل صحيح داخل بغداد.';
   return errors;
 }
@@ -81,10 +81,8 @@ export function buildMessage(cart,products,customer,reference) {
     'الاسم: '+cleanText(customer.name,70),
     'الهاتف: +'+normalizePhone(customer.phone),
     'المدينة: بغداد',
-    'المنطقة: '+cleanText(customer.area,80),
-    ...(cleanText(customer.address,200)?['العنوان: '+cleanText(customer.address,200)]:[]),
+    'العنوان: '+cleanText(customer.address,200),
     ...(validLocation(customer.location)?['موقع التوصيل (Waze): '+wazeUrl(customer.location)]:[]),
-    ...(cleanText(customer.landmark,120)?['أقرب نقطة دالة: '+cleanText(customer.landmark,120)]:[]),
     '', '*تفاصيل الطلب*',
   ];
   for(const [i,l] of lines.entries()) {

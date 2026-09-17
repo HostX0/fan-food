@@ -95,7 +95,7 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
     pick(point);if(validLocation(point))map.current?.setView([point.lat,point.lng],17);
   }
   return <div className="form-field wide location-field" id="customer-location">
-    <div className="field-label">موقع التوصيل<small>اختياري — يساعد المندوب يوصل بسهولة</small></div>
+    <div className="field-label">موقع التوصيل<small>اختياري</small></div>
     {validLocation(value)&&<div className="saved-location"><Icon name="done" size={20}/><div><strong>تم تحديد موقع التوصيل</strong><a href={wazeUrl(value)} target="_blank" rel="noopener noreferrer">شاهد الموقع على Waze</a></div><button type="button" className="icon-button" aria-label="حذف موقع التوصيل" onClick={()=>{onChange(null);setOpen(false);}}><Icon name="trash"/></button></div>}
     {!open?<button type="button" className="button button-outline full location-open" onClick={start}><Icon name="pin"/>{value?'تعديل موقع التوصيل':'حدد موقع التوصيل على الخريطة'}</button>:<div className="location-panel">
       <div className="location-actions"><button type="button" className="button button-outline" onClick={locate} disabled={busy} data-testid="locate-me"><Icon name="pin"/>{busy?'جاري تحديد الموقع…':'استخدم موقعي الحالي'}</button><button type="button" className="text-link" onClick={()=>{request.current++;setBusy(false);setOpen(false);}}>إلغاء</button></div>
@@ -109,6 +109,6 @@ export function LocationPicker({value,onChange,error}:{value:DeliveryLocation|nu
       <button type="button" className="button button-primary full" data-testid="confirm-location" disabled={!draft||busy} onClick={()=>{if(validLocation(draft)){onChange(draft);setOpen(false);}}}><Icon name="check"/>اعتمد هذا الموقع</button>
     </div>}
     {error&&<p className="field-error" role="alert">{error}</p>}
-    <p className="field-help">التوصيل داخل بغداد فقط. اللوكيشن ينضاف كرابط Waze برسالة الطلب، وما نخزنه بجهازك.</p>
+    <p className="field-help">اللوكيشن ينرسل ويا الطلب كرابط Waze.</p>
   </div>;
 }

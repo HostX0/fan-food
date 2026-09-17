@@ -1,0 +1,27 @@
+{
+  "generated": true,
+  "job": "0ce8ed54-e905-41fe-83fa-8742ef3b06d1",
+  "originalSha256": "de3f090b0070dfd11b8e976e247242b0f328eab3606856b07ba216ba4c71036c",
+  "assets": [
+    {
+      "path": "public/images/hero-v5/table-1440.webp",
+      "sha256": "0d3a8929992437664c27d3c8770fcff7fe1aff5881e9f43e418414dbe2c3f583",
+      "bytes": 307710
+    },
+    {
+      "path": "public/images/hero-v5/table-2000.webp",
+      "sha256": "95f3f9e02e4b578f596b0c93afaf4cad362cc21593fd78bfe53a68745e3184e4",
+      "bytes": 510204
+    },
+    {
+      "path": "public/images/hero-v5/table-800.webp",
+      "sha256": "1398d5d6833063f4e890511c3fcf572129eebf7328e09c5aa283371eab378f61",
+      "bytes": 114766
+    },
+    {
+      "path": "public/images/hero-v5/table-og.jpg",
+      "sha256": "374e787c5b0a340575d992a01235021fec260fca3ec5f1521cdbb8c2892a75fa",
+      "bytes": 264502
+    }
+  ]
+}

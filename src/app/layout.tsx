@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     applicationName: 'فن فود',
     icons: { icon: '/icon.svg', apple: '/apple-icon.png' },
     manifest: '/manifest.webmanifest',
-    openGraph: { title: 'فن فود — أكل البيت، بروح اليوم.', description: 'اختار سفرتك من منيو فن فود واطلب مباشرة عبر واتساب.', locale: 'ar_IQ', type: 'website', images: [{ url: '/images/menu-v4/p007.webp', width: 960, height: 720, alt: 'فن فود — من مطبخنا إلى لمّتكم' }] },
+    openGraph: { title: 'فن فود — أكل البيت، بروح اليوم.', description: 'اختار سفرتك من منيو فن فود واطلب مباشرة عبر واتساب.', locale: 'ar_IQ', type: 'website', images: [{ url: '/images/hero-v5/table-og.jpg', width: 1200, height: 630, alt: 'فن فود — من مطبخنا إلى لمّتكم' }] },
     robots: { index: true, follow: true },
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#1F3A29' };
@@ -21,5 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
       <link rel="stylesheet" href="/menu-enhancements-v2.css"/>
       <link rel="stylesheet" href="/menu-ux-v3.css"/>
       <link rel="stylesheet" href="/menu-final-v4.css"/>
+      <link rel="stylesheet" href="/menu-polish-v5.css"/>
     </head><body>{children}</body></html>;
 }

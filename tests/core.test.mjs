@@ -1,3 +1,4 @@
+import './polish.test.mjs';
 import "./final-menu.test.mjs";
 import './quick-cart.test.mjs';
 import test from 'node:test';
@@ -6,7 +7,7 @@ import {readFileSync} from 'node:fs';
 import {sanitizeCart,addLine,totals,expandCart,lineKey,normalizePhone,normalizeSearch,cleanText,formatPrice,validateCustomer,buildMessage,whatsappUrl,makeReference} from '../src/lib/core.mjs';
 const menu=JSON.parse(readFileSync(new URL('../src/data/menu.json',import.meta.url),'utf8'));
 const P=menu.products;const dolma=P.find(p=>p.name==='دولمة');const pasta=P.find(p=>p.name.startsWith('معكرونة'));
-const customer={name:'زبون اختبار',phone:'07700000000',city:'بغداد',area:'منطقة اختبار',address:'عنوان تجريبي واضح',landmark:'',note:''};
+const customer={name:'زبون اختبار',phone:'07700000000',city:'بغداد',address:'عنوان تجريبي واضح',note:''};
 test('All 73 source price options, 58 products, eight categories',()=>{assert.equal(P.reduce((n,p)=>n+p.variants.length,0),73);assert.equal(P.length,58);assert.equal(menu.categories.length,8);assert.equal(new Set(P.map(p=>p.id)).size,P.length);assert.equal(new Set(P.flatMap(p=>p.variants.map(v=>v.id))).size,73);});
 test('Every variant has a positive integer IQD price and original row',()=>{for(const p of P)for(const v of p.variants){assert.ok(Number.isInteger(v.price)&&v.price>0);assert.ok(v.sourceRow>=2&&v.sourceRow<=74);}});
 test('Catalog asset references resolve',()=>{for(const p of P){assert.doesNotThrow(()=>readFileSync(new URL('../public'+p.image,import.meta.url)));}});

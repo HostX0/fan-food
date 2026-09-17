@@ -37,10 +37,10 @@ try{
   await cart.getByRole('button',{name:'كمّل بيانات التوصيل',exact:true}).click();
   assert.equal(await page.locator('#customer-city').inputValue(),'بغداد');assert.ok(await page.locator('#customer-city').getAttribute('readonly')!==null);
   assert.equal(await page.locator('.phone-prefix').innerText(),'+964');
-  assert.equal(await page.locator('#customer-address').getAttribute('aria-required'),'false');
-  await page.locator('#customer-name').fill('زبون اختبار');await page.locator('#customer-phone').fill('+964 770 123 4567');await page.locator('#customer-area').fill('الجادرية');
+  assert.equal(await page.locator('#customer-address').getAttribute('aria-required'),'true');
+  await page.locator('#customer-name').fill('زبون اختبار');await page.locator('#customer-phone').fill('+964 770 123 4567');await page.locator('#customer-address').fill('الجادرية، قرب جامعة بغداد');
   assert.equal(await page.locator('#customer-phone').inputValue(),'770 123 4567');
-  // No detailed address or pin required; opening review must not fabricate coordinates.
+  // One combined address is enough; an omitted pin must not fabricate coordinates.
   await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();await page.locator('#order-message').waitFor();
   let message=await page.locator('#order-message').inputValue();assert.ok(!message.includes('waze.com'));assert.ok(message.includes('+9647701234567'));
   await cart.getByRole('button',{name:'تعديل البيانات',exact:true}).click();
@@ -74,7 +74,7 @@ try{
   const wa=new URL(await page.locator('[data-testid="send-order"]').getAttribute('href'));
   assert.equal(wa.origin,'https://wa.me');assert.equal(wa.pathname,'/9647737773444');assert.equal(wa.searchParams.get('text'),message);
   for(const text of ['المدينة: بغداد','الجادرية','+9647701234567','ورق عنب','8,000',href])assert.ok(message.includes(text),text);
-  assert.ok(!message.includes('العنوان:'));assert.ok(!message.includes('NaN'));
+  assert.ok(message.includes('العنوان: الجادرية، قرب جامعة بغداد'));assert.ok(!message.includes('المنطقة:'));assert.ok(!message.includes('NaN'));
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   const bounds=await cart.boundingBox();assert.ok(bounds.width<=width+1&&bounds.height<=height+1);
   const saved=await page.evaluate(()=>JSON.stringify({...localStorage}));for(const text of ['زبون اختبار','الجادرية','33.315','44.366','7701234567'])assert.ok(!saved.includes(text),'Customer data remains transient');

@@ -45,9 +45,7 @@ export type Customer = {
     name: string;
     phone: string;
     city: string;
-    area: string;
     address: string;
-    landmark: string;
     location?: DeliveryLocation | null;
     note: string;
 };

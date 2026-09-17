@@ -14,7 +14,7 @@ import { Price, Quantity, Modal, EmptyState } from './primitives';
 const products: Product[] = menu.products;
 const categories: Category[] = menu.categories;
 const POPULAR_PRODUCT_IDS = CURATED_PRODUCT_IDS;
-const emptyCustomer: Customer = { name: '', phone: '', city: SITE.city, area: '', address: '', landmark: '', note: '', location: null };
+const emptyCustomer: Customer = { name: '', phone: '', city: SITE.city, address: '', note: '', location: null };
 type Stage = 'cart' | 'details' | 'review';
 type State = {
     cart: CartLine[];
@@ -41,6 +41,13 @@ type State = {
 export default class MenuApp extends React.Component<Record<string, never>, State> {
     state: State = { cart: [], ready: false, category: 'popular', query: '', sort: 'default', favorites: [], selected: null, variant: '', choice: '', itemNote: '', quantity: 1, cartOpen: false, stage: 'cart', customer: { ...emptyCustomer }, errors: {}, reference: '', toast: '', confirmClear: false, copied: false };
     private toastTimer: ReturnType<typeof setTimeout> | undefined;
+    private headerObserver: ResizeObserver | undefined;
+    private menuFrame = 0;
+    private checkoutFrame = 0;
+    private syncHeaderHeight = () => {
+        const height = document.querySelector('.site-header')?.getBoundingClientRect().height;
+        if (height) document.documentElement.style.setProperty('--header-offset', `${height}px`);
+    };
     private onStorage = (event: StorageEvent) => {
         try {
             if (event.key === SITE.storageKey)
@@ -64,8 +71,23 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
         catch { }
         this.setState({ cart, favorites, ready: true });
         window.addEventListener('storage', this.onStorage);
+        this.syncHeaderHeight();
+        const header = document.querySelector('.site-header');
+        if (header && typeof ResizeObserver !== 'undefined') {
+            this.headerObserver = new ResizeObserver(this.syncHeaderHeight);
+            this.headerObserver.observe(header);
+        }
+        window.addEventListener('resize', this.syncHeaderHeight, {passive: true});
     }
     componentDidUpdate(_props: Record<string, never>, previous: State) {
+        // Start each checkout step at its heading instead of carrying over a scroll offset.
+        if (this.state.cartOpen && (previous.stage !== this.state.stage || !previous.cartOpen)) {
+            cancelAnimationFrame(this.checkoutFrame);
+            this.checkoutFrame = requestAnimationFrame(() => {
+                document.querySelector('.cart-modal .drawer-body')?.scrollTo({top: 0, behavior: 'instant'});
+                document.querySelector<HTMLElement>('.cart-modal [data-dialog-heading]')?.focus({preventScroll: true});
+            });
+        }
         if (this.state.ready && (previous.cart !== this.state.cart || !previous.ready))
             try {
                 localStorage.setItem(SITE.storageKey, JSON.stringify(this.state.cart));
@@ -77,11 +99,42 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
             }
             catch { }
     }
-    componentWillUnmount() { window.removeEventListener('storage', this.onStorage); if (this.toastTimer)
-        clearTimeout(this.toastTimer); }
+    componentWillUnmount() {
+        window.removeEventListener('storage', this.onStorage);
+        window.removeEventListener('resize', this.syncHeaderHeight);
+        this.headerObserver?.disconnect();
+        cancelAnimationFrame(this.menuFrame);
+        cancelAnimationFrame(this.checkoutFrame);
+        if (this.toastTimer) clearTimeout(this.toastTimer);
+    }
     notify = (message: string) => { if (this.toastTimer)
         clearTimeout(this.toastTimer); this.setState({ toast: message }); this.toastTimer = setTimeout(() => this.setState({ toast: '' }), 2600); };
-    goMenu = (category = 'popular') => { this.setState({ category, query: '' }, () => { document.getElementById('menu')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }); };
+    /** Use the bar's original-position anchor, not its sticky bounding box or the menu heading. */
+    goMenu = (category = 'popular', fromHero = false) => {
+        cancelAnimationFrame(this.menuFrame);
+        const align = (smooth = false) => {
+            const anchor = document.getElementById('category-start');
+            if (!anchor) return;
+            const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
+            const top = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - headerHeight);
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({top, behavior: smooth && !reduce ? 'smooth' : 'instant'});
+        };
+        // Align before changing category height to avoid browser scroll-clamping to the footer.
+        if (!fromHero) align();
+        this.setState({category, query: ''}, () => {
+            this.menuFrame = requestAnimationFrame(() => {
+                align(fromHero);
+                const bar = document.getElementById('category-bar');
+                const active = bar?.querySelector<HTMLElement>('button[aria-pressed="true"]');
+                if (!bar || !active) return;
+                const box = bar.getBoundingClientRect(), tab = active.getBoundingClientRect();
+                // Reveal ONLY the horizontal tab. scrollIntoView also shifts the page on iOS.
+                const delta = tab.left < box.left + 10 ? tab.left - box.left - 10 : tab.right > box.right - 10 ? tab.right - box.right + 10 : 0;
+                if (delta) bar.scrollBy({left: delta, behavior: 'instant'});
+            });
+        });
+    };
     openProduct = (product: Product) => this.setState({ selected: product, variant: product.variants[0].id, choice: product.choices[0] || '', quantity: 1, itemNote: '' });
     isSimpleProduct = isSingleSelection;
     quickAdd = (product: Product) => {
@@ -111,7 +164,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
             this.setState({ stage: 'cart' });
             return;
         }
-        this.setState({ stage: 'review', errors: {}, reference: this.state.reference || makeReference(), copied: false }, () => document.querySelector<HTMLElement>('[data-dialog-heading]')?.focus());
+        this.setState({ stage: 'review', errors: {}, reference: this.state.reference || makeReference(), copied: false }, () => document.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true}));
     };
     copyMessage = async (message: string) => {
         try {
@@ -211,17 +264,15 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
    {!count ? <div className="drawer-body"><EmptyState title="سلتك تنتظر أكلاتك"><p>تصفّح المنيو وضيف اللي تشتهيه.</p><button className="button button-primary" onClick={() => this.setState({ cartOpen: false }, () => this.goMenu())}>اكتشف المنيو<Icon name="arrow" size={14}/></button></EmptyState></div> : stage === 'cart' ? <>
      <div className="drawer-body">{this.renderCartLines()}<button className="text-link continue-shopping" onClick={() => this.setState({ cartOpen: false })}><Icon name="plus" size={13}/>ضيف أكلة ثانية</button>
       {this.state.confirmClear ? <div className="confirm-clear"><p>متأكد تريد تفرّغ السلة؟</p><button className="text-link danger" onClick={() => this.setState({ cart: [], confirmClear: false })}>إي، فرّغها</button><button className="text-link" onClick={() => this.setState({ confirmClear: false })}>إلغاء</button></div> : <button className="text-link clear-cart" onClick={() => this.setState({ confirmClear: true })}><Icon name="trash" size={12}/>تفريغ السلة</button>}
-     </div><div className="drawer-footer"><div className="total-line"><span>مجموع الأصناف</span><Price value={subtotal} large/></div><p className="subtle-disclaimer">{SITE.orderDisclaimer}<br />الإضافات نأكد سعرها وياك.</p><button className="button button-primary full" onClick={() => this.setState({ stage: 'details' }, () => document.querySelector<HTMLElement>('[data-dialog-heading]')?.focus())}>كمّل بيانات التوصيل<Icon name="arrow"/></button></div>
+     </div><div className="drawer-footer"><div className="total-line"><span>مجموع الأصناف</span><Price value={subtotal} large/></div><p className="subtle-disclaimer">{SITE.orderDisclaimer}<br />الإضافات نأكد سعرها وياك.</p><button className="button button-primary full" onClick={() => this.setState({ stage: 'details' }, () => document.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true}))}>كمّل بيانات التوصيل<Icon name="arrow"/></button></div>
     </> : stage === 'details' ? <form onSubmit={this.reviewOrder} noValidate className="checkout-form"><div className="drawer-body"><div className="form-grid">
       {this.renderField('name', 'الاسم', { placeholder: 'اسم صاحب الطلب', autoComplete: 'name', max: 70 })}
-      <div className="form-field"><label className="field-label" htmlFor="customer-phone">رقم الموبايل<small>مطلوب</small></label><div className={`phone-input ${this.state.errors.phone?'has-error':''}`} dir="ltr"><span className="phone-prefix" aria-label="مفتاح العراق">+964</span><input id="customer-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel-national" value={customer.phone} placeholder="770 123 4567" maxLength={22} aria-required="true" aria-invalid={!!this.state.errors.phone} aria-describedby={this.state.errors.phone?'customer-phone-error':'customer-phone-help'} onChange={e=>this.setCustomer('phone',nationalPhoneInput(e.target.value))} onBlur={()=>this.setCustomer('phone',formatNationalPhone(customer.phone))}/></div><p className="field-help" id="customer-phone-help">مثال: <bdi dir="ltr">+964 770 123 4567</bdi> — هم تگدر تلصق رقمك مثل 0770…</p>{this.state.errors.phone&&<p id="customer-phone-error" className="field-error" role="alert">{this.state.errors.phone}</p>}</div>
-      <div className="form-field"><label className="field-label" htmlFor="customer-city">المدينة<small>التوصيل لبغداد فقط</small></label><input id="customer-city" name="city" value="بغداد" readOnly aria-readonly="true" autoComplete="address-level1" className="fixed-city"/></div>
-      {this.renderField('area', 'المنطقة', { placeholder: 'اسم المنطقة / المحلّة', autoComplete: 'address-level2', max: 80 })}
-      {this.renderField('address', 'العنوان التفصيلي', { placeholder: 'الشارع، الزقاق، رقم الدار أو العمارة', autoComplete: 'street-address', max: 200, wide: true, optional: true })}
+      <div className="form-field"><label className="field-label" htmlFor="customer-phone">رقم الموبايل<small>مطلوب</small></label><div className={`phone-input ${this.state.errors.phone?'has-error':''}`} dir="ltr"><span className="phone-prefix" aria-label="مفتاح العراق">+964</span><input id="customer-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel-national" value={customer.phone} placeholder="770 123 4567" maxLength={22} aria-required="true" aria-invalid={!!this.state.errors.phone} aria-describedby={this.state.errors.phone?'customer-phone-error':'customer-phone-help'} onChange={e=>this.setCustomer('phone',nationalPhoneInput(e.target.value))} onBlur={()=>this.setCustomer('phone',formatNationalPhone(customer.phone))}/></div><p className="field-help" id="customer-phone-help">مثال: <bdi dir="ltr">+964 770 123 4567</bdi></p>{this.state.errors.phone&&<p id="customer-phone-error" className="field-error" role="alert">{this.state.errors.phone}</p>}</div>
+      <div className="form-field wide city-field"><label className="field-label" htmlFor="customer-city">المحافظة<small>التوصيل لبغداد فقط</small></label><input id="customer-city" name="city" value="بغداد" readOnly aria-readonly="true" autoComplete="address-level1" className="fixed-city"/></div>
+      {this.renderField('address', 'العنوان التفصيلي (المنطقة + أقرب نقطة دالة)', { placeholder: 'مثال: المنصور، قرب مول المنصور', autoComplete: 'street-address', max: 200, wide: true })}
       <LocationPicker value={customer.location} error={this.state.errors.location} onChange={location=>this.setState(s=>({customer:{...s.customer,location},errors:{...s.errors,location:undefined},copied:false}))}/>
-      {this.renderField('landmark', 'أقرب نقطة دالة', { placeholder: 'مكان معروف قريب على العنوان', optional: true, max: 120, wide: true })}
-      <div className="form-field wide"><label className="field-label" htmlFor="customer-note">ملاحظات الطلب<small>اختياري</small></label><textarea id="customer-note" rows={3} value={customer.note} maxLength={500} placeholder="موعد مفضّل، تعليمات التوصيل، أو أي استفسار…" onChange={e => this.setCustomer('note', e.target.value)}/></div>
-     </div><div className="privacy-note"><Icon name="care" size={18}/><p>بياناتك تبقى بهالصفحة، وما نخزّنها بقاعدة بيانات. تنتقل لواتساب بس من تختار فتح المحادثة.</p></div></div>
+      <div className="form-field wide"><label className="field-label" htmlFor="customer-note">ملاحظات الطلب<small>اختياري</small></label><textarea id="customer-note" rows={2} value={customer.note} maxLength={500} placeholder="أي ملاحظة للمطبخ أو للتوصيل…" onChange={e => this.setCustomer('note', e.target.value)}/></div>
+     </div><div className="privacy-note"><Icon name="care" size={18}/><p>بياناتك للطلب فقط، وما نخزّنها بقاعدة بيانات.</p></div></div>
      <div className="drawer-footer"><button type="submit" className="button button-primary full">راجع رسالة الطلب<Icon name="arrow"/></button><button type="button" className="text-link back-link" onClick={() => this.setState({ stage: 'cart' })}><Icon name="back" size={13}/>الرجوع للسلة</button></div></form> : <>
      <div className="drawer-body"><div className="review-summary"><Icon name="whatsapp" size={27}/><div><strong>إلى فن فود</strong><span dir="ltr">{SITE.phoneDisplay}</span></div><Price value={subtotal}/></div>{customer.location&&<a className="review-location" href={wazeUrl(customer.location)} target="_blank" rel="noopener noreferrer"><Icon name="pin" size={16}/>موقع التوصيل مرفق — راجعه على Waze</a>}<label className="field-label" htmlFor="order-message">رسالة طلبك</label><textarea id="order-message" className="message-preview" readOnly value={message} rows={13} dir="rtl"/>
       <div className="info-note"><Icon name="info"/><span>راح يفتح واتساب برسالتك جاهزة. اضغط «إرسال» داخل واتساب؛ الطلب مو مؤكّد إلا بعد رد المطعم.</span></div>
@@ -244,14 +295,14 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
    <div className="announcement"><span>أكل البيت، بروح اليوم.</span><span className="announcement-end"><Icon name="whatsapp" size={13}/>بغداد فقط • الطلب واتساب</span></div>
    <header className="site-header"><div className="container header-inner"><a className="logo-link" href="#" aria-label="فن فود — الصفحة الرئيسية"><img src="/images/logo.png" alt="فن فود" width="119" height="67"/></a><nav className="desktop-nav" aria-label="التنقل الرئيسي"><a className="active" href="#menu">المنيو</a><a href="#our-story">حكايتنا</a><a href="#how-to-order">شلون أطلب؟</a></nav><div className="header-actions"><a className="icon-button instagram-link" aria-label="فن فود على إنستغرام" href={SITE.instagram} target="_blank" rel="noopener noreferrer"><Icon name="instagram" size={21}/></a><button className="header-cart" onClick={this.openCart} aria-label={`افتح السلة، ${count} عبوة`}><Icon name="bag" size={17}/><span>سلتك</span><b>{count}</b></button></div></div></header>
    <main>
-    <section className="hero container" aria-labelledby="hero-title"><div className="hero-copy"><div className="eyebrow"><Icon name="leaf" size={13}/>مطبخ عراقي • بروح البيت</div><h1 id="hero-title">من مطبخنا<br />إلى <span className="gold-underline">لمّتكم.</span></h1><p>اختار أكلك، ضيفه للسلة، ودز طلبك عالواتساب.</p><div className="hero-actions"><button className="button button-primary" onClick={() => this.goMenu()}>شنو مشتهي اليوم؟<Icon name="arrow" size={16}/></button><a className="hero-contact" href={whatsappUrl(SITE.whatsapp)} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={22}/>احچي ويانا</a></div><div className="hero-details"><span><Icon name="bowl" size={16}/>8 أقسام على ذوقك</span><i /><span><Icon name="bag" size={15}/>طلب مباشر، بدون تسجيل</span></div></div>
-     <div className="hero-visual"><div className="hero-frame"><img src="/images/menu-v4/p007.webp" srcSet="/images/menu-v4/p007-sm.webp 480w, /images/menu-v4/p007.webp 960w" sizes="(max-width: 767px) 100vw, 50vw" alt="برياني عراقي — صورة توضيحية" width="960" height="720" fetchPriority="high"/><div className="hero-image-caption"><Icon name="leaf" size={14}/><span>طعم البيت، بكل لقمة.</span></div></div><div className="hero-note"><span>فنّ بالأكل،</span><strong>وفرحة باللّمة.</strong><svg width="42" height="20" viewBox="0 0 50 22" fill="none" aria-hidden="true"><path d="M2 13C12 4 26 3 42 7M8 19C23 9 32 11 47 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div><div className="hero-seal" aria-hidden="true"><Icon name="leaf" size={22}/><span>من بيتنا</span><b>إلى كل بيت</b></div></div>
+    <section className="hero container" aria-labelledby="hero-title"><div className="hero-copy"><div className="eyebrow"><Icon name="leaf" size={13}/>مطبخ عراقي • بروح البيت</div><h1 id="hero-title">من مطبخنا<br />إلى <span className="gold-underline">لمّتكم.</span></h1><p>اختار أكلك، ضيفه للسلة، ودز طلبك عالواتساب.</p><div className="hero-actions"><button className="button button-primary" onClick={() => this.goMenu('popular', true)}>شوف المنيو<Icon name="arrow" size={16}/></button><a className="hero-contact" href={whatsappUrl(SITE.whatsapp)} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={22}/>احچي ويانا</a></div><div className="hero-details"><span><Icon name="bowl" size={16}/>8 أقسام على ذوقك</span><i /><span><Icon name="bag" size={15}/>طلب مباشر، بدون تسجيل</span></div></div>
+     <div className="hero-visual"><div className="hero-frame"><img src="/images/hero-v5/table-1440.webp" srcSet="/images/hero-v5/table-800.webp 800w, /images/hero-v5/table-1440.webp 1440w, /images/hero-v5/table-2000.webp 2000w" sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1280px) 55vw, 680px" alt="سفرة عراقية من الدولمة والبرياني والكليجة — صورة توضيحية" width="2000" height="1125" fetchPriority="high" decoding="async" data-testid="hero-photo"/><div className="hero-image-caption"><Icon name="leaf" size={14}/><span>طعم البيت، بكل لقمة.</span></div></div><div className="hero-note"><span>فنّ بالأكل،</span><strong>وفرحة باللّمة.</strong><svg width="42" height="20" viewBox="0 0 50 22" fill="none" aria-hidden="true"><path d="M2 13C12 4 26 3 42 7M8 19C23 9 32 11 47 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div><div className="hero-seal" aria-hidden="true"><Icon name="leaf" size={22}/><span>من بيتنا</span><b>إلى كل بيت</b></div></div>
     </section>
     <div className="values-strip container"><span><Icon name="home" size={18}/><b>وصفات بروح البيت</b></span><span><Icon name="bowl" size={18}/><b>أحجام تناسب لمّتكم</b></span><span><Icon name="whatsapp" size={18}/><b>اختيارك يصير رسالة</b></span><div className="strip-pattern" aria-hidden="true"/></div>
     <section className="menu-section container" id="menu" aria-labelledby="menu-title"><div className="menu-heading"><div><span className="eyebrow">منيو فن فود</span><h2 id="menu-title">شنو <span>مشتهي اليوم؟</span></h2></div><div className="menu-tools"><div className="search-box"><Icon name="search" size={18}/><input type="search" aria-label="ابحث في المنيو" placeholder="اسم الأكلة، نوعها، أو ميزانيتك…" maxLength={100} value={query} onChange={e => this.setState({ query: e.target.value, category: 'all' })}/>{query && <button aria-label="مسح البحث" className="icon-button" onClick={() => this.setState({ query: '' })}><Icon name="close" size={13}/></button>}</div><div className="sort-box"><Icon name="sort" size={13}/><select aria-label="ترتيب الأصناف" value={sort} onChange={e => this.setState({ sort: e.target.value })}><option value="default">ترتيب المنيو</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option></select></div></div></div>
      <div className="search-hints" aria-label="اقتراحات بحث">{['دولمة','كبة','دجاج','تحت 15000'].map(term=><button type="button" key={term} onClick={()=>this.setState({query:term,category:'all'})}>{term}</button>)}</div>
-     <div className="category-nav" role="group" aria-label="أقسام المنيو"><button className={category === 'popular' ? 'active' : ''} aria-pressed={category === 'popular'} onClick={() => this.goMenu('popular')}><Icon name="fire" size={14}/>الأكثر طلباً</button><button className={category === 'all' ? 'active' : ''} aria-pressed={category === 'all'} onClick={() => this.goMenu('all')}><Icon name="all" size={14}/>كل المنيو</button>{categories.map(c => <button key={c.id} className={category === c.id ? 'active' : ''} aria-pressed={category === c.id} onClick={() => this.goMenu(c.id)}><Icon name={c.icon} size={14}/>{c.name}</button>)}<button className={category === 'favorites' ? 'active' : ''} aria-pressed={category === 'favorites'} onClick={() => this.goMenu('favorites')}><Icon name="heart" size={14}/>المفضلة{favorites.length > 0 && <small>{favorites.length}</small>}</button></div>
-     <div className="menu-layout"><div className="menu-content">
+     <div className="category-anchor" id="category-start" aria-hidden="true"/><div className="category-nav" id="category-bar" role="group" aria-label="أقسام المنيو"><button className={category === 'popular' ? 'active' : ''} aria-pressed={category === 'popular'} onClick={() => this.goMenu('popular')}><Icon name="fire" size={14}/>الأكثر طلباً</button><button className={category === 'all' ? 'active' : ''} aria-pressed={category === 'all'} onClick={() => this.goMenu('all')}><Icon name="all" size={14}/>كل المنيو</button>{categories.map(c => <button key={c.id} className={category === c.id ? 'active' : ''} aria-pressed={category === c.id} onClick={() => this.goMenu(c.id)}><Icon name={c.icon} size={14}/>{c.name}</button>)}<button className={category === 'favorites' ? 'active' : ''} aria-pressed={category === 'favorites'} onClick={() => this.goMenu('favorites')}><Icon name="heart" size={14}/>المفضلة{favorites.length > 0 && <small>{favorites.length}</small>}</button></div>
+     <div className="menu-layout"><div className="menu-content" key={category}><span className="sr-only" role="status">{category === 'popular' ? 'الأكثر طلباً' : category === 'all' ? 'كل المنيو' : category === 'favorites' ? 'المفضلة' : selectedCategory?.name}، {visible.length} صنف</span>
       {(query || category === 'favorites' || sort !== 'default') && <div className="result-heading"><h3>{category === 'favorites' ? 'أكلاتك المفضّلة' : query ? `نتائج البحث عن «${query}»` : category === 'popular' ? 'الأكثر طلباً' : selectedCategory?.name || 'كل الأصناف'}</h3><span aria-live="polite">{visible.length} صنف</span></div>}
       {!visible.length ? <EmptyState icon={category === 'favorites' ? 'heart' : 'search'} title={category === 'favorites' ? 'المفضلة بعدها فارغة' : 'ما لكينا هالأكلة'}><p>{category === 'favorites' ? 'اضغط القلب على أي صنف.' : 'جرّب اسم ثاني.'}</p><button className="button button-outline" onClick={() => this.setState({ category: 'all', query: '' })}>عرض كل المنيو</button></EmptyState> : grouped ? categories.map(c => <section className="category-section" key={c.id} aria-labelledby={'heading-' + c.id}><div className="section-heading"><div><span className="section-icon"><Icon name={c.icon} size={18}/></span><div><h3 id={'heading-' + c.id}>{c.name}</h3><p>{c.description}</p></div></div><span className="section-count">{products.filter(p => p.categoryId === c.id).length} أصناف</span></div><div className="product-grid">{visible.filter(p => p.categoryId === c.id).map(this.renderProduct)}</div></section>) : category === 'popular' && !query && sort === 'default' ? <section className="category-section" aria-labelledby="heading-popular"><div className="section-heading"><div><span className="section-icon"><Icon name="fire" size={18}/></span><div><h3 id="heading-popular">الأكثر طلباً</h3><p>مختارات فن فود.</p></div></div><span className="section-count">{visible.length} أصناف</span></div><div className="product-grid">{visible.map(this.renderProduct)}</div></section> : <>
        {selectedCategory && !query && sort === 'default' && <div className="section-heading category-summary"><div><span className="section-icon"><Icon name={selectedCategory.icon} size={18}/></span><div><h3>{selectedCategory.name}</h3><p>{selectedCategory.description}</p></div></div><span className="section-count">{visible.length} أصناف</span></div>}

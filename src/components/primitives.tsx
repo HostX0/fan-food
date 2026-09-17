@@ -57,7 +57,7 @@ export class Modal extends React.Component<{
         this.dialog?.showModal();
         document.body.style.overflow = 'hidden';
         // Focus the heading, not a text field: don't unnecessarily open mobile keyboards.
-        this.dialog?.querySelector<HTMLElement>('[data-dialog-heading]')?.focus();
+        this.dialog?.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true});
     }
     componentWillUnmount() { this.dialog?.removeEventListener('cancel', this.cancel); this.dialog?.removeEventListener('keydown', this.trapTab); this.dialog?.close(); document.body.style.overflow = this.previousOverflow; this.lastFocus?.focus({ preventScroll: true }); }
     render() {

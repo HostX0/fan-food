@@ -94,9 +94,7 @@ try {
   assert.ok(await cart.locator('[aria-invalid="true"]').count()>=3);
   await page.locator('#customer-name').fill('اختبار الواجهة');
   await page.locator('#customer-phone').fill('٠٧٧٠٠٠٠٠٠٠٠');
-  await page.locator('#customer-area').fill('منطقة اختبار');
-  await page.locator('#customer-address').fill('عنوان تجريبي لفحص الواجهة فقط');
-  await page.locator('#customer-landmark').fill('نقطة دالة تجريبية');
+  await page.locator('#customer-address').fill('منطقة اختبار، قرب نقطة دالة تجريبية — عنوان تجريبي لفحص الواجهة فقط');
   await page.locator('#customer-note').fill('اختبار محلي — لا يرسل للمطعم');
   await cart.getByRole('button',{name:'راجع رسالة الطلب',exact:true}).click();
   await page.locator('[data-testid="send-order"]').waitFor();
