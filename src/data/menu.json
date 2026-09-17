@@ -1,0 +1,1333 @@
+{
+  "categories": [
+    {
+      "id": "dolma",
+      "name": "الدولمة والمحاشي",
+      "description": "لَمّة تبدأ بطعم عراقي أصيل.",
+      "image": "/images/dolma.webp",
+      "icon": "leaf"
+    },
+    {
+      "id": "rice",
+      "name": "أطباق الرز والولائم",
+      "description": "أطباق للبيت… وللّمة الكبيرة.",
+      "image": "/images/rice.webp",
+      "icon": "bowl"
+    },
+    {
+      "id": "kubba",
+      "name": "الكبة",
+      "description": "أشكال مختلفة، ونكهة من بيتنا.",
+      "image": "/images/kubba.webp",
+      "icon": "wheat"
+    },
+    {
+      "id": "pastries",
+      "name": "المعجنات والمقبلات",
+      "description": "لقمات صغيرة، تكمّل السفرة.",
+      "image": "/images/pastries.webp",
+      "icon": "bread"
+    },
+    {
+      "id": "samosa",
+      "name": "السمبوسة والبورك",
+      "description": "حشوات على ذوق كل واحد.",
+      "image": "/images/samosa.webp",
+      "icon": "triangle"
+    },
+    {
+      "id": "grills",
+      "name": "اللحوم والمشاوي",
+      "description": "اختار النوع والكمية اللي تناسبك.",
+      "image": "/images/grills.webp",
+      "icon": "fire"
+    },
+    {
+      "id": "specials",
+      "name": "الأطباق الخاصة",
+      "description": "من وصفات مطبخ فن فود.",
+      "image": "/images/pasta.webp",
+      "icon": "cloche"
+    },
+    {
+      "id": "sweets",
+      "name": "الحلويات والمخبوزات",
+      "description": "والختام… حلو من بيتنا.",
+      "image": "/images/sweets.webp",
+      "icon": "cookie"
+    }
+  ],
+  "products": [
+    {
+      "id": "p001",
+      "categoryId": "dolma",
+      "name": "ورق عنب",
+      "image": "/images/dolma.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v002",
+          "label": "20 حبة",
+          "price": 8000,
+          "sourceName": "ورق عنب",
+          "sourceRow": 2
+        },
+        {
+          "id": "v003",
+          "label": "40 حبة",
+          "price": 16000,
+          "sourceName": "ورق عنب",
+          "sourceRow": 3
+        },
+        {
+          "id": "v004",
+          "label": "60 حبة",
+          "price": 23000,
+          "sourceName": "ورق عنب",
+          "sourceRow": 4
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "ورق عنب الدولمة والمحاشي اختار الحجم المناسب للمّة. ورق عنب 20 حبة ورق عنب 40 حبة ورق عنب 60 حبة"
+    },
+    {
+      "id": "p002",
+      "categoryId": "dolma",
+      "name": "دولمة",
+      "image": "/images/dolma.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v005",
+          "label": "3 أشخاص",
+          "price": 18000,
+          "sourceName": "دولمة",
+          "sourceRow": 5
+        },
+        {
+          "id": "v006",
+          "label": "5 أشخاص",
+          "price": 26000,
+          "sourceName": "دولمة",
+          "sourceRow": 6
+        },
+        {
+          "id": "v007",
+          "label": "7 أشخاص",
+          "price": 35000,
+          "sourceName": "دولمة",
+          "sourceRow": 7
+        }
+      ],
+      "note": "يمكن طلب إضافة الضلوع؛ يُؤكّد سعر الإضافة عبر واتساب.",
+      "choices": [],
+      "searchText": "دولمة الدولمة والمحاشي اختار الحجم المناسب للمّة. دولمة 3 أشخاص دولمة 5 أشخاص دولمة 7 أشخاص"
+    },
+    {
+      "id": "p003",
+      "categoryId": "dolma",
+      "name": "دولمة كوردية",
+      "image": "/images/dolma.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v008",
+          "label": "3 أشخاص",
+          "price": 18000,
+          "sourceName": "دولمة كوردية",
+          "sourceRow": 8
+        },
+        {
+          "id": "v009",
+          "label": "5 أشخاص",
+          "price": 26000,
+          "sourceName": "دولمة كوردية",
+          "sourceRow": 9
+        },
+        {
+          "id": "v010",
+          "label": "7 أشخاص",
+          "price": 35000,
+          "sourceName": "دولمة كوردية",
+          "sourceRow": 10
+        }
+      ],
+      "note": "يمكن طلب إضافة الضلوع؛ يُؤكّد سعر الإضافة عبر واتساب.",
+      "choices": [],
+      "searchText": "دولمة كوردية الدولمة والمحاشي اختار الحجم المناسب للمّة. دولمة كوردية 3 أشخاص دولمة كوردية 5 أشخاص دولمة كوردية 7 أشخاص"
+    },
+    {
+      "id": "p004",
+      "categoryId": "dolma",
+      "name": "تبسي باذنجان بالكبة",
+      "image": "/images/tabsi.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v011",
+          "label": "3 أشخاص",
+          "price": 8000,
+          "sourceName": "تبسي باذنجان بالكبة",
+          "sourceRow": 11
+        },
+        {
+          "id": "v012",
+          "label": "6 أشخاص",
+          "price": 16000,
+          "sourceName": "تبسي باذنجان بالكبة",
+          "sourceRow": 12
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "تبسي باذنجان بالكبة الدولمة والمحاشي اختار الحجم المناسب للمّة. تبسي باذنجان بالكبة 3 أشخاص تبسي باذنجان بالكبة 6 أشخاص"
+    },
+    {
+      "id": "p005",
+      "categoryId": "dolma",
+      "name": "ملفوف بالباذنجان",
+      "image": "/images/tabsi.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v013",
+          "label": "3 أشخاص",
+          "price": 8000,
+          "sourceName": "ملفوف بالباذنجان",
+          "sourceRow": 13
+        },
+        {
+          "id": "v014",
+          "label": "6 أشخاص",
+          "price": 16000,
+          "sourceName": "ملفوف بالباذنجان",
+          "sourceRow": 14
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "ملفوف بالباذنجان الدولمة والمحاشي اختار الحجم المناسب للمّة. ملفوف بالباذنجان 3 أشخاص ملفوف بالباذنجان 6 أشخاص"
+    },
+    {
+      "id": "p006",
+      "categoryId": "dolma",
+      "name": "شيخ محشي عائلي مع رز",
+      "image": "/images/tabsi.webp",
+      "imageRepresentative": true,
+      "description": "عائلي، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v015",
+          "label": "عائلي",
+          "price": 25000,
+          "sourceName": "شيخ محشي عائلي مع رز",
+          "sourceRow": 15
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "شيخ محشي عائلي مع رز الدولمة والمحاشي عائلي، من مطبخ فن فود. شيخ محشي عائلي مع رز عائلي"
+    },
+    {
+      "id": "p007",
+      "categoryId": "rice",
+      "name": "صينية برياني",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v016",
+          "label": "وسط • 4-5 أشخاص",
+          "price": 20000,
+          "sourceName": "صينية برياني وسط",
+          "sourceRow": 16
+        },
+        {
+          "id": "v017",
+          "label": "كبيرة • 6-7 أشخاص",
+          "price": 25000,
+          "sourceName": "صينية برياني كبيرة",
+          "sourceRow": 17
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "صينية برياني أطباق الرز والولائم اختار الحجم المناسب للمّة. صينية برياني وسط وسط • 4-5 أشخاص صينية برياني كبيرة كبيرة • 6-7 أشخاص"
+    },
+    {
+      "id": "p008",
+      "categoryId": "rice",
+      "name": "نصف دجاجة مع الرز",
+      "image": "/images/chickenrice.webp",
+      "imageRepresentative": true,
+      "description": "طبق للّمة، بطعم البيت.",
+      "variants": [
+        {
+          "id": "v018",
+          "label": "الطبق",
+          "price": 13000,
+          "sourceName": "نصف دجاجة مع الرز",
+          "sourceRow": 18
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "نصف دجاجة مع الرز أطباق الرز والولائم طبق للّمة، بطعم البيت. نصف دجاجة مع الرز الطبق"
+    },
+    {
+      "id": "p009",
+      "categoryId": "rice",
+      "name": "دجاجة كاملة مع الرز",
+      "image": "/images/chickenrice.webp",
+      "imageRepresentative": true,
+      "description": "طبق للّمة، بطعم البيت.",
+      "variants": [
+        {
+          "id": "v019",
+          "label": "الطبق",
+          "price": 25000,
+          "sourceName": "دجاجة كاملة مع الرز",
+          "sourceRow": 19
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "دجاجة كاملة مع الرز أطباق الرز والولائم طبق للّمة، بطعم البيت. دجاجة كاملة مع الرز الطبق"
+    },
+    {
+      "id": "p010",
+      "categoryId": "rice",
+      "name": "مقلوبة دجاج",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v020",
+          "label": "4 أشخاص",
+          "price": 20000,
+          "sourceName": "مقلوبة دجاج",
+          "sourceRow": 20
+        },
+        {
+          "id": "v021",
+          "label": "6 أشخاص",
+          "price": 30000,
+          "sourceName": "مقلوبة دجاج",
+          "sourceRow": 21
+        },
+        {
+          "id": "v022",
+          "label": "10 أشخاص",
+          "price": 40000,
+          "sourceName": "مقلوبة دجاج",
+          "sourceRow": 22
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "مقلوبة دجاج أطباق الرز والولائم اختار الحجم المناسب للمّة. مقلوبة دجاج 4 أشخاص مقلوبة دجاج 6 أشخاص مقلوبة دجاج 10 أشخاص"
+    },
+    {
+      "id": "p011",
+      "categoryId": "rice",
+      "name": "مقلوبة لحم",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v023",
+          "label": "4 أشخاص",
+          "price": 30000,
+          "sourceName": "مقلوبة لحم",
+          "sourceRow": 23
+        },
+        {
+          "id": "v024",
+          "label": "6 أشخاص",
+          "price": 40000,
+          "sourceName": "مقلوبة لحم",
+          "sourceRow": 24
+        },
+        {
+          "id": "v025",
+          "label": "10 أشخاص",
+          "price": 50000,
+          "sourceName": "مقلوبة لحم",
+          "sourceRow": 25
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "مقلوبة لحم أطباق الرز والولائم اختار الحجم المناسب للمّة. مقلوبة لحم 4 أشخاص مقلوبة لحم 6 أشخاص مقلوبة لحم 10 أشخاص"
+    },
+    {
+      "id": "p012",
+      "categoryId": "rice",
+      "name": "كبسة خليجية بالدجاج",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "طبق للّمة، بطعم البيت.",
+      "variants": [
+        {
+          "id": "v026",
+          "label": "الطبق",
+          "price": 25000,
+          "sourceName": "كبسة خليجية بالدجاج",
+          "sourceRow": 26
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبسة خليجية بالدجاج أطباق الرز والولائم طبق للّمة، بطعم البيت. كبسة خليجية بالدجاج الطبق"
+    },
+    {
+      "id": "p013",
+      "categoryId": "rice",
+      "name": "بخاري عماني بالدجاج",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "طبق للّمة، بطعم البيت.",
+      "variants": [
+        {
+          "id": "v027",
+          "label": "الطبق",
+          "price": 25000,
+          "sourceName": "بخاري عماني بالدجاج",
+          "sourceRow": 27
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بخاري عماني بالدجاج أطباق الرز والولائم طبق للّمة، بطعم البيت. بخاري عماني بالدجاج الطبق"
+    },
+    {
+      "id": "p014",
+      "categoryId": "rice",
+      "name": "قوزي لحم",
+      "image": "/images/qouzi.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v028",
+          "label": "1 كيلو",
+          "price": 40000,
+          "sourceName": "قوزي لحم",
+          "sourceRow": 28
+        },
+        {
+          "id": "v029",
+          "label": "2 كيلو",
+          "price": 75000,
+          "sourceName": "قوزي لحم",
+          "sourceRow": 29
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "قوزي لحم أطباق الرز والولائم اختار الحجم المناسب للمّة. قوزي لحم 1 كيلو قوزي لحم 2 كيلو"
+    },
+    {
+      "id": "p015",
+      "categoryId": "rice",
+      "name": "مطبق سمك على الطريقة البغدادية",
+      "image": "/images/rice.webp",
+      "imageRepresentative": true,
+      "description": "اختار الحجم المناسب للمّة.",
+      "variants": [
+        {
+          "id": "v030",
+          "label": "3 أشخاص",
+          "price": 23000,
+          "sourceName": "مطبق سمك على الطريقة البغدادية",
+          "sourceRow": 30
+        },
+        {
+          "id": "v031",
+          "label": "6 أشخاص",
+          "price": 35000,
+          "sourceName": "مطبق سمك على الطريقة البغدادية",
+          "sourceRow": 31
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "مطبق سمك على الطريقة البغدادية أطباق الرز والولائم اختار الحجم المناسب للمّة. مطبق سمك على الطريقة البغدادية 3 أشخاص مطبق سمك على الطريقة البغدادية 6 أشخاص"
+    },
+    {
+      "id": "p016",
+      "categoryId": "kubba",
+      "name": "كبة حلب",
+      "image": "/images/kubba-real.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v032",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "كبة حلب",
+          "sourceRow": 32
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبة حلب الكبة 10 قطع، من مطبخ فن فود. كبة حلب 10 قطع"
+    },
+    {
+      "id": "p017",
+      "categoryId": "kubba",
+      "name": "كبة التمن",
+      "image": "/images/kubba.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v033",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "كبة التمن",
+          "sourceRow": 33
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبة التمن الكبة 10 قطع، من مطبخ فن فود. كبة التمن 10 قطع"
+    },
+    {
+      "id": "p018",
+      "categoryId": "kubba",
+      "name": "كبة الجريش",
+      "image": "/images/kubba.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v034",
+          "label": "10 قطع",
+          "price": 10000,
+          "sourceName": "كبة الجريش",
+          "sourceRow": 34
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبة الجريش الكبة 10 قطع، من مطبخ فن فود. كبة الجريش 10 قطع"
+    },
+    {
+      "id": "p019",
+      "categoryId": "kubba",
+      "name": "كبة طرابلسية",
+      "image": "/images/kubba.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v035",
+          "label": "10 قطع",
+          "price": 10000,
+          "sourceName": "كبة طرابلسية",
+          "sourceRow": 35
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبة طرابلسية الكبة 10 قطع، من مطبخ فن فود. كبة طرابلسية 10 قطع"
+    },
+    {
+      "id": "p020",
+      "categoryId": "kubba",
+      "name": "كبة حامض",
+      "image": "/images/kubba.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v036",
+          "label": "10 قطع",
+          "price": 10000,
+          "sourceName": "كبة حامض",
+          "sourceRow": 36
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كبة حامض الكبة 10 قطع، من مطبخ فن فود. كبة حامض 10 قطع"
+    },
+    {
+      "id": "p021",
+      "categoryId": "pastries",
+      "name": "مثلثات فن فود",
+      "image": "/images/pastries.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v037",
+          "label": "10 قطع",
+          "price": 12000,
+          "sourceName": "مثلثات فن فود",
+          "sourceRow": 37
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "مثلثات فن فود المعجنات والمقبلات 10 قطع، من مطبخ فن فود. مثلثات فن فود 10 قطع"
+    },
+    {
+      "id": "p022",
+      "categoryId": "pastries",
+      "name": "لحم بعجين",
+      "image": "/images/lahmbajeen.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v038",
+          "label": "10 قطع",
+          "price": 9000,
+          "sourceName": "لحم بعجين",
+          "sourceRow": 38
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "لحم بعجين المعجنات والمقبلات 10 قطع، من مطبخ فن فود. لحم بعجين 10 قطع"
+    },
+    {
+      "id": "p023",
+      "categoryId": "pastries",
+      "name": "صفيحة دجاج",
+      "image": "/images/pastries.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v039",
+          "label": "10 قطع",
+          "price": 9000,
+          "sourceName": "صفيحة دجاج",
+          "sourceRow": 39
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "صفيحة دجاج المعجنات والمقبلات 10 قطع، من مطبخ فن فود. صفيحة دجاج 10 قطع"
+    },
+    {
+      "id": "p024",
+      "categoryId": "pastries",
+      "name": "ميني بيتزا",
+      "image": "/images/minipizza.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v040",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "ميني بيتزا",
+          "sourceRow": 40
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "ميني بيتزا المعجنات والمقبلات 10 قطع، من مطبخ فن فود. ميني بيتزا 10 قطع"
+    },
+    {
+      "id": "p025",
+      "categoryId": "pastries",
+      "name": "صفيحة جبن",
+      "image": "/images/pastries.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v041",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "صفيحة جبن",
+          "sourceRow": 41
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "صفيحة جبن المعجنات والمقبلات 10 قطع، من مطبخ فن فود. صفيحة جبن 10 قطع"
+    },
+    {
+      "id": "p026",
+      "categoryId": "pastries",
+      "name": "صينية معجنات مشكل",
+      "image": "/images/pastries.webp",
+      "imageRepresentative": true,
+      "description": "25 قطعة، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v042",
+          "label": "25 قطعة",
+          "price": 23000,
+          "sourceName": "صينية معجنات مشكل",
+          "sourceRow": 42
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "صينية معجنات مشكل المعجنات والمقبلات 25 قطعة، من مطبخ فن فود. صينية معجنات مشكل 25 قطعة"
+    },
+    {
+      "id": "p027",
+      "categoryId": "pastries",
+      "name": "المسخن",
+      "image": "/images/pastries.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v043",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "المسخن",
+          "sourceRow": 43
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "المسخن المعجنات والمقبلات 10 قطع، من مطبخ فن فود. المسخن 10 قطع"
+    },
+    {
+      "id": "p028",
+      "categoryId": "samosa",
+      "name": "سمبوسة لحم",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v044",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة لحم",
+          "sourceRow": 44
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة لحم السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة لحم 10 قطع"
+    },
+    {
+      "id": "p029",
+      "categoryId": "samosa",
+      "name": "سمبوسة دجاج بالخضار",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v045",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة دجاج بالخضار",
+          "sourceRow": 45
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة دجاج بالخضار السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة دجاج بالخضار 10 قطع"
+    },
+    {
+      "id": "p030",
+      "categoryId": "samosa",
+      "name": "سمبوسة خضار",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v046",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة خضار",
+          "sourceRow": 46
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة خضار السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة خضار 10 قطع"
+    },
+    {
+      "id": "p031",
+      "categoryId": "samosa",
+      "name": "سمبوسة جبن",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v047",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة جبن",
+          "sourceRow": 47
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة جبن السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة جبن 10 قطع"
+    },
+    {
+      "id": "p032",
+      "categoryId": "samosa",
+      "name": "سمبوسة سبانغ",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v048",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة سبانغ",
+          "sourceRow": 48
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة سبانغ السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة سبانغ 10 قطع"
+    },
+    {
+      "id": "p033",
+      "categoryId": "samosa",
+      "name": "سمبوسة مسخن",
+      "image": "/images/samosa.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v049",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "سمبوسة مسخن",
+          "sourceRow": 49
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سمبوسة مسخن السمبوسة والبورك 10 قطع، من مطبخ فن فود. سمبوسة مسخن 10 قطع"
+    },
+    {
+      "id": "p034",
+      "categoryId": "samosa",
+      "name": "بورك لحم",
+      "image": "/images/borek.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v050",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "بورك لحم",
+          "sourceRow": 50
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بورك لحم السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك لحم 10 قطع"
+    },
+    {
+      "id": "p035",
+      "categoryId": "samosa",
+      "name": "بورك دجاج",
+      "image": "/images/borek.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v051",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "بورك دجاج",
+          "sourceRow": 51
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بورك دجاج السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك دجاج 10 قطع"
+    },
+    {
+      "id": "p036",
+      "categoryId": "samosa",
+      "name": "بورك جبن",
+      "image": "/images/borek.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v052",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "بورك جبن",
+          "sourceRow": 52
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بورك جبن السمبوسة والبورك 10 قطع، من مطبخ فن فود. بورك جبن 10 قطع"
+    },
+    {
+      "id": "p037",
+      "categoryId": "grills",
+      "name": "همبرغر لحم",
+      "image": "/images/burger.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v053",
+          "label": "1 كيلو",
+          "price": 25000,
+          "sourceName": "همبرغر لحم",
+          "sourceRow": 53
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "همبرغر لحم اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. همبرغر لحم 1 كيلو"
+    },
+    {
+      "id": "p038",
+      "categoryId": "grills",
+      "name": "همبرغر دجاج",
+      "image": "/images/burger.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v054",
+          "label": "1 كيلو",
+          "price": 18000,
+          "sourceName": "همبرغر دجاج",
+          "sourceRow": 54
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "همبرغر دجاج اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. همبرغر دجاج 1 كيلو"
+    },
+    {
+      "id": "p039",
+      "categoryId": "grills",
+      "name": "كفتة فن فود",
+      "image": "/images/kofta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v055",
+          "label": "1 كيلو",
+          "price": 26000,
+          "sourceName": "كفتة فن فود",
+          "sourceRow": 55
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كفتة فن فود اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كفتة فن فود 1 كيلو"
+    },
+    {
+      "id": "p040",
+      "categoryId": "grills",
+      "name": "كفتة فن فود محشية بالجبن",
+      "image": "/images/kofta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v056",
+          "label": "1 كيلو",
+          "price": 30000,
+          "sourceName": "كفتة فن فود محشية بالجبن",
+          "sourceRow": 56
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كفتة فن فود محشية بالجبن اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كفتة فن فود محشية بالجبن 1 كيلو"
+    },
+    {
+      "id": "p041",
+      "categoryId": "grills",
+      "name": "كباب طاوة",
+      "image": "/images/kofta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v057",
+          "label": "1/2 كيلو",
+          "price": 10000,
+          "sourceName": "كباب طاوة",
+          "sourceRow": 57
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كباب طاوة اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كباب طاوة 1/2 كيلو"
+    },
+    {
+      "id": "p042",
+      "categoryId": "grills",
+      "name": "كباب عروق",
+      "image": "/images/kofta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v058",
+          "label": "1/2 كيلو",
+          "price": 10000,
+          "sourceName": "كباب عروق",
+          "sourceRow": 58
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كباب عروق اللحوم والمشاوي بالكيلو، حسب الكمية اللي تحتاجها. كباب عروق 1/2 كيلو"
+    },
+    {
+      "id": "p043",
+      "categoryId": "specials",
+      "name": "سكالوب لحم",
+      "image": "/images/pasta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v059",
+          "label": "1/2 كيلو",
+          "price": 16000,
+          "sourceName": "سكالوب لحم",
+          "sourceRow": 59
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سكالوب لحم الأطباق الخاصة بالكيلو، حسب الكمية اللي تحتاجها. سكالوب لحم 1/2 كيلو"
+    },
+    {
+      "id": "p044",
+      "categoryId": "specials",
+      "name": "سكالوب دجاج",
+      "image": "/images/pasta.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v060",
+          "label": "1/2 كيلو",
+          "price": 8000,
+          "sourceName": "سكالوب دجاج",
+          "sourceRow": 60
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "سكالوب دجاج الأطباق الخاصة بالكيلو، حسب الكمية اللي تحتاجها. سكالوب دجاج 1/2 كيلو"
+    },
+    {
+      "id": "p045",
+      "categoryId": "specials",
+      "name": "أفخاذ كاذبة",
+      "image": "/images/pasta.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v061",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "أفخاذ كاذبة",
+          "sourceRow": 61
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "أفخاذ كاذبة الأطباق الخاصة 10 قطع، من مطبخ فن فود. أفخاذ كاذبة 10 قطع"
+    },
+    {
+      "id": "p046",
+      "categoryId": "specials",
+      "name": "بقجة فن فود",
+      "image": "/images/pasta.webp",
+      "imageRepresentative": true,
+      "description": "10 قطع، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v062",
+          "label": "10 قطع",
+          "price": 8000,
+          "sourceName": "بقجة فن فود",
+          "sourceRow": 62
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بقجة فن فود الأطباق الخاصة 10 قطع، من مطبخ فن فود. بقجة فن فود 10 قطع"
+    },
+    {
+      "id": "p047",
+      "categoryId": "specials",
+      "name": "معكرونة بشاميل عائلي",
+      "image": "/images/pasta.webp",
+      "imageRepresentative": true,
+      "description": "صينية بشاميل عائلية، باختيارك من اللحم أو الدجاج.",
+      "variants": [
+        {
+          "id": "v063",
+          "label": "عائلي",
+          "price": 15000,
+          "sourceName": "معكرونة بشاميل عائلي",
+          "sourceRow": 63
+        }
+      ],
+      "note": "لحم أو دجاج",
+      "choices": [
+        "لحم",
+        "دجاج"
+      ],
+      "searchText": "معكرونة بشاميل عائلي الأطباق الخاصة صينية بشاميل عائلية، باختيارك من اللحم أو الدجاج. معكرونة بشاميل عائلي عائلي"
+    },
+    {
+      "id": "p048",
+      "categoryId": "sweets",
+      "name": "كليجة مشكل",
+      "image": "/images/kleicha-real.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v064",
+          "label": "1 كيلو",
+          "price": 12000,
+          "sourceName": "كليجة مشكل",
+          "sourceRow": 64
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كليجة مشكل الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة مشكل 1 كيلو"
+    },
+    {
+      "id": "p049",
+      "categoryId": "sweets",
+      "name": "كليجة تمر",
+      "image": "/images/kleicha-real.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v065",
+          "label": "1 كيلو",
+          "price": 10000,
+          "sourceName": "كليجة تمر",
+          "sourceRow": 65
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كليجة تمر الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة تمر 1 كيلو"
+    },
+    {
+      "id": "p050",
+      "categoryId": "sweets",
+      "name": "كليجة حلقوم",
+      "image": "/images/kleicha-real.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v066",
+          "label": "1 كيلو",
+          "price": 10000,
+          "sourceName": "كليجة حلقوم",
+          "sourceRow": 66
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كليجة حلقوم الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة حلقوم 1 كيلو"
+    },
+    {
+      "id": "p051",
+      "categoryId": "sweets",
+      "name": "كليجة جوز",
+      "image": "/images/kleicha-real.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v067",
+          "label": "1 كيلو",
+          "price": 14000,
+          "sourceName": "كليجة جوز",
+          "sourceRow": 67
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كليجة جوز الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة جوز 1 كيلو"
+    },
+    {
+      "id": "p052",
+      "categoryId": "sweets",
+      "name": "كليجة فستق حلبي",
+      "image": "/images/kleicha-real.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v068",
+          "label": "1 كيلو",
+          "price": 16000,
+          "sourceName": "كليجة فستق حلبي",
+          "sourceRow": 68
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "كليجة فستق حلبي الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. كليجة فستق حلبي 1 كيلو"
+    },
+    {
+      "id": "p053",
+      "categoryId": "sweets",
+      "name": "لفة خميره بالجبن",
+      "image": "/images/buns.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v069",
+          "label": "1 كيلو",
+          "price": 15000,
+          "sourceName": "لفة خميره بالجبن",
+          "sourceRow": 69
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "لفة خميره بالجبن الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميره بالجبن 1 كيلو"
+    },
+    {
+      "id": "p054",
+      "categoryId": "sweets",
+      "name": "لفة خميرة سادة",
+      "image": "/images/buns.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v070",
+          "label": "1 كيلو",
+          "price": 10000,
+          "sourceName": "لفة خميرة سادة",
+          "sourceRow": 70
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "لفة خميرة سادة الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميرة سادة 1 كيلو"
+    },
+    {
+      "id": "p055",
+      "categoryId": "sweets",
+      "name": "لفة خميرة فن فود",
+      "image": "/images/buns.webp",
+      "imageRepresentative": true,
+      "description": "بالوزن المبيّن، حسب الكمية اللي تحتاجها.",
+      "variants": [
+        {
+          "id": "v071",
+          "label": "1 كيلو",
+          "price": 15000,
+          "sourceName": "لفة خميرة فن فود",
+          "sourceRow": 71
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "لفة خميرة فن فود الحلويات والمخبوزات بالكيلو، حسب الكمية اللي تحتاجها. لفة خميرة فن فود 1 كيلو"
+    },
+    {
+      "id": "p056",
+      "categoryId": "sweets",
+      "name": "قالب بسكت مربى",
+      "image": "/images/sweets.webp",
+      "imageRepresentative": true,
+      "description": "قالب، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v072",
+          "label": "قالب",
+          "price": 20000,
+          "sourceName": "قالب بسكت مربى",
+          "sourceRow": 72
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "قالب بسكت مربى الحلويات والمخبوزات قالب، من مطبخ فن فود. قالب بسكت مربى قالب"
+    },
+    {
+      "id": "p057",
+      "categoryId": "sweets",
+      "name": "بايركس حلويات عائلي",
+      "image": "/images/dessert.webp",
+      "imageRepresentative": true,
+      "description": "بايركس، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v073",
+          "label": "بايركس",
+          "price": 35000,
+          "sourceName": "بايركس حلويات عائلي",
+          "sourceRow": 73
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بايركس حلويات عائلي الحلويات والمخبوزات بايركس، من مطبخ فن فود. بايركس حلويات عائلي بايركس"
+    },
+    {
+      "id": "p058",
+      "categoryId": "sweets",
+      "name": "بايركس حلويات وسط",
+      "image": "/images/dessert.webp",
+      "imageRepresentative": true,
+      "description": "بايركس، من مطبخ فن فود.",
+      "variants": [
+        {
+          "id": "v074",
+          "label": "بايركس",
+          "price": 25000,
+          "sourceName": "بايركس حلويات وسط",
+          "sourceRow": 74
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "بايركس حلويات وسط الحلويات والمخبوزات بايركس، من مطبخ فن فود. بايركس حلويات وسط بايركس"
+    }
+  ],
+  "sourceRowCount": 73,
+  "source": "Fan_Food_Menu.xlsx",
+  "sourceModified": "2026-09-17T16:52:25.284Z"
+}

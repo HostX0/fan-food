@@ -1,0 +1,29 @@
+{
+  "name": "fan-food-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fan Food — Arabic-first, frontend-only Next.js menu with WhatsApp ordering.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node scripts/serve.mjs out",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/core.test.mjs"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "@fortawesome/free-solid-svg-icons": "6.7.2",
+    "@fortawesome/free-brands-svg-icons": "6.7.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "4.1.10",
+    "@tailwindcss/postcss": "4.1.10"
+  },
+  "engines": { "node": ">=20.9.0" }
+}

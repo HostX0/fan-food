@@ -1,0 +1,1 @@
+export default function NotFound() { return <main dir="rtl" style={{ minHeight: '100vh', display: 'grid', placeContent: 'center', textAlign: 'center', padding: 24 }}><h1>هالصفحة مو موجودة.</h1><p>بس سفرتنا بعدها مليانة أكلات طيبة.</p><a className="button button-primary" style={{ marginTop: 20 }} href="/">ارجع للمنيو</a></main>; }

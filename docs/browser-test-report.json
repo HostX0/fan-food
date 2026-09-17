@@ -1,0 +1,162 @@
+[
+  {
+    "test": "All 58 product cards render",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Eight categories + all + favorites",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "320x740"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "390x844"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "540x900"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "768x1024"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "820x1180"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "1024x768"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "1440x1000"
+  },
+  {
+    "test": "No horizontal page overflow",
+    "status": "passed",
+    "details": "1920x1080"
+  },
+  {
+    "test": "Arabic product search",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Arabic spelling normalization",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Empty search state",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Favorites filter",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Category filter",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Variant price and quantity calculation",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Keyboard focus contained in modal",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Add a configured variant",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Cart serialization without customer details",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Quick add a single-size product",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Correct multi-product subtotal",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Required customer validation",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Complete Arabic order message preview",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "WhatsApp URL and full Arabic payload; not sent",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Escape closes dialog",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Cart remains after WhatsApp handoff preview",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Remove line and recalculate",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Clear-cart cancellation",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Confirmed clear-cart action",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Pasta filling choice preserved",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "Exact requested agency footer link",
+    "status": "passed",
+    "details": ""
+  },
+  {
+    "test": "No JavaScript runtime errors",
+    "status": "passed",
+    "details": ""
+  }
+]
