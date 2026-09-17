@@ -1,0 +1,69 @@
+name: Production menu regression checks
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fanfood-production-qa
+  cancel-in-progress: true
+jobs:
+  validate-and-verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Locked installation, unit tests, TypeScript and real Next.js build
+        run: |
+          npm ci --no-audit --no-fund
+          node --check tests/production-style.mjs
+          npm test
+          npm run typecheck
+          npm run build
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: fanfood-playwright-1.63.0-ubuntu-v1
+      - name: Browser engines
+        run: |
+          mkdir -p "$RUNNER_TEMP/qa"
+          npm install --prefix "$RUNNER_TEMP/qa" --no-audit --no-fund playwright@1.63.0
+          "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium webkit firefox
+      - name: Verify actual built files
+        run: |
+          export PLAYWRIGHT_REQUIRE_FROM="$RUNNER_TEMP/qa/package.json"
+          PORT=3000 node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
+          QUICK_SMOKE=1 REPORT_DIR=test-results/local BASE_URL=http://127.0.0.1:3000 node tests/checkout-enhancements.mjs
+          REPORT_DIR=test-results/local-style BASE_URL=http://127.0.0.1:3000 node tests/production-style.mjs
+      - name: Verify updated Vercel production, not only a local preview
+        env:
+          BASE_URL: https://fan-food.vercel.app
+        run: |
+          export PLAYWRIGHT_REQUIRE_FROM="$RUNNER_TEMP/qa/package.json"
+          ready=0
+          for i in $(seq 1 60); do
+            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'checkout-20260917-1'; then ready=1; break; fi
+            sleep 5
+          done
+          test "$ready" = 1 || { echo 'New production deployment is not ready'; exit 1; }
+          REPORT_DIR=test-results/live node tests/checkout-enhancements.mjs
+          REPORT_DIR=test-results/live-style node tests/production-style.mjs
+      - name: Package verified repository source
+        run: git archive --format=zip --output="$RUNNER_TEMP/FanFood_Production_Source.zip" HEAD
+      - name: Save regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fanfood-production-qa-${{ github.run_id }}
+          path: |
+            test-results/
+            ${{ runner.temp }}/FanFood_Production_Source.zip
+            ${{ runner.temp }}/serve.log
+          if-no-files-found: warn
+          retention-days: 14
