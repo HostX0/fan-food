@@ -1,0 +1,97 @@
+name: Import and verify Fan Food
+on:
+  push:
+    paths:
+      - '.github/workflows/bootstrap-menu.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: fan-food-source-import
+  cancel-in-progress: false
+jobs:
+  import-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Restore supplied source archive
+        if: ${{ hashFiles('package.json') == '' }}
+        env:
+          SOURCE_URL: 'https://sdmntprnortheu.oaiusercontent.com/files/00000000-9398-81f4-84eb-c084d0031189/raw?se=2026-09-17T18%3A04%3A53Z&sp=r&sv=2026-02-06&sr=b&scid=db914368-f507-59b6-9c6a-3ecb9899a49a&skoid=b5d2651b-fef3-4bb0-a03b-ca59cc22929b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-17T11%3A19%3A13Z&ske=2026-09-18T11%3A19%3A13Z&sks=b&skv=2026-02-06&sig=k8sgY7cEU3u50pKd//dtFMcWripx6O6FvL5lEVIZ4Ko%3D'
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 60 "$SOURCE_URL" -o "$RUNNER_TEMP/fanfood.zip"
+          echo "816a26c4d9f18d61868b3e0a1b8c87933c40822acb29c8eb9eae38a6c9aba95d  $RUNNER_TEMP/fanfood.zip" | sha256sum --check
+          python - <<'PY'
+          import os, pathlib, zipfile
+          root = pathlib.Path.cwd().resolve()
+          with zipfile.ZipFile(os.path.join(os.environ['RUNNER_TEMP'], 'fanfood.zip')) as archive:
+              for item in archive.infolist():
+                  parts = pathlib.PurePosixPath(item.filename).parts
+                  if not parts or parts[0] != 'fan-food-menu' or len(parts) < 2:
+                      continue
+                  target = root.joinpath(*parts[1:]).resolve()
+                  if root not in target.parents or '.git' in parts:
+                      raise ValueError('Unsafe archive entry')
+                  if item.is_dir():
+                      target.mkdir(parents=True, exist_ok=True)
+                  else:
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      if target.exists():
+                          raise ValueError(f'Refusing to overwrite {target}')
+                      target.write_bytes(archive.read(item))
+          PY
+      - name: Configure root-level Vercel deployment
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p = pathlib.Path('package.json')
+          data = json.loads(p.read_text())
+          data['engines'] = {'node': '22.x'}
+          p.write_text(json.dumps(data, indent=2) + '\n')
+          pathlib.Path('vercel.json').write_text(json.dumps({
+            '$schema': 'https://openapi.vercel.sh/vercel.json',
+            'framework': 'nextjs',
+            'buildCommand': 'npm run build',
+            'outputDirectory': 'out'
+          }, indent=2) + '\n')
+          pathlib.Path('.nvmrc').write_text('22\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          if ! git diff --cached --quiet; then
+            git commit -m "Restore complete Fan Food menu at repository root"
+            git push origin HEAD:main
+          fi
+      - name: Install actual dependencies
+        run: npm install --no-fund --no-audit
+      - name: TypeScript validation
+        run: npm run typecheck
+      - name: Order logic tests
+        run: npm test
+      - name: Actual Next.js production build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build
+      - name: Persist reproducible dependency lock
+        if: always()
+        run: |
+          if test -f package-lock.json; then
+            git add package-lock.json next-env.d.ts tsconfig.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Lock verified dependency resolution for deployment"
+              git push origin HEAD:main
+            fi
+          fi
+      - name: Collect build output
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fan-food-production-build
+          path: out/
+          retention-days: 7
