@@ -60,10 +60,10 @@ export function addLine(cart,product,variantId,quantity=1,choice='',note='') {
 export function validateCustomer(customer) {
   const errors={};
   if(cleanText(customer.name,70).length<2) errors.name='اكتب الاسم، حرفين على الأقل.';
-  if(!normalizePhone(customer.phone)) errors.phone='اكتب رقم موبايل عراقي صحيح، مثل 07XXXXXXXXX.';
-  if(cleanText(customer.city,60).length<2) errors.city='اكتب اسم المدينة.';
+  if(!normalizePhone(customer.phone)) errors.phone='اكتب رقم موبايل عراقي صحيح، مثل 770 123 4567.';
+  if(normalizeSearch(customer.city)!=='بغداد') errors.city='التوصيل متوفر داخل بغداد فقط.';
   if(cleanText(customer.area,80).length<2) errors.area='اكتب اسم المنطقة.';
-  if(cleanText(customer.address,200).length<4) errors.address='اكتب العنوان بوضوح حتى يوصل طلبك.';
+  if(customer.location && !validLocation(customer.location)) errors.location='اختار موقع توصيل صحيح داخل بغداد.';
   return errors;
 }
 export function makeReference(now = new Date(), random = Math.random()) {
@@ -80,9 +80,10 @@ export function buildMessage(cart,products,customer,reference) {
     '', '*بيانات الزبون*',
     'الاسم: '+cleanText(customer.name,70),
     'الهاتف: +'+normalizePhone(customer.phone),
-    'المدينة: '+cleanText(customer.city,60),
+    'المدينة: بغداد',
     'المنطقة: '+cleanText(customer.area,80),
-    'العنوان: '+cleanText(customer.address,200),
+    ...(cleanText(customer.address,200)?['العنوان: '+cleanText(customer.address,200)]:[]),
+    ...(validLocation(customer.location)?['موقع التوصيل (Waze): '+wazeUrl(customer.location)]:[]),
     ...(cleanText(customer.landmark,120)?['أقرب نقطة دالة: '+cleanText(customer.landmark,120)]:[]),
     '', '*تفاصيل الطلب*',
   ];
@@ -100,4 +101,30 @@ export function buildMessage(cart,products,customer,reference) {
 export function whatsappUrl(number,message='') {
   if(!/^\d{10,15}$/.test(number)) throw new Error('INVALID_WHATSAPP_NUMBER');
   return 'https://wa.me/'+number+(message?'?text='+encodeURIComponent(message):'');
+}
+
+/** Only used to reject obviously out-of-city pins, not as a delivery-service polygon. */
+export const BAGHDAD_BOUNDS = { south: 33.0, north: 33.65, west: 44.05, east: 44.8 };
+export function validLocation(value) {
+  if (!value || typeof value !== 'object') return false;
+  const {lat, lng} = value;
+  return typeof lat === 'number' && typeof lng === 'number' && Number.isFinite(lat) && Number.isFinite(lng)
+    && lat >= BAGHDAD_BOUNDS.south && lat <= BAGHDAD_BOUNDS.north
+    && lng >= BAGHDAD_BOUNDS.west && lng <= BAGHDAD_BOUNDS.east;
+}
+export function wazeUrl(location) {
+  if (!validLocation(location)) return '';
+  return 'https://www.waze.com/ul?ll=' + encodeURIComponent(location.lat.toFixed(6) + ',' + location.lng.toFixed(6)) + '&navigate=yes&zoom=17';
+}
+export function nationalPhoneInput(value) {
+  let n = westernDigits(value).replace(/[^0-9]/g, '');
+  if (n.startsWith('00964')) n = n.slice(5);
+  else if (n.startsWith('964')) n = n.slice(3);
+  if (n.startsWith('0')) n = n.slice(1);
+  // Preserve overlong inputs for validation instead of silently changing a pasted phone number.
+  return n.slice(0, 15);
+}
+export function formatNationalPhone(value) {
+  const n = nationalPhoneInput(value);
+  return n.length === 10 ? n.slice(0,3) + ' ' + n.slice(3,6) + ' ' + n.slice(6) : n;
 }

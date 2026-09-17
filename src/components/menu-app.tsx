@@ -5,10 +5,13 @@ import { SITE } from '../data/site';
 import type { Product, Category, CartLine, Customer } from '../lib/types';
 import { addLine, sanitizeCart, expandCart, totals, normalizeSearch, formatPrice, validateCustomer, buildMessage, makeReference, whatsappUrl } from '../lib/core.mjs';
 import { Icon } from './icon';
+import { LocationPicker } from './location-picker';
+import { searchProducts } from '../lib/search.mjs';
+import { nationalPhoneInput, formatNationalPhone, wazeUrl } from '../lib/core.mjs';
 import { Price, Quantity, Modal, EmptyState } from './primitives';
 const products: Product[] = menu.products;
 const categories: Category[] = menu.categories;
-const emptyCustomer: Customer = { name: '', phone: '', city: SITE.city, area: '', address: '', landmark: '', note: '' };
+const emptyCustomer: Customer = { name: '', phone: '', city: SITE.city, area: '', address: '', landmark: '', note: '', location: null };
 type Stage = 'cart' | 'details' | 'review';
 type State = {
     cart: CartLine[];
@@ -88,7 +91,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     remove = (key: string) => this.setState(s => ({ cart: s.cart.filter(l => l.key !== key) }), () => this.notify('انحذف الصنف من السلة'));
     toggleFavorite = (id: string) => this.setState(s => ({ favorites: s.favorites.includes(id) ? s.favorites.filter(f => f !== id) : [...s.favorites, id] }));
     openCart = () => this.setState({ cartOpen: true, stage: 'cart', confirmClear: false, copied: false });
-    setCustomer = (field: keyof Customer, value: string) => this.setState(s => ({ customer: { ...s.customer, [field]: value }, errors: { ...s.errors, [field]: undefined }, copied: false }));
+    setCustomer = (field: Exclude<keyof Customer, 'location'>, value: string) => this.setState(s => ({ customer: { ...s.customer, [field]: value }, errors: { ...s.errors, [field]: undefined }, copied: false }));
     reviewOrder = (e: React.FormEvent) => {
         e.preventDefault();
         const errors = validateCustomer(this.state.customer);
@@ -117,8 +120,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     };
     getVisible = () => {
         const { category, query, sort, favorites } = this.state;
-        const terms = normalizeSearch(query).split(' ').filter(Boolean);
-        let list = products.filter(p => (category === 'all' || category === 'favorites' && favorites.includes(p.id) || p.categoryId === category) && terms.every(t => normalizeSearch(p.searchText).includes(t)));
+        let list = searchProducts(products, query).filter(p => category === 'all' || (category === 'favorites' && favorites.includes(p.id)) || p.categoryId === category);
         if (sort === 'low')
             list = [...list].sort((a, b) => Math.min(...a.variants.map(v => v.price)) - Math.min(...b.variants.map(v => v.price)));
         if (sort === 'high')
@@ -130,7 +132,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
         const amount = Math.min(...product.variants.map(v => v.price));
         const qty = this.state.cart.filter(l => l.productId === product.id).reduce((a, l) => a + l.quantity, 0);
         return <article className="product-card" key={product.id} data-product-id={product.id}>
-   <div className="product-photo"><button className="photo-button" type="button" onClick={() => this.openProduct(product)} aria-label={'تفاصيل ' + product.name}><img src={product.image} alt={'صورة توضيحية لأصناف ' + categories.find(c => c.id === product.categoryId)?.name} width="520" height="360" loading="lazy" decoding="async"/></button>
+   <div className="product-photo"><button className="photo-button" type="button" onClick={() => this.openProduct(product)} aria-label={'تفاصيل ' + product.name}><img src={product.image} alt={product.name + (product.imageRepresentative ? ' — صورة توضيحية' : ' — من صور فن فود')} width="640" height="480" loading="lazy" decoding="async"/></button>
     <button className={`favorite-button ${favorite ? 'is-favorite' : ''}`} type="button" aria-label={(favorite ? 'إزالة ' : 'حفظ ') + product.name + (favorite ? ' من المفضلة' : ' في المفضلة')} aria-pressed={favorite} onClick={() => this.toggleFavorite(product.id)}><Icon name="heart" size={15}/></button>
     {qty > 0 && <span className="in-cart"><Icon name="check" size={10}/>{qty} بالسلة</span>}
    </div>
@@ -150,7 +152,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     renderCartSummary = () => {
         const { count, subtotal } = totals(this.state.cart, products);
         return <aside className="desktop-cart" aria-label="ملخص السلة"><div className="cart-aside-heading"><span className="small-icon"><Icon name="bag"/></span><h2>سفرتك</h2><span className="count-badge">{count}</span></div>
-   {count ? <>{this.renderCartLines(true)}<div className="aside-totals"><span>مجموع الأصناف</span><Price value={subtotal}/></div><p className="subtle-disclaimer">التوصيل والإضافات غير المسعّرة تُؤكّد لاحقاً.</p><button className="button button-primary full" onClick={this.openCart}>راجع طلبك<Icon name="arrow" size={15}/></button><p className="direct-note"><Icon name="whatsapp" size={14}/> الطلب مباشرة عبر واتساب</p></> : <EmptyState title="بعدها السفرة فارغة"><p>ضيف أكلاتك المفضّلة،<br />وخلي الباقي علينا.</p><span className="empty-dash"/></EmptyState>}
+   {count ? <>{this.renderCartLines(true)}<div className="aside-totals"><span>مجموع الأصناف</span><Price value={subtotal}/></div><p className="subtle-disclaimer">التوصيل والإضافات غير المسعّرة تُؤكّد لاحقاً.</p><button className="button button-primary full" onClick={this.openCart}>راجع طلبك<Icon name="arrow" size={15}/></button><p className="direct-note"><Icon name="whatsapp" size={14}/> الطلب مباشرة عبر واتساب • بغداد</p></> : <EmptyState title="بعدها السفرة فارغة"><p>ضيف أكلاتك المفضّلة،<br />وخلي الباقي علينا.</p><span className="empty-dash"/></EmptyState>}
    <div className="aside-bottom"><Icon name="care" size={19}/><p>أكل البيت، بروح اليوم.<small>من مطبخنا إلى لمّتكم.</small></p></div>
   </aside>;
     };
@@ -160,7 +162,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
             return null;
         const v = p.variants.find(v => v.id === this.state.variant) ?? p.variants[0];
         return <Modal className="product-modal" labelledBy="product-dialog-title" onClose={() => this.setState({ selected: null })}>
-   <div className="modal-photo"><img src={p.image} width="780" height="420" alt={'صورة توضيحية لأصناف ' + categories.find(c => c.id === p.categoryId)?.name}/><button className="icon-button close-modal" aria-label="إغلاق تفاصيل الصنف" onClick={() => this.setState({ selected: null })}><Icon name="close"/></button><span>صورة توضيحية لأصناف القسم</span></div>
+   <div className="modal-photo"><img src={p.image} width="780" height="420" alt={p.name + (p.imageRepresentative ? ' — صورة توضيحية' : ' — من صور فن فود')}/><button className="icon-button close-modal" aria-label="إغلاق تفاصيل الصنف" onClick={() => this.setState({ selected: null })}><Icon name="close"/></button><span>{p.imageRepresentative ? 'صورة توضيحية للصنف — التقديم قد يختلف' : 'من صور مطبخ فن فود'}</span></div>
    <div className="modal-body"><span className="eyebrow">{categories.find(c => c.id === p.categoryId)?.name}</span><h2 id="product-dialog-title" tabIndex={-1} data-dialog-heading>{p.name}</h2><p className="muted">{p.description}</p>
     <fieldset className="variant-fieldset"><legend>الحجم / الكمية<span>سعر العبوة الواحدة</span></legend><div className="variant-options">{p.variants.map(variant => <label className={`variant-option ${this.state.variant === variant.id ? 'selected' : ''}`} key={variant.id}><input type="radio" name="variant" value={variant.id} checked={this.state.variant === variant.id} onChange={() => this.setState({ variant: variant.id })}/><span>{variant.label}</span><Price value={variant.price}/><Icon name="done" size={18}/></label>)}</div></fieldset>
     {p.choices.length > 0 && <fieldset className="choice-fieldset"><legend>اختار النوع</legend><div className="choice-options">{p.choices.map(choice => <label className={this.state.choice === choice ? 'selected' : ''} key={choice}><input type="radio" name="choice" value={choice} checked={this.state.choice === choice} onChange={() => this.setState({ choice })}/>{choice}</label>)}</div></fieldset>}
@@ -169,7 +171,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
    </div><div className="product-modal-footer"><Quantity value={this.state.quantity} label="عدد العبوات" onChange={quantity => this.setState({ quantity })}/><button className="button button-primary grow" onClick={() => this.add(p, v.id, this.state.quantity, this.state.choice, this.state.itemNote)}><Icon name="bag" size={16}/>أضف للسلة<Price value={v.price * this.state.quantity}/></button></div>
   </Modal>;
     };
-    renderField = (field: keyof Customer, label: string, options: {
+    renderField = (field: Exclude<keyof Customer, 'location'>, label: string, options: {
         placeholder?: string;
         optional?: boolean;
         type?: string;
@@ -199,15 +201,16 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
      </div><div className="drawer-footer"><div className="total-line"><span>مجموع الأصناف</span><Price value={subtotal} large/></div><p className="subtle-disclaimer">{SITE.orderDisclaimer}<br />أي إضافة غير مسعّرة تحتاج تأكيد المطعم.</p><button className="button button-primary full" onClick={() => this.setState({ stage: 'details' }, () => document.querySelector<HTMLElement>('[data-dialog-heading]')?.focus())}>كمّل بيانات التوصيل<Icon name="arrow"/></button></div>
     </> : stage === 'details' ? <form onSubmit={this.reviewOrder} noValidate className="checkout-form"><div className="drawer-body"><div className="form-grid">
       {this.renderField('name', 'الاسم', { placeholder: 'اسم صاحب الطلب', autoComplete: 'name', max: 70 })}
-      {this.renderField('phone', 'رقم الموبايل', { placeholder: '07XXXXXXXXX', autoComplete: 'tel', type: 'tel', max: 20 })}
-      {this.renderField('city', 'المدينة', { autoComplete: 'address-level1', max: 60 })}
+      <div className="form-field"><label className="field-label" htmlFor="customer-phone">رقم الموبايل<small>مطلوب</small></label><div className={`phone-input ${this.state.errors.phone?'has-error':''}`} dir="ltr"><span className="phone-prefix" aria-label="مفتاح العراق">+964</span><input id="customer-phone" name="phone" type="tel" inputMode="tel" dir="ltr" autoComplete="tel-national" value={customer.phone} placeholder="770 123 4567" maxLength={22} aria-required="true" aria-invalid={!!this.state.errors.phone} aria-describedby={this.state.errors.phone?'customer-phone-error':'customer-phone-help'} onChange={e=>this.setCustomer('phone',nationalPhoneInput(e.target.value))} onBlur={()=>this.setCustomer('phone',formatNationalPhone(customer.phone))}/></div><p className="field-help" id="customer-phone-help">مثال: <bdi dir="ltr">+964 770 123 4567</bdi> — تگدر تلصق الرقم بصيغة 0770 أيضاً.</p>{this.state.errors.phone&&<p id="customer-phone-error" className="field-error" role="alert">{this.state.errors.phone}</p>}</div>
+      <div className="form-field"><label className="field-label" htmlFor="customer-city">المدينة<small>التوصيل لبغداد فقط</small></label><input id="customer-city" name="city" value="بغداد" readOnly aria-readonly="true" autoComplete="address-level1" className="fixed-city"/></div>
       {this.renderField('area', 'المنطقة', { placeholder: 'اسم المنطقة / المحلّة', autoComplete: 'address-level2', max: 80 })}
-      {this.renderField('address', 'العنوان التفصيلي', { placeholder: 'الشارع، الزقاق، رقم الدار أو العمارة', autoComplete: 'street-address', max: 200, wide: true })}
+      {this.renderField('address', 'العنوان التفصيلي', { placeholder: 'الشارع، الزقاق، رقم الدار أو العمارة', autoComplete: 'street-address', max: 200, wide: true, optional: true })}
+      <LocationPicker value={customer.location} error={this.state.errors.location} onChange={location=>this.setState(s=>({customer:{...s.customer,location},errors:{...s.errors,location:undefined},copied:false}))}/>
       {this.renderField('landmark', 'أقرب نقطة دالة', { placeholder: 'مكان معروف قريب على العنوان', optional: true, max: 120, wide: true })}
       <div className="form-field wide"><label className="field-label" htmlFor="customer-note">ملاحظات الطلب<small>اختياري</small></label><textarea id="customer-note" rows={3} value={customer.note} maxLength={500} placeholder="موعد مفضّل، تعليمات التوصيل، أو أي استفسار…" onChange={e => this.setCustomer('note', e.target.value)}/></div>
      </div><div className="privacy-note"><Icon name="care" size={18}/><p>بياناتك تبقى بهالصفحة، وما نخزّنها بقاعدة بيانات. تنتقل لواتساب بس من تختار فتح المحادثة.</p></div></div>
      <div className="drawer-footer"><button type="submit" className="button button-primary full">عاين رسالة الطلب<Icon name="arrow"/></button><button type="button" className="text-link back-link" onClick={() => this.setState({ stage: 'cart' })}><Icon name="back" size={13}/>الرجوع للسلة</button></div></form> : <>
-     <div className="drawer-body"><div className="review-summary"><Icon name="whatsapp" size={27}/><div><strong>إلى فن فود</strong><span dir="ltr">{SITE.phoneDisplay}</span></div><Price value={subtotal}/></div><label className="field-label" htmlFor="order-message">معاينة الرسالة</label><textarea id="order-message" className="message-preview" readOnly value={message} rows={13} dir="rtl"/>
+     <div className="drawer-body"><div className="review-summary"><Icon name="whatsapp" size={27}/><div><strong>إلى فن فود</strong><span dir="ltr">{SITE.phoneDisplay}</span></div><Price value={subtotal}/></div>{customer.location&&<a className="review-location" href={wazeUrl(customer.location)} target="_blank" rel="noopener noreferrer"><Icon name="pin" size={16}/>موقع التوصيل مرفق — راجعه على Waze</a>}<label className="field-label" htmlFor="order-message">معاينة الرسالة</label><textarea id="order-message" className="message-preview" readOnly value={message} rows={13} dir="rtl"/>
       <div className="info-note"><Icon name="info"/><span>راح يفتح واتساب برسالتك جاهزة. اضغط «إرسال» داخل واتساب؛ الطلب مو مؤكّد إلا بعد رد المطعم.</span></div>
       {long && <div className="long-message"><strong>طلبك كبير، نخليه أسهل.</strong><p>انسخ الرسالة أولاً، بعدها افتح واتساب والصقها بالمحادثة.</p></div>}
      </div><div className="drawer-footer"><button className="button button-outline full" onClick={() => this.copyMessage(message)}><Icon name={this.state.copied ? 'check' : 'copy'}/>{this.state.copied ? 'تم نسخ الرسالة' : 'انسخ رسالة الطلب'}</button>
@@ -225,14 +228,15 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
         const selectedCategory = categories.find(c => c.id === category);
         return <>
    <a href="#menu" className="skip-link">انتقل إلى المنيو</a>
-   <div className="announcement"><span>أكل البيت، بروح اليوم.</span><span className="announcement-end"><Icon name="whatsapp" size={13}/>اختار من المنيو واطلب عبر واتساب</span></div>
+   <div className="announcement"><span>أكل البيت، بروح اليوم.</span><span className="announcement-end"><Icon name="whatsapp" size={13}/>توصيل داخل بغداد فقط • الطلب عبر واتساب</span></div>
    <header className="site-header"><div className="container header-inner"><a className="logo-link" href="#" aria-label="فن فود — الصفحة الرئيسية"><img src="/images/logo.png" alt="فن فود" width="119" height="67"/></a><nav className="desktop-nav" aria-label="التنقل الرئيسي"><a className="active" href="#menu">المنيو</a><a href="#our-story">حكايتنا</a><a href="#how-to-order">شلون أطلب؟</a></nav><div className="header-actions"><a className="icon-button instagram-link" aria-label="فن فود على إنستغرام" href={SITE.instagram} target="_blank" rel="noopener noreferrer"><Icon name="instagram" size={21}/></a><button className="header-cart" onClick={this.openCart} aria-label={`افتح السلة، ${count} عبوة`}><Icon name="bag" size={17}/><span>سلتك</span><b>{count}</b></button></div></div></header>
    <main>
     <section className="hero container" aria-labelledby="hero-title"><div className="hero-copy"><div className="eyebrow"><Icon name="leaf" size={13}/>مطبخ عراقي • بروح البيت</div><h1 id="hero-title">من مطبخنا<br />إلى <span className="gold-underline">لمّتكم.</span></h1><p>الأكلة اللي تحبّها، واللّمة اللي تشتاقلها.<br />اختار سفرتك من أطباقنا، وخلي طعم البيت يجمعكم.</p><div className="hero-actions"><button className="button button-primary" onClick={() => this.goMenu()}>شنو مشتهي اليوم؟<Icon name="arrow" size={16}/></button><a className="hero-contact" href={whatsappUrl(SITE.whatsapp)} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={22}/>احچي ويانا</a></div><div className="hero-details"><span><Icon name="bowl" size={16}/>8 أقسام على ذوقك</span><i /><span><Icon name="bag" size={15}/>طلب مباشر، بدون تسجيل</span></div></div>
      <div className="hero-visual"><div className="hero-frame"><img src="/images/hero.webp" alt="طبق أرز عراقي مع الدجاج، من صور هوية فن فود" width="889" height="521" fetchPriority="high"/><div className="hero-image-caption"><Icon name="leaf" size={14}/><span>الطعم اللي يذكّرك بالبيت.</span></div></div><div className="hero-note"><span>فنّ بالأكل،</span><strong>وفرحة باللّمة.</strong><svg width="42" height="20" viewBox="0 0 50 22" fill="none" aria-hidden="true"><path d="M2 13C12 4 26 3 42 7M8 19C23 9 32 11 47 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div><div className="hero-seal" aria-hidden="true"><Icon name="leaf" size={22}/><span>من بيتنا</span><b>إلى كل بيت</b></div></div>
     </section>
     <div className="values-strip container"><span><Icon name="home" size={18}/><b>وصفات بروح البيت</b></span><span><Icon name="bowl" size={18}/><b>أحجام تناسب لمّتكم</b></span><span><Icon name="whatsapp" size={18}/><b>اختيارك يصير رسالة</b></span><div className="strip-pattern" aria-hidden="true"/></div>
-    <section className="menu-section container" id="menu" aria-labelledby="menu-title"><div className="menu-heading"><div><span className="eyebrow">على سفرتكم، من فن فود</span><h2 id="menu-title">اختار اللي <span>يطيّب خاطرك.</span></h2><p>أكلات عراقية، معجنات، وحلو يكمّل اللمة.</p></div><div className="menu-tools"><div className="search-box"><Icon name="search" size={18}/><input type="search" aria-label="ابحث في المنيو" placeholder="دوّر على أكلتك المفضّلة…" value={query} onChange={e => this.setState({ query: e.target.value })}/>{query && <button aria-label="مسح البحث" className="icon-button" onClick={() => this.setState({ query: '' })}><Icon name="close" size={13}/></button>}</div><div className="sort-box"><Icon name="sort" size={13}/><select aria-label="ترتيب الأصناف" value={sort} onChange={e => this.setState({ sort: e.target.value })}><option value="default">ترتيب المنيو</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option></select></div></div></div>
+    <section className="menu-section container" id="menu" aria-labelledby="menu-title"><div className="menu-heading"><div><span className="eyebrow">على سفرتكم، من فن فود</span><h2 id="menu-title">اختار اللي <span>يطيّب خاطرك.</span></h2><p>أكلات عراقية، معجنات، وحلو يكمّل اللمة.</p></div><div className="menu-tools"><div className="search-box"><Icon name="search" size={18}/><input type="search" aria-label="ابحث في المنيو" placeholder="اسم الأكلة، نوعها، أو ميزانيتك…" maxLength={100} value={query} onChange={e => this.setState({ query: e.target.value, category: 'all' })}/>{query && <button aria-label="مسح البحث" className="icon-button" onClick={() => this.setState({ query: '' })}><Icon name="close" size={13}/></button>}</div><div className="sort-box"><Icon name="sort" size={13}/><select aria-label="ترتيب الأصناف" value={sort} onChange={e => this.setState({ sort: e.target.value })}><option value="default">ترتيب المنيو</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option></select></div></div></div>
+     <div className="search-hints" aria-label="اقتراحات بحث"><span>جرّب:</span>{['دولمة','كبة','دجاج','تحت 15000'].map(term=><button type="button" key={term} onClick={()=>this.setState({query:term,category:'all'})}>{term}</button>)}<small>بحث بالعربي والإنكليزي، مع تصحيح بسيط للأخطاء.</small></div>
      <div className="category-nav" role="group" aria-label="أقسام المنيو"><button className={category === 'all' ? 'active' : ''} aria-pressed={category === 'all'} onClick={() => this.goMenu('all')}><Icon name="all" size={14}/>كل المنيو</button>{categories.map(c => <button key={c.id} className={category === c.id ? 'active' : ''} aria-pressed={category === c.id} onClick={() => this.goMenu(c.id)}><Icon name={c.icon} size={14}/>{c.name}</button>)}<button className={category === 'favorites' ? 'active' : ''} aria-pressed={category === 'favorites'} onClick={() => this.goMenu('favorites')}><Icon name="heart" size={14}/>المفضلة{favorites.length > 0 && <small>{favorites.length}</small>}</button></div>
      <div className="menu-layout"><div className="menu-content">
       {(query || category === 'favorites' || sort !== 'default') && <div className="result-heading"><h3>{category === 'favorites' ? 'أكلاتك المفضّلة' : query ? `نتائج البحث عن «${query}»` : selectedCategory?.name || 'كل الأصناف'}</h3><span aria-live="polite">{visible.length} صنف</span></div>}
@@ -240,7 +244,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
        {selectedCategory && !query && sort === 'default' && <div className="category-feature"><img src={selectedCategory.image} alt="" width="900" height="300"/><div><span className="eyebrow">من مطبخ فن فود</span><h3>{selectedCategory.name}</h3><p>{selectedCategory.description}</p></div></div>}
        <div className="product-grid">{visible.map(this.renderProduct)}</div>
       </>}
-      <div className="catalog-footnote"><Icon name="info" size={15}/><p>الأسعار بالدينار العراقي ولكل حجم أو عبوة موضّحة. الصور توضيحية لأصناف الأقسام؛ التقديم قد يختلف. التوفّر والتوصيل وطلبات الإضافات تُؤكّد عبر واتساب.</p></div>
+      <div className="catalog-footnote"><Icon name="info" size={15}/><p>الأسعار بالدينار العراقي ولكل حجم أو عبوة موضّحة. صور الأصناف مزيج من صور مطبخنا وصور توضيحية مولّدة؛ التقديم والكمية الفعلية حسب الوصف والحجم المختار. التوفّر والتوصيل وطلبات الإضافات تُؤكّد عبر واتساب.</p></div>
      </div>{this.renderCartSummary()}</div>
     </section>
     <section className="story-section" id="our-story"><div className="container story-inner"><div className="story-photo"><img src="/images/packaging.webp" alt="مشهد توضيحي لتغليف فن فود بهويته الخضراء" width="883" height="669" loading="lazy"/></div><div className="story-copy"><span className="eyebrow"><Icon name="leaf" size={15}/>حكاية بيت، مو بس مطبخ</span><h2>كل سفرة إلها ناسها.<br />وكل لقمة إلها <span>حكاية.</span></h2><p>بفن فود، نحب الأكل اللي يجمعنا. من الدولمة والكبة إلى صواني الرز والكليجة… اختار اللي تحبّه، ورتّب لمّتك بطريقتك.</p><div className="story-signature">أكل البيت، بروح اليوم.</div><a href={SITE.instagram} className="text-link" target="_blank" rel="noopener noreferrer"><Icon name="instagram" size={19}/>شوف أكثر من مطبخنا<Icon name="arrow" size={13}/></a></div></div></section>

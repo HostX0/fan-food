@@ -1,0 +1,27 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {validateCustomer,buildMessage,addLine,normalizePhone,nationalPhoneInput,formatNationalPhone,validLocation,wazeUrl} from '../src/lib/core.mjs';
+import {searchProducts} from '../src/lib/search.mjs';
+const {products:P}=JSON.parse(readFileSync(new URL('../src/data/menu.json',import.meta.url),'utf8'));
+const customer={name:'اختبار الموقع',phone:'7700000000',city:'بغداد',area:'الجادرية',address:'',landmark:'',note:''};
+const location={lat:33.3152,lng:44.3661,source:'manual'};
+test('Delivery details accept an optional empty address and no pin',()=>assert.deepEqual(validateCustomer(customer),{}));
+test('Only Baghdad is accepted as the city',()=>{assert.ok(validateCustomer({...customer,city:'البصرة'}).city);assert.ok(validateCustomer({...customer,city:''}).city);});
+test('National input handles local, international, Arabic and Persian pasted numbers',()=>{for(const x of ['07701234567','+964 770 123 4567','009647701234567','٠٧٧٠١٢٣٤٥٦٧','۰۷۷۰۱۲۳۴۵۶۷'])assert.equal(nationalPhoneInput(x),'7701234567');});
+test('National display formatting preserves the actual number',()=>{assert.equal(formatNationalPhone('07701234567'),'770 123 4567');assert.equal(normalizePhone(formatNationalPhone('07701234567')),'9647701234567');});
+test('Overlong pasted numbers are rejected not silently truncated into a different valid number',()=>{assert.equal(normalizePhone(nationalPhoneInput('+964770123456789')),'');});
+test('Map rejects absent, malformed, out-of-city and infinite coordinates',()=>{for(const x of [null,{},'33,44',{lat:'33.3152',lng:44.3661},{lat:NaN,lng:44.3},{lat:0,lng:0},{lat:51.5,lng:.1},{lat:33.3,lng:Infinity}])assert.equal(validLocation(x),false);assert.equal(validLocation(location),true);});
+test('Waze contains accurate confirmed coordinates and navigation flag',()=>{const url=new URL(wazeUrl(location));assert.equal(url.origin,'https://www.waze.com');assert.equal(url.searchParams.get('ll'),'33.315200,44.366100');assert.equal(url.searchParams.get('navigate'),'yes');assert.equal(wazeUrl(null),'');});
+test('Only explicitly provided valid pin is added to WhatsApp order',()=>{const cart=addLine([],P[0],P[0].variants[0].id,1);const without=buildMessage(cart,P,customer,'TEST');assert.ok(!without.includes('waze'));const withPin=buildMessage(cart,P,{...customer,location},'TEST');assert.ok(withPin.includes(wazeUrl(location)));assert.ok(withPin.includes('المدينة: بغداد'));assert.ok(!withPin.includes('العنوان:'));});
+test('Invalid location cannot leak into composed messages',()=>{const c=addLine([],P[0],P[0].variants[0].id,1);assert.throws(()=>buildMessage(c,P,{...customer,location:{lat:100,lng:100}},'T'),/INVALID_CUSTOMER/);});
+test('All products have distinct per-item images',()=>{assert.equal(new Set(P.map(p=>p.image)).size,58);const hashes=P.map(p=>createHash('sha256').update(readFileSync(new URL('../public'+p.image,import.meta.url))).digest('hex'));assert.equal(new Set(hashes).size,58);});
+test('Arabic exact-name search ranks precise dishes first',()=>{assert.equal(searchProducts(P,'دولمه كورديه')[0].id,'p003');assert.equal(searchProducts(P,'كبة حلب')[0].id,'p016');});
+test('English and Iraqi colloquial aliases find actual menu items',()=>{assert.equal(searchProducts(P,'grape leaves')[0].id,'p001');assert.equal(searchProducts(P,'chicken escalope')[0]?.id,'p044');assert.ok(searchProducts(P,'chicken').some(p=>p.id==='p044'));assert.ok(searchProducts(P,'برغر').some(p=>p.id==='p037'));assert.ok(searchProducts(P,'سبانخ').some(p=>p.id==='p032'));});
+test('A small typo can match but nonsense does not fabricate results',()=>{assert.equal(searchProducts(P,'مقلوب دجاج')[0].id,'p010');assert.equal(searchProducts(P,'zxqnonexistent987').length,0);});
+test('Arabic and English budget queries return only within-budget starting prices',()=>{for(const q of ['تحت 15000','اقل من ١٥ الف','under 15k']){const found=searchProducts(P,q);assert.ok(found.length>0);assert.ok(found.every(p=>Math.min(...p.variants.map(v=>v.price))<=15000));}});
+test('Ingredient plus price filters are combined',()=>{const r=searchProducts(P,'دجاج تحت 10000');assert.ok(r.length>0);assert.ok(r.every(p=>Math.min(...p.variants.map(v=>v.price))<=10000));});
+test('Search does not mutate the catalog',()=>{const before=JSON.stringify(P);searchProducts(P,'كبب');assert.equal(JSON.stringify(P),before);});
+
+test('Arabic articles and attached prepositions do not hide matching dishes',()=>{assert.equal(searchProducts(P,'ورق العنب')[0].id,'p001');assert.ok(searchProducts(P,'بالجبن').some(p=>p.id==='p031'));});

@@ -32,6 +32,12 @@ export type CartLine = {
     choice: string;
     note: string;
 };
+export type DeliveryLocation = {
+    lat: number;
+    lng: number;
+    source: 'gps' | 'manual';
+    accuracy?: number;
+};
 export type Customer = {
     name: string;
     phone: string;
@@ -39,6 +45,7 @@ export type Customer = {
     area: string;
     address: string;
     landmark: string;
+    location?: DeliveryLocation | null;
     note: string;
 };
 export type ExpandedLine = CartLine & {
