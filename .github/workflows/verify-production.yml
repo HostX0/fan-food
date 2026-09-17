@@ -23,6 +23,7 @@ jobs:
           npm ci --no-audit --no-fund
           node --check tests/production-style.mjs
           node --check tests/final-menu-browser.mjs
+          node --check tests/polish-browser.mjs
           npm test
           npm run typecheck
           npm run build
@@ -44,6 +45,7 @@ jobs:
           REPORT_DIR=test-results/local-style BASE_URL=http://127.0.0.1:3000 node tests/production-style.mjs
           REPORT_DIR=test-results/local-quick BASE_URL=http://127.0.0.1:3000 node tests/quick-controls.mjs
           REPORT_DIR=test-results/local-final BASE_URL=http://127.0.0.1:3000 node tests/final-menu-browser.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/local-polish BASE_URL=http://127.0.0.1:3000 node tests/polish-browser.mjs
       - name: Verify updated Vercel production, not only a local preview
         env:
           BASE_URL: https://fan-food.vercel.app
@@ -51,10 +53,11 @@ jobs:
           export PLAYWRIGHT_REQUIRE_FROM="$RUNNER_TEMP/qa/package.json"
           ready=0
           for i in $(seq 1 60); do
-            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'iraqi-photo-menu-20260918-v4'; then ready=1; break; fi
+            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'hero-checkout-nav-20260918-v5'; then ready=1; break; fi
             sleep 5
           done
           test "$ready" = 1 || { echo 'New production deployment is not ready'; exit 1; }
+          QUICK_SMOKE=1 REPORT_DIR=test-results/live-polish node tests/polish-browser.mjs
           REPORT_DIR=test-results/live node tests/checkout-enhancements.mjs
           REPORT_DIR=test-results/live-style node tests/production-style.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/live-quick node tests/quick-controls.mjs
