@@ -23,10 +23,10 @@ jobs:
           cache: npm
       - name: Fetch and verify the scoped update package
         env:
-          BUNDLE_URL: 'https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-4708-8210-9bb4-2e5db354dd8d/raw?se=2026-09-17T18%3A46%3A16Z&sp=r&sv=2026-02-06&sr=b&scid=cd718492-7e6f-5152-8ad5-85fa059f33d6&skoid=b5d2651b-fef3-4bb0-a03b-ca59cc22929b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-17T18%3A16%3A18Z&ske=2026-09-18T18%3A16%3A18Z&sks=b&skv=2026-02-06&sig=0gkVrliYP%2BRcZCH1v8OTWbGqHr8noCYwOqt5ucC2lys%3D'
+          BUNDLE_URL: 'https://sdmntprukwest.oaiusercontent.com/files/00000000-9860-8243-a5d1-dddfd9eb2ec8/raw?se=2026-09-17T18%3A54%3A16Z&sp=r&sv=2026-02-06&sr=b&scid=2eded150-4580-538e-9e9d-60070a38b6b1&skoid=b5d2651b-fef3-4bb0-a03b-ca59cc22929b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-17T18%3A16%3A31Z&ske=2026-09-18T18%3A16%3A31Z&sks=b&skv=2026-02-06&sig=ozi%2B3bKbOgvKMCA3iGG64rt1bNA2S9mhbtm5MOwaaVY%3D'
         run: |
           curl -fsSL --retry 3 --max-time 120 "$BUNDLE_URL" -o "$RUNNER_TEMP/fanfood-update.zip"
-          echo "f6e6ab86c2269d9c6c1cf937432f02d522eec3f3230213da4dad385eb43b5c8c  $RUNNER_TEMP/fanfood-update.zip" | sha256sum -c -
+          echo "aad0cf1530e50cc751d60e44da4eddfef6bb65226d8fdbff1cbe7ac12e9cc990  $RUNNER_TEMP/fanfood-update.zip" | sha256sum -c -
           python3 - <<'PY'
           import zipfile,json,os,hashlib,subprocess
           from pathlib import Path
@@ -48,6 +48,7 @@ jobs:
               assert hashlib.sha256(data).hexdigest()==item['sha256']
               dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
           PY
+          node --check tests/checkout-enhancements.mjs
       - name: Prepare approved local product photography and map library
         run: |
           python3 -m pip install --quiet Pillow
@@ -65,7 +66,13 @@ jobs:
           npm test
           npm run typecheck
       - name: Next.js production build
-        run: npm run build
+        run: |
+          npm run build
+          zip -qr "$RUNNER_TEMP/FanFood_Static_Build.zip" out
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: fanfood-playwright-1.63.0-ubuntu-v1
       - name: Install isolated cross-browser test tools
         run: |
           mkdir -p "$RUNNER_TEMP/qa"
@@ -113,6 +120,7 @@ jobs:
           path: |
             test-results/
             ${{ runner.temp }}/FanFood_Production_Source.zip
+            ${{ runner.temp }}/FanFood_Static_Build.zip
             ${{ runner.temp }}/serve.log
           if-no-files-found: warn
           retention-days: 14
