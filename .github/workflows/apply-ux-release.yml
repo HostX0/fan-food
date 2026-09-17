@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - name: Apply only the requested source changes with integrity checks
+      - name: Apply only application source changes with integrity checks
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -38,7 +38,7 @@ jobs:
             packed+=chunk
           raw=zlib.decompress(packed)
           assert hashlib.sha256(raw).hexdigest()=='b63fc87ede624633a846549afd825fa9f51700707a2d7b8e5c1688626db8c2f0'
-          changes=json.loads(raw);root=Path.cwd()
+          changes=[c for c in json.loads(raw) if not c['p'].startswith('.github/')];root=Path.cwd()
           for change in changes:
             p=root/change['p']
             assert p.resolve().is_relative_to(root) and not p.is_symlink()
@@ -95,7 +95,7 @@ jobs:
           REPORT_DIR=test-results/quick-local node tests/quick-controls.mjs
           REPORT_DIR=test-results/browser-local node tests/browser-smoke.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/checkout-local node tests/checkout-enhancements.mjs
-      - name: Publish validated changes to main without overwriting concurrent edits
+      - name: Publish validated application source without altering workflows
         run: |
           git fetch origin main
           test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || { echo 'Main changed during validation; refusing overwrite'; exit 1; }
@@ -103,9 +103,9 @@ jobs:
           import subprocess,json,os
           from pathlib import Path
           paths=json.loads(Path(os.environ['RUNNER_TEMP']+'/ux-paths.json').read_text())
+          assert not any(p.startswith('.github/') for p in paths)
           subprocess.run(['git','add','--',*paths,'public/images/products/p008-half-chicken.webp'],check=True)
           PY
-          git rm .github/workflows/apply-ux-release.yml
           git config user.name 'HostX0'
           git config user.email '42905848+HostX0@users.noreply.github.com'
           git commit -m 'Publish simplified menu, six featured dishes, inline quantity controls and corrected half-chicken photo'
