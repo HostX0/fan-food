@@ -22,6 +22,7 @@ async function fits(page,label){
 }
 try {
  for(const [engine,width,height] of profiles){
+  console.log(`START ${engine} ${width}x${height}`);
   const browser=await engines[engine].launch({headless:true});
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,locale:'ar-IQ',reducedMotion:'reduce',hasTouch:width<1100});
   const page=await context.newPage(); activePage=page;
@@ -47,8 +48,10 @@ try {
   }
   await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
   const search=page.getByRole('searchbox');
-  await search.fill('دولمه');
-  await count(page,2);
+  // Search includes category names; use the full dish to test Arabic letter normalization.
+  await search.fill('دولمه كورديه');
+  await count(page,1);
+  assert.equal(await page.locator('.product-card h3').textContent(),'دولمة كوردية');
   await search.fill('zxqnonexistent987');await count(page,0);
   await search.fill('');await count(page,menu.products.length);
   const first=menu.products[0];
