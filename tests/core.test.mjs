@@ -1,3 +1,4 @@
+import './menu-scroll.test.mjs';
 import './polish.test.mjs';
 import "./final-menu.test.mjs";
 import './quick-cart.test.mjs';

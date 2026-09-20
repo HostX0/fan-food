@@ -16,7 +16,7 @@ try{
   const css=await page.request.get(base+'/menu-enhancements-v2.css');assert.equal(css.status(),200);assert.ok((await css.text()).includes('.location-map'));
   assert.equal(await page.locator('.search-hints').evaluate(e=>getComputedStyle(e).display),'flex');
   await page.locator('#menu').scrollIntoViewIfNeeded();await page.screenshot({path:`${dir}/${width}-menu.png`});
-  await page.locator('[data-product-id="p016"] .add-button').click();await page.locator('.header-cart').click();
+  await page.locator('[data-product-id="p016"] .add-button').first().click();await page.locator('.header-cart').click();
   const dialog=page.locator('dialog.cart-modal');await dialog.getByRole('button',{name:'كمّل بيانات التوصيل',exact:true}).click();
   await page.locator('#customer-name').fill('اختبار تنسيق');await page.locator('#customer-phone').fill('07701234567');await page.locator('#customer-address').fill('الجادرية، قرب جامعة بغداد');
   assert.equal(await page.locator('.phone-input').evaluate(e=>getComputedStyle(e).display),'flex');

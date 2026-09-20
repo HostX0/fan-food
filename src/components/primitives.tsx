@@ -30,6 +30,8 @@ export class Modal extends React.Component<{
     private dialog: HTMLDialogElement | null = null;
     private lastFocus: HTMLElement | null = null;
     private previousOverflow = '';
+    private previousScroll = {left: 0, top: 0};
+    private restorePagePosition = () => window.scrollTo({...this.previousScroll, behavior: 'instant'});
     private cancel = (event: Event) => { event.preventDefault(); this.props.onClose(); };
     private trapTab = (event: KeyboardEvent) => {
         if (event.key !== 'Tab' || !this.dialog)
@@ -52,14 +54,27 @@ export class Modal extends React.Component<{
     componentDidMount() {
         this.lastFocus = document.activeElement as HTMLElement;
         this.previousOverflow = document.body.style.overflow;
+        this.previousScroll = {left: window.scrollX, top: window.scrollY};
         this.dialog?.addEventListener('cancel', this.cancel);
         this.dialog?.addEventListener('keydown', this.trapTab);
         this.dialog?.showModal();
         document.body.style.overflow = 'hidden';
         // Focus the heading, not a text field: don't unnecessarily open mobile keyboards.
         this.dialog?.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true});
+        this.restorePagePosition();
     }
-    componentWillUnmount() { this.dialog?.removeEventListener('cancel', this.cancel); this.dialog?.removeEventListener('keydown', this.trapTab); this.dialog?.close(); document.body.style.overflow = this.previousOverflow; this.lastFocus?.focus({ preventScroll: true }); }
+    componentWillUnmount() {
+        this.dialog?.removeEventListener('cancel', this.cancel);
+        this.dialog?.removeEventListener('keydown', this.trapTab);
+        this.dialog?.close();
+        document.body.style.overflow = this.previousOverflow;
+        this.lastFocus?.focus({preventScroll: true});
+        this.restorePagePosition();
+        const position = {...this.previousScroll};
+        requestAnimationFrame(() => {
+            if (!document.querySelector('dialog[open]')) window.scrollTo({...position, behavior: 'instant'});
+        });
+    }
     render() {
         return <dialog ref={el => { this.dialog = el; }} className={`modal ${this.props.className || ''}`} aria-labelledby={this.props.labelledBy} onClick={e => { if (e.target === e.currentTarget) {
             const r = e.currentTarget.getBoundingClientRect();

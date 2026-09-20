@@ -7,6 +7,7 @@ import { addLine, sanitizeCart, expandCart, totals, normalizeSearch, formatPrice
 import { Icon } from './icon';
 import { LocationPicker } from './location-picker';
 import { searchProducts } from '../lib/search.mjs';
+import { activeMenuSection, isContinuousMenu } from '../lib/menu-scroll.mjs';
 import {productImage, smallImage, productSrcSet} from '../lib/product-media.mjs';
 import { CURATED_PRODUCT_IDS, isSingleSelection, changeQuickQuantity } from '../lib/quick-cart.mjs';
 import { nationalPhoneInput, formatNationalPhone, wazeUrl } from '../lib/core.mjs';
@@ -44,9 +45,58 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     private headerObserver: ResizeObserver | undefined;
     private menuFrame = 0;
     private checkoutFrame = 0;
+    private scrollTimer: ReturnType<typeof setTimeout> | undefined;
+    private navigationTimer: ReturnType<typeof setTimeout> | undefined;
+    private pendingNavigation: {id: string; expires: number} | undefined;
+    private continuousMenu = () => isContinuousMenu(this.state);
+    private menuOffset = () => (document.querySelector('.site-header')?.getBoundingClientRect().height || 0)
+        + (document.getElementById('category-bar')?.getBoundingClientRect().height || 0) + 18;
+    /** Scrollspy only updates the highlighted section; it never scrolls the document. */
+    private syncActiveSection = () => {
+        if (!this.state.ready || !this.continuousMenu() || this.state.cartOpen || this.state.selected) return;
+        const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-menu-section]'));
+        if (!sections.length) return;
+        const offset = this.menuOffset();
+        if (this.pendingNavigation) {
+            const target = sections.find(section => section.dataset.menuSection === this.pendingNavigation?.id);
+            if (target && Math.abs(target.getBoundingClientRect().top - offset) > 4 && performance.now() < this.pendingNavigation.expires) return;
+            this.pendingNavigation = undefined;
+        }
+        const id = activeMenuSection(sections.map(section => ({id: section.dataset.menuSection!, top: section.getBoundingClientRect().top})), offset + 4);
+        if (id && id !== this.state.category) this.setState({category: id}, this.revealActiveTab);
+    };
+    // Time-throttled, passive listener: nine section measurements, only set state on a boundary change.
+    private onMenuScroll = () => {
+        if (this.scrollTimer) return;
+        this.scrollTimer = setTimeout(() => {
+            this.scrollTimer = undefined;
+            this.syncActiveSection();
+        }, 50);
+    };
+    private interruptNavigation = () => {
+        cancelAnimationFrame(this.menuFrame);
+        this.pendingNavigation = undefined;
+        if (this.navigationTimer) clearTimeout(this.navigationTimer);
+        this.onMenuScroll();
+    };
+    private onScrollKey = (event: KeyboardEvent) => {
+        if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) this.interruptNavigation();
+    };
+    private revealActiveTab = () => {
+        const bar = document.getElementById('category-bar');
+        const active = bar?.querySelector<HTMLElement>('button[aria-pressed="true"]');
+        if (!bar || !active) return;
+        const box = bar.getBoundingClientRect(), tab = active.getBoundingClientRect();
+        // Horizontal-only: scrollIntoView would move the page vertically in Safari.
+        const delta = tab.left < box.left + 10 ? tab.left - box.left - 10 : tab.right > box.right - 10 ? tab.right - box.right + 10 : 0;
+        if (delta) bar.scrollBy({left: delta, behavior: 'instant'});
+    };
     private syncHeaderHeight = () => {
         const height = document.querySelector('.site-header')?.getBoundingClientRect().height;
         if (height) document.documentElement.style.setProperty('--header-offset', `${height}px`);
+        const barHeight = document.getElementById('category-bar')?.getBoundingClientRect().height;
+        if (barHeight) document.documentElement.style.setProperty('--category-height', `${barHeight}px`);
+        this.onMenuScroll();
     };
     private onStorage = (event: StorageEvent) => {
         try {
@@ -76,10 +126,19 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
         if (header && typeof ResizeObserver !== 'undefined') {
             this.headerObserver = new ResizeObserver(this.syncHeaderHeight);
             this.headerObserver.observe(header);
+            const bar = document.getElementById('category-bar');
+            if (bar) this.headerObserver.observe(bar);
+            const content = document.querySelector('.menu-content');
+            if (content) this.headerObserver.observe(content);
         }
         window.addEventListener('resize', this.syncHeaderHeight, {passive: true});
+        window.addEventListener('scroll', this.onMenuScroll, {passive: true});
+        window.addEventListener('wheel', this.interruptNavigation, {passive: true});
+        window.addEventListener('touchstart', this.interruptNavigation, {passive: true});
+        window.addEventListener('keydown', this.onScrollKey);
     }
     componentDidUpdate(_props: Record<string, never>, previous: State) {
+        if (previous.query !== this.state.query || previous.sort !== this.state.sort || previous.ready !== this.state.ready || previous.cartOpen !== this.state.cartOpen || previous.selected !== this.state.selected || (previous.category === 'favorites') !== (this.state.category === 'favorites')) this.onMenuScroll();
         // Start each checkout step at its heading instead of carrying over a scroll offset.
         if (this.state.cartOpen && (previous.stage !== this.state.stage || !previous.cartOpen)) {
             cancelAnimationFrame(this.checkoutFrame);
@@ -102,6 +161,12 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     componentWillUnmount() {
         window.removeEventListener('storage', this.onStorage);
         window.removeEventListener('resize', this.syncHeaderHeight);
+        window.removeEventListener('scroll', this.onMenuScroll);
+        window.removeEventListener('wheel', this.interruptNavigation);
+        window.removeEventListener('touchstart', this.interruptNavigation);
+        window.removeEventListener('keydown', this.onScrollKey);
+        if (this.scrollTimer) clearTimeout(this.scrollTimer);
+        if (this.navigationTimer) clearTimeout(this.navigationTimer);
         this.headerObserver?.disconnect();
         cancelAnimationFrame(this.menuFrame);
         cancelAnimationFrame(this.checkoutFrame);
@@ -109,29 +174,28 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     }
     notify = (message: string) => { if (this.toastTimer)
         clearTimeout(this.toastTimer); this.setState({ toast: message }); this.toastTimer = setTimeout(() => this.setState({ toast: '' }), 2600); };
-    /** Use the bar's original-position anchor, not its sticky bounding box or the menu heading. */
-    goMenu = (category = 'popular', fromHero = false) => {
+    /** Categories are anchors into one continuous menu, never product filters. */
+    goMenu = (category = 'popular', _fromHero = false) => {
         cancelAnimationFrame(this.menuFrame);
-        const align = (smooth = false) => {
-            const anchor = document.getElementById('category-start');
-            if (!anchor) return;
-            const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
-            const top = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - headerHeight);
-            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            window.scrollTo({top, behavior: smooth && !reduce ? 'smooth' : 'instant'});
-        };
-        // Align before changing category height to avoid browser scroll-clamping to the footer.
-        if (!fromHero) align();
-        this.setState({category, query: ''}, () => {
+        if (this.navigationTimer) clearTimeout(this.navigationTimer);
+        const targetId = category === 'all' ? 'popular' : category;
+        const sameSection = targetId === this.state.category;
+        window.scrollTo({top: window.scrollY, left: window.scrollX, behavior: 'instant'});
+        this.pendingNavigation = targetId === 'favorites' ? undefined : {id: targetId, expires: performance.now() + 1800};
+        this.setState({category: targetId, query: '', sort: 'default'}, () => {
             this.menuFrame = requestAnimationFrame(() => {
-                align(fromHero);
-                const bar = document.getElementById('category-bar');
-                const active = bar?.querySelector<HTMLElement>('button[aria-pressed="true"]');
-                if (!bar || !active) return;
-                const box = bar.getBoundingClientRect(), tab = active.getBoundingClientRect();
-                // Reveal ONLY the horizontal tab. scrollIntoView also shifts the page on iOS.
-                const delta = tab.left < box.left + 10 ? tab.left - box.left - 10 : tab.right > box.right - 10 ? tab.right - box.right + 10 : 0;
-                if (delta) bar.scrollBy({left: delta, behavior: 'instant'});
+                const target = document.getElementById(targetId === 'favorites' ? 'category-start' : `menu-section-${targetId}`);
+                if (!target) return;
+                const offset = targetId === 'favorites' ? (document.querySelector('.site-header')?.getBoundingClientRect().height || 0) : this.menuOffset();
+                const top = Math.max(0, window.scrollY + target.getBoundingClientRect().top - offset);
+                const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                window.scrollTo({top, behavior: reduce || sameSection ? 'instant' : 'smooth'});
+                this.revealActiveTab();
+                this.onMenuScroll();
+                this.navigationTimer = setTimeout(() => {
+                    this.pendingNavigation = undefined;
+                    this.onMenuScroll();
+                }, 1850);
             });
         });
     };
@@ -181,7 +245,7 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     };
     getVisible = () => {
         const { category, query, sort, favorites } = this.state;
-        let list = searchProducts(products, query).filter(p => category === 'all' || (category === 'favorites' && favorites.includes(p.id)) || (category === 'popular' && POPULAR_PRODUCT_IDS.includes(p.id)) || p.categoryId === category);
+        let list = searchProducts(products, query).filter(p => category !== 'favorites' || favorites.includes(p.id));
         if (sort === 'low')
             list = [...list].sort((a, b) => Math.min(...a.variants.map(v => v.price)) - Math.min(...b.variants.map(v => v.price)));
         if (sort === 'high')
@@ -288,8 +352,8 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
         const { category, query, sort, cart, favorites, toast } = this.state;
         const visible = this.getVisible();
         const { count, subtotal } = totals(cart, products);
-        const grouped = category === 'all' && !query && sort === 'default';
-        const selectedCategory = categories.find(c => c.id === category);
+        const grouped = this.continuousMenu();
+        const featured = POPULAR_PRODUCT_IDS.map(id => products.find(p => p.id === id)!).filter(Boolean);
         return <>
    <a href="#menu" className="skip-link">انتقل إلى المنيو</a>
    <div className="announcement"><span>أكل البيت، بروح اليوم.</span><span className="announcement-end"><Icon name="whatsapp" size={13}/>بغداد فقط • الطلب واتساب</span></div>
@@ -301,13 +365,21 @@ export default class MenuApp extends React.Component<Record<string, never>, Stat
     <div className="values-strip container"><span><Icon name="home" size={18}/><b>وصفات بروح البيت</b></span><span><Icon name="bowl" size={18}/><b>أحجام تناسب لمّتكم</b></span><span><Icon name="whatsapp" size={18}/><b>اختيارك يصير رسالة</b></span><div className="strip-pattern" aria-hidden="true"/></div>
     <section className="menu-section container" id="menu" aria-labelledby="menu-title"><div className="menu-heading"><div><span className="eyebrow">منيو فن فود</span><h2 id="menu-title">شنو <span>مشتهي اليوم؟</span></h2></div><div className="menu-tools"><div className="search-box"><Icon name="search" size={18}/><input type="search" aria-label="ابحث في المنيو" placeholder="اسم الأكلة، نوعها، أو ميزانيتك…" maxLength={100} value={query} onChange={e => this.setState({ query: e.target.value, category: 'all' })}/>{query && <button aria-label="مسح البحث" className="icon-button" onClick={() => this.setState({ query: '' })}><Icon name="close" size={13}/></button>}</div><div className="sort-box"><Icon name="sort" size={13}/><select aria-label="ترتيب الأصناف" value={sort} onChange={e => this.setState({ sort: e.target.value })}><option value="default">ترتيب المنيو</option><option value="low">السعر: من الأقل</option><option value="high">السعر: من الأعلى</option></select></div></div></div>
      <div className="search-hints" aria-label="اقتراحات بحث">{['دولمة','كبة','دجاج','تحت 15000'].map(term=><button type="button" key={term} onClick={()=>this.setState({query:term,category:'all'})}>{term}</button>)}</div>
-     <div className="category-anchor" id="category-start" aria-hidden="true"/><div className="category-nav" id="category-bar" role="group" aria-label="أقسام المنيو"><button className={category === 'popular' ? 'active' : ''} aria-pressed={category === 'popular'} onClick={() => this.goMenu('popular')}><Icon name="fire" size={14}/>الأكثر طلباً</button><button className={category === 'all' ? 'active' : ''} aria-pressed={category === 'all'} onClick={() => this.goMenu('all')}><Icon name="all" size={14}/>كل المنيو</button>{categories.map(c => <button key={c.id} className={category === c.id ? 'active' : ''} aria-pressed={category === c.id} onClick={() => this.goMenu(c.id)}><Icon name={c.icon} size={14}/>{c.name}</button>)}<button className={category === 'favorites' ? 'active' : ''} aria-pressed={category === 'favorites'} onClick={() => this.goMenu('favorites')}><Icon name="heart" size={14}/>المفضلة{favorites.length > 0 && <small>{favorites.length}</small>}</button></div>
-     <div className="menu-layout"><div className="menu-content" key={category}><span className="sr-only" role="status">{category === 'popular' ? 'الأكثر طلباً' : category === 'all' ? 'كل المنيو' : category === 'favorites' ? 'المفضلة' : selectedCategory?.name}، {visible.length} صنف</span>
-      {(query || category === 'favorites' || sort !== 'default') && <div className="result-heading"><h3>{category === 'favorites' ? 'أكلاتك المفضّلة' : query ? `نتائج البحث عن «${query}»` : category === 'popular' ? 'الأكثر طلباً' : selectedCategory?.name || 'كل الأصناف'}</h3><span aria-live="polite">{visible.length} صنف</span></div>}
-      {!visible.length ? <EmptyState icon={category === 'favorites' ? 'heart' : 'search'} title={category === 'favorites' ? 'المفضلة بعدها فارغة' : 'ما لكينا هالأكلة'}><p>{category === 'favorites' ? 'اضغط القلب على أي صنف.' : 'جرّب اسم ثاني.'}</p><button className="button button-outline" onClick={() => this.setState({ category: 'all', query: '' })}>عرض كل المنيو</button></EmptyState> : grouped ? categories.map(c => <section className="category-section" key={c.id} aria-labelledby={'heading-' + c.id}><div className="section-heading"><div><span className="section-icon"><Icon name={c.icon} size={18}/></span><div><h3 id={'heading-' + c.id}>{c.name}</h3><p>{c.description}</p></div></div><span className="section-count">{products.filter(p => p.categoryId === c.id).length} أصناف</span></div><div className="product-grid">{visible.filter(p => p.categoryId === c.id).map(this.renderProduct)}</div></section>) : category === 'popular' && !query && sort === 'default' ? <section className="category-section" aria-labelledby="heading-popular"><div className="section-heading"><div><span className="section-icon"><Icon name="fire" size={18}/></span><div><h3 id="heading-popular">الأكثر طلباً</h3><p>مختارات فن فود.</p></div></div><span className="section-count">{visible.length} أصناف</span></div><div className="product-grid">{visible.map(this.renderProduct)}</div></section> : <>
-       {selectedCategory && !query && sort === 'default' && <div className="section-heading category-summary"><div><span className="section-icon"><Icon name={selectedCategory.icon} size={18}/></span><div><h3>{selectedCategory.name}</h3><p>{selectedCategory.description}</p></div></div><span className="section-count">{visible.length} أصناف</span></div>}
-       <div className="product-grid">{visible.map(this.renderProduct)}</div>
-      </>}
+     <div className="category-anchor" id="category-start" aria-hidden="true"/><div className="category-nav" id="category-bar" data-mode={grouped ? 'browse' : 'results'} role="group" aria-label="أقسام المنيو"><button className={grouped && category === 'popular' ? 'active' : ''} aria-pressed={grouped && category === 'popular'} aria-current={grouped && category === 'popular' ? 'location' : undefined} aria-controls="menu-section-popular" onClick={() => this.goMenu('popular')}><Icon name="fire" size={14}/>الأكثر طلباً</button><button className={!grouped && category === 'all' ? 'active' : ''} aria-pressed={!grouped && category === 'all'} onClick={() => this.goMenu('all')}><Icon name="all" size={14}/>كل المنيو</button>{categories.map(c => <button key={c.id} className={grouped && category === c.id ? 'active' : ''} aria-pressed={grouped && category === c.id} aria-current={grouped && category === c.id ? 'location' : undefined} aria-controls={'menu-section-' + c.id} onClick={() => this.goMenu(c.id)}><Icon name={c.icon} size={14}/>{c.name}</button>)}<button className={category === 'favorites' ? 'active' : ''} aria-pressed={category === 'favorites'} onClick={() => this.goMenu('favorites')}><Icon name="heart" size={14}/>المفضلة{favorites.length > 0 && <small>{favorites.length}</small>}</button></div>
+     <div className="menu-layout"><div className="menu-content" data-menu-mode={grouped ? 'browse' : 'results'}>
+      <span className="sr-only" role="status">{grouped ? `كل المنيو، ${products.length} صنف` : `${visible.length} صنف`}</span>
+      {!grouped && <div className="result-heading"><h3>{category === 'favorites' ? 'أكلاتك المفضّلة' : query ? `نتائج البحث عن «${query}»` : 'كل الأصناف'}</h3><span aria-live="polite">{visible.length} صنف</span><button className="text-link" type="button" onClick={() => this.goMenu('all')}>رجوع لكل المنيو<Icon name="back" size={13}/></button></div>}
+      {grouped ? <>
+       <section className="category-section featured-section" id="menu-section-popular" data-menu-section="popular" aria-labelledby="heading-popular">
+        <div className="section-heading"><div><span className="section-icon"><Icon name="fire" size={18}/></span><div><h3 id="heading-popular">الأكثر طلباً</h3><p>مختارات فن فود، وباقي المنيو تحت.</p></div></div><span className="section-count">{featured.length} أصناف</span></div>
+        <div className="product-grid">{featured.map(this.renderProduct)}</div>
+        <button type="button" className="continue-menu" onClick={() => this.goMenu(categories[0].id)}>كمّل نزول وشوف باقي الأكلات<Icon name="down" size={14}/></button>
+       </section>
+       {categories.map(c => <section className="category-section" id={'menu-section-' + c.id} data-menu-section={c.id} key={c.id} aria-labelledby={'heading-' + c.id}>
+        <div className="section-heading"><div><span className="section-icon"><Icon name={c.icon} size={18}/></span><div><h3 id={'heading-' + c.id}>{c.name}</h3><p>{c.description}</p></div></div><span className="section-count">{products.filter(p => p.categoryId === c.id).length} أصناف</span></div>
+        <div className="product-grid">{products.filter(p => p.categoryId === c.id).map(this.renderProduct)}</div>
+       </section>)}
+      </> : !visible.length ? <EmptyState icon={category === 'favorites' ? 'heart' : 'search'} title={category === 'favorites' ? 'المفضلة بعدها فارغة' : 'ما لكينا هالأكلة'}><p>{category === 'favorites' ? 'اضغط القلب على أي صنف.' : 'جرّب اسم ثاني.'}</p><button className="button button-outline" onClick={() => this.goMenu('all')}>عرض كل المنيو</button></EmptyState> : <div className="product-grid">{visible.map(this.renderProduct)}</div>}
       <div className="catalog-footnote"><Icon name="info" size={15}/><div><p>الأسعار بالدينار. التوصيل والتوفّر نأكدهم وياك عالواتساب.</p><details className="menu-disclosures"><summary>عن الصور والمكونات</summary><p>الصور توضيحية مولّدة. نعتمد الكمية والحجم المكتوبين، مو عدد القطع بالصورة. الوصف يذكر المكونات الأساسية المتعارف عليها، مو وصفة المطعم الكاملة؛ خلطات فن فود والحشوات نأكدها وياك. عندك حساسية؟ احچي ويانا قبل الطلب.</p></details></div></div>
      </div>{this.renderCartSummary()}</div>
     </section>

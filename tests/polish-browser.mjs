@@ -5,11 +5,13 @@ const dir=process.env.REPORT_DIR||'test-results/polish';fs.mkdirSync(dir,{recurs
 const profiles=process.env.QUICK_SMOKE?[['chromium',390,844,'no-preference'],['webkit',390,844,'reduce'],['chromium',820,1180,'reduce'],['chromium',1440,1000,'no-preference']]:[['chromium',320,740,'reduce'],['chromium',390,844,'no-preference'],['chromium',430,932,'reduce'],['chromium',820,1180,'reduce'],['chromium',1440,1000,'no-preference'],['webkit',390,844,'reduce'],['webkit',820,1180,'reduce'],['firefox',1440,1000,'reduce']];
 const results=[];let active;
 async function aligned(page){
+ // Allow the click handler frame to start before accepting a previously aligned section.
+ await page.waitForTimeout(250);
  await page.waitForFunction(()=>{
   const header=document.querySelector('.site-header').getBoundingClientRect();
-  const anchor=document.querySelector('#category-start').getBoundingClientRect();
+  const section=document.getElementById(document.querySelector('#category-bar [aria-current="location"]').getAttribute('aria-controls')).getBoundingClientRect();
   const bar=document.querySelector('#category-bar').getBoundingClientRect();
-  return Math.abs(anchor.top-header.bottom)<4&&Math.abs(bar.top-header.bottom)<4;
+  return Math.abs(section.top-bar.bottom-18)<5&&Math.abs(bar.top-header.bottom)<4;
  },null,{timeout:15000});
  const a=await page.locator('#category-bar [aria-pressed="true"]').boundingBox(),b=await page.locator('#category-bar').boundingBox();
  assert.ok(a.x>=b.x-2&&a.x+a.width<=b.x+b.width+2,'Active tab visible horizontally');
@@ -35,7 +37,7 @@ try{
   await page.locator('[data-product-id="p058"]').scrollIntoViewIfNeeded();
   await bar.getByRole('button',{name:'الكبة',exact:true}).click();await aligned(page);
   await page.screenshot({path:`${dir}/${engine}-${width}-categories.png`});
-  const item=page.locator('[data-product-id="p016"]');await item.locator('.add-button').click();await item.locator('[data-action="increase"]').click();await item.locator('[data-action="decrease"]').click();assert.equal(await item.locator('.inline-stepper-number').textContent(),'1');
+  const item=page.locator('#menu-section-kubba [data-product-id="p016"]');await item.locator('.add-button').click();await item.locator('[data-action="increase"]').click();await item.locator('[data-action="decrease"]').click();assert.equal(await item.locator('.inline-stepper-number').textContent(),'1');
   await page.locator('.header-cart').click();const cart=page.locator('dialog.cart-modal');await cart.getByRole('button',{name:'كمّل بيانات التوصيل',exact:true}).click();
   assert.equal(await page.locator('#customer-city').inputValue(),'بغداد');assert.equal(await page.locator('#customer-area').count(),0);assert.equal(await page.locator('#customer-landmark').count(),0);assert.equal(await cart.locator('input').count(),4);
   assert.equal(await page.locator('#customer-address').getAttribute('placeholder'),'مثال: المنصور، قرب مول المنصور');
