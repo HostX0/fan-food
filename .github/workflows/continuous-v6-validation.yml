@@ -1,0 +1,115 @@
+name: Validate continuous menu v6
+on:
+  push:
+    branches: [codex/continuous-menu-v6-20260920]
+    paths: ['.github/workflows/continuous-v6-validation.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: fanfood-continuous-v6-validation
+  cancel-in-progress: false
+jobs:
+  validate-continuous-menu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Apply only reviewed source edits with exact preimage checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import os,json,base64,zlib,hashlib,urllib.request
+          from pathlib import Path
+          parts=['4268b93496b89d610485357c5330ae251c97ddb4','442beffe6112faa58c0624b252781240f8211444']
+          encoded=b''
+          for sha in parts:
+            req=urllib.request.Request('https://api.github.com/repos/HostX0/fan-food/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
+            with urllib.request.urlopen(req,timeout=45) as r: data=json.load(r)
+            chunk=base64.b64decode(data['content'])
+            assert hashlib.sha1(b'blob '+str(len(chunk)).encode()+b'\0'+chunk).hexdigest()==sha
+            encoded+=chunk
+          raw=zlib.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(raw).hexdigest()=='2b9c8cf1ffde07d8bd5385a439664d0ab9f3243c118488bba328614bc9afcc18'
+          changes=json.loads(raw);root=Path.cwd()
+          for change in changes:
+            assert change['p'].startswith(('src/','public/','tests/','docs/'))
+            p=root/change['p'];assert p.resolve().is_relative_to(root) and not p.is_symlink()
+            before=p.read_bytes() if p.exists() else None
+            if change['sha']:
+              assert before is not None and hashlib.sha1(b'blob '+str(len(before)).encode()+b'\0'+before).hexdigest()==change['sha'], 'Concurrent change: '+change['p']
+            else: assert before is None, 'Path already exists: '+change['p']
+            lines=before.decode().splitlines(keepends=True) if before is not None else []
+            for start,end,replacement in reversed(change['edits']): lines[start:end]=[replacement]
+            after=''.join(lines).encode()
+            assert hashlib.sha256(after).hexdigest()==change['after'], 'Invalid payload: '+change['p']
+            p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(after)
+            print('Updated',change['p'])
+          Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json').write_text(json.dumps([c['p'] for c in changes]))
+          PY
+      - name: Locked dependencies, unit tests, TypeScript and production build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          npm ci --no-audit --no-fund
+          npm test | tee "$RUNNER_TEMP/unit-tests.log"
+          npm run typecheck
+          npm run build
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: fanfood-playwright-1.63.0-ubuntu-v1
+      - name: Prepare browser engines
+        run: |
+          npm install --prefix "$RUNNER_TEMP/qa" --no-audit --no-fund playwright@1.63.0
+          "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium webkit firefox
+      - name: Test continuous scrolling and all existing ordering interactions
+        env:
+          BASE_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_REQUIRE_FROM: ${{ runner.temp }}/qa/package.json
+        run: |
+          node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
+          REPORT_DIR=test-results/continuous-local node tests/continuous-menu-browser.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/browser-local node tests/browser-smoke.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/checkout-local node tests/checkout-enhancements.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/quick-local node tests/quick-controls.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/photos-local node tests/final-menu-browser.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/polish-local node tests/polish-browser.mjs
+          REPORT_DIR=test-results/style-local node tests/production-style.mjs
+      - name: Save validated source on review branch, leaving production unchanged
+        run: |
+          git fetch origin codex/continuous-menu-v6-20260920
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/codex/continuous-menu-v6-20260920)" || { echo 'Review branch changed during validation'; exit 1; }
+          python3 - <<'PY'
+          import subprocess,json,os
+          from pathlib import Path
+          paths=json.loads(Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json').read_text())
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'HostX0'
+          git config user.email '42905848+HostX0@users.noreply.github.com'
+          git commit -m 'Show all 58 dishes continuously with sticky category scroll tracking and shared featured quantities'
+          git push origin HEAD:codex/continuous-menu-v6-20260920
+          mkdir -p test-results
+          git rev-parse HEAD > test-results/validated-commit.txt
+          git archive --format=zip --output="$RUNNER_TEMP/FanFood_Continuous_Menu_Verified.zip" HEAD
+      - name: Retain screenshots and validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fanfood-continuous-v6-${{ github.run_id }}
+          path: |
+            test-results/
+            ${{ runner.temp }}/FanFood_Continuous_Menu_Verified.zip
+            ${{ runner.temp }}/serve.log
+            ${{ runner.temp }}/unit-tests.log
+          if-no-files-found: warn
+          retention-days: 14
