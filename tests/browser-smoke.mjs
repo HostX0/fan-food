@@ -32,8 +32,8 @@ try {
   page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)failedAssets.push(`${r.status()} ${r.url()}`);});
   const response=await page.goto(base,{waitUntil:'domcontentloaded',timeout:45000});
   assert.equal(response.status(),200);
-  await hydrate(page);await count(page,6);
-  await page.locator('.category-nav').getByRole('button',{name:'كل المنيو',exact:true}).click();await count(page,menu.products.length);
+  await hydrate(page);await count(page,menu.products.length+6);
+  await page.locator('.category-nav').getByRole('button',{name:'كل المنيو',exact:true}).click();await count(page,menu.products.length+6);
   assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
   assert.equal(await page.locator('html').getAttribute('lang'),'ar');
   await fits(page,'initial');
@@ -44,7 +44,8 @@ try {
   const nav=page.locator('.category-nav');
   for(const category of menu.categories){
    await nav.getByRole('button',{name:category.name,exact:true}).click();
-   await count(page,menu.products.filter(p=>p.categoryId===category.id).length);
+   await count(page,menu.products.length+6);
+   assert.equal(await page.locator(`#menu-section-${category.id} .product-card`).count(),menu.products.filter(p=>p.categoryId===category.id).length);
    await fits(page,category.name);
   }
   await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
@@ -54,7 +55,7 @@ try {
   await count(page,1);
   assert.equal(await page.locator('.product-card h3').textContent(),'دولمة كوردية');
   await search.fill('zxqnonexistent987');await count(page,0);
-  await search.fill('');await count(page,menu.products.length);
+  await search.fill('');await count(page,menu.products.length+6);
   const first=menu.products[0];
   await page.locator(`[data-product-id="${first.id}"] .favorite-button`).click();
   await nav.getByRole('button',{name:/^المفضلة/}).click();await count(page,1);

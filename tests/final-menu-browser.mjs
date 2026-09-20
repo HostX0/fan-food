@@ -17,16 +17,16 @@ try{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base,{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>localStorage.getItem('fanfood:cart:v1')!==null);
-  assert.equal(await page.locator('.product-card').count(),6);
+  assert.equal(await page.locator('#menu-section-popular .product-card').count(),6);
   assert.ok((await page.locator('#menu-title').innerText()).includes('مشتهي اليوم'));
   assert.ok(!(await page.locator('body').innerText()).includes('يطيّب خاطرك'));
   await page.locator('.category-nav').getByRole('button',{name:'كل المنيو',exact:true}).click();
-  assert.equal(await page.locator('.product-description').count(),58);
+  assert.equal(await page.locator('[data-menu-section]:not([data-menu-section="popular"]) .product-description').count(),58);
   const descriptions=await page.locator('.product-card').evaluateAll(cards=>cards.map(c=>({id:c.dataset.productId,text:c.querySelector('.product-description').textContent,size:parseFloat(getComputedStyle(c.querySelector('.product-description')).fontSize),src:c.querySelector('.photo-button img').getAttribute('src'),set:c.querySelector('.photo-button img').getAttribute('srcset')})));
   for(const d of descriptions){const p=menu.products.find(p=>p.id===d.id);assert.equal(d.text,p.description);assert.ok(d.size>=11.5);assert.equal(d.src,p.image);assert.ok(d.set.includes('480w'));}
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   // The first six retain quick add; food and controls remain inside each card at all widths.
-  const card=page.locator('[data-product-id="p016"]');await card.locator('.add-button').click();
+  const card=page.locator('[data-product-id="p016"]').first();await card.locator('.add-button').click();
   await card.locator('[data-action="increase"]').click();assert.equal(await card.locator('.inline-stepper-number').textContent(),'2');
   const [photo,control]=await Promise.all([card.locator('.product-photo').boundingBox(),card.locator('.card-stepper').boundingBox()]);
   assert.ok(control.x>=photo.x&&control.x+control.width<=photo.x+photo.width+1);

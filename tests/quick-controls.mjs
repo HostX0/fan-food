@@ -16,10 +16,10 @@ try {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base,{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>localStorage.getItem('fanfood:cart:v1')!==null);
-  assert.equal(await page.locator('.product-card').count(),6);
+  assert.equal(await page.locator('#menu-section-popular .product-card').count(),6);
   assert.equal(await page.locator('.category-nav button').first().innerText(),'الأكثر طلباً');
   assert.equal(await page.locator('.category-nav button').first().getAttribute('aria-pressed'),'true');
-  const card=page.locator('[data-product-id="p016"]');
+  const card=page.locator('[data-product-id="p016"]').first();
   await card.locator('.add-button').click();
   assert.equal(await page.locator('dialog').count(),0,'Single selection must not open a dialog');
   const stepper=card.locator('.card-stepper');const count=stepper.locator('.inline-stepper-number');
@@ -42,7 +42,7 @@ try {
   assert.equal(await count.innerText(),'1');await stepper.locator('[data-action="decrease"]').click();
   assert.equal(await page.locator('.header-cart b').innerText(),'0');
   // Multi-variant products still open a choice sheet.
-  await page.locator('[data-product-id="p002"] .add-button').click();
+  await page.locator('[data-product-id="p002"] .add-button').first().click();
   assert.equal(await page.locator('dialog.product-modal .variant-option').count(),3);
   await page.getByRole('button',{name:'إغلاق تفاصيل الصنف',exact:true}).click();
   // The cart uses the same decrement-by-one behavior rather than deleting a full row.

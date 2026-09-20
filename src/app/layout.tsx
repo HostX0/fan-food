@@ -22,5 +22,6 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
       <link rel="stylesheet" href="/menu-ux-v3.css"/>
       <link rel="stylesheet" href="/menu-final-v4.css"/>
       <link rel="stylesheet" href="/menu-polish-v5.css"/>
+      <link rel="stylesheet" href="/menu-scroll-v6.css"/>
     </head><body>{children}</body></html>;
 }

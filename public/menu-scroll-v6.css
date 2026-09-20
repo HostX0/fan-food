@@ -1,0 +1,9 @@
+/* One continuous menu. Keep cards mounted; scroll only changes the navigation highlight. */
+:root{--category-height:64px;}
+.menu-content{animation:none!important;}
+.category-section[data-menu-section]{scroll-margin-top:calc(var(--header-offset) + var(--category-height) + 18px);}
+.category-nav{touch-action:pan-x pan-y;}
+.category-nav button[aria-current="location"]{background:var(--green,#1f3a29);color:#fff;}
+.continue-menu{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:44px;padding:10px 14px;margin-top:16px;border:1px solid #dde2d2;border-radius:12px;color:#36513a;background:#f0f2e7;font-size:12px;font-weight:600;}
+.result-heading{flex-wrap:wrap;gap:10px;}.result-heading .text-link{font-size:12px;min-height:44px;}
+@media(prefers-reduced-motion:no-preference){.continue-menu{transition:background-color .16s ease;}.continue-menu:hover{background:#e6ebda;}}

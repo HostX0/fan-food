@@ -29,7 +29,7 @@ try{
   await page.waitForFunction(()=>document.querySelector('.product-card')?.getAttribute('data-product-id')==='p044');
   await search.fill('تحت 15000');await page.waitForFunction(()=>document.querySelectorAll('.product-card').length>0&&document.querySelectorAll('.product-card').length<58);
   await search.fill('دولمه كورديه');await page.waitForFunction(()=>document.querySelector('.product-card')?.getAttribute('data-product-id')==='p003');
-  await search.fill('');await page.waitForFunction(()=>document.querySelectorAll('.product-card').length===58);
+  await search.fill('');await page.waitForFunction(()=>document.querySelectorAll('.product-card').length===64);
   if(engine==='chromium'&&[390,820,1440].includes(width))await page.screenshot({path:`${dir}/${width}-menu.png`});
   await page.locator('[data-product-id="p001"] .add-button').click();
   await page.locator('dialog.product-modal').getByRole('button',{name:/أضف للسلة/}).click();
