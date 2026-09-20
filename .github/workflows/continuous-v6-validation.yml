@@ -21,40 +21,33 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-      - name: Apply only reviewed source edits with exact preimage checks
+      - name: Apply reviewed source edits with exact preimage checks
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'PY'
           import os,json,base64,zlib,hashlib,urllib.request
           from pathlib import Path
-          parts=['4268b93496b89d610485357c5330ae251c97ddb4','442beffe6112faa58c0624b252781240f8211444']
           encoded=b''
-          for sha in parts:
+          for sha in ['4268b93496b89d610485357c5330ae251c97ddb4','442beffe6112faa58c0624b252781240f8211444']:
             req=urllib.request.Request('https://api.github.com/repos/HostX0/fan-food/git/blobs/'+sha,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json'})
             with urllib.request.urlopen(req,timeout=45) as r: data=json.load(r)
-            chunk=base64.b64decode(data['content'])
-            assert hashlib.sha1(b'blob '+str(len(chunk)).encode()+b'\0'+chunk).hexdigest()==sha
-            encoded+=chunk
-          raw=zlib.decompress(base64.b64decode(encoded))
-          assert hashlib.sha256(raw).hexdigest()=='2b9c8cf1ffde07d8bd5385a439664d0ab9f3243c118488bba328614bc9afcc18'
+            chunk=base64.b64decode(data['content']);assert hashlib.sha1(b'blob '+str(len(chunk)).encode()+b'\0'+chunk).hexdigest()==sha;encoded+=chunk
+          raw=zlib.decompress(base64.b64decode(encoded));assert hashlib.sha256(raw).hexdigest()=='2b9c8cf1ffde07d8bd5385a439664d0ab9f3243c118488bba328614bc9afcc18'
           changes=json.loads(raw);root=Path.cwd()
-          for change in changes:
-            assert change['p'].startswith(('src/','public/','tests/','docs/'))
-            p=root/change['p'];assert p.resolve().is_relative_to(root) and not p.is_symlink()
+          for c in changes:
+            assert c['p'].startswith(('src/','public/','tests/','docs/'))
+            p=root/c['p'];assert p.resolve().is_relative_to(root) and not p.is_symlink()
             before=p.read_bytes() if p.exists() else None
-            if change['sha']:
-              assert before is not None and hashlib.sha1(b'blob '+str(len(before)).encode()+b'\0'+before).hexdigest()==change['sha'], 'Concurrent change: '+change['p']
-            else: assert before is None, 'Path already exists: '+change['p']
+            if c['sha']: assert before is not None and hashlib.sha1(b'blob '+str(len(before)).encode()+b'\0'+before).hexdigest()==c['sha'], 'Concurrent change: '+c['p']
+            else: assert before is None
             lines=before.decode().splitlines(keepends=True) if before is not None else []
-            for start,end,replacement in reversed(change['edits']): lines[start:end]=[replacement]
-            after=''.join(lines).encode()
-            assert hashlib.sha256(after).hexdigest()==change['after'], 'Invalid payload: '+change['p']
+            for start,end,replacement in reversed(c['edits']): lines[start:end]=[replacement]
+            after=''.join(lines).encode();assert hashlib.sha256(after).hexdigest()==c['after']
             p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(after)
-            print('Updated',change['p'])
           Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json').write_text(json.dumps([c['p'] for c in changes]))
           PY
-      - name: Preserve reading position and cancel stale navigation frames
+      - name: Stabilize native dialog restoration and repeated navigation
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -82,23 +75,26 @@ jobs:
           p.write_text(s)
           p=Path('src/components/menu-app.tsx');s=p.read_text()
           replace('    private interruptNavigation = () => {', '    private interruptNavigation = () => {\n        cancelAnimationFrame(this.menuFrame);')
+          replace("        const targetId = category === 'all' ? 'popular' : category;", "        const targetId = category === 'all' ? 'popular' : category;\n        const sameSection = targetId === this.state.category;\n        window.scrollTo({top: window.scrollY, left: window.scrollX, behavior: 'instant'});")
+          replace("window.scrollTo({top, behavior: reduce ? 'instant' : 'smooth'});", "window.scrollTo({top, behavior: reduce || sameSection ? 'instant' : 'smooth'});")
           p.write_text(s)
           p=Path('tests/continuous-menu-browser.mjs');s=p.read_text()
           replace("  await manualScroll(page,'rice');const savedY=await page.evaluate(()=>scrollY);await page.locator('.header-cart').click();await page.getByRole('button',{name:'إغلاق السلة',exact:true}).click();await selected(page,'rice');assert.ok(Math.abs((await page.evaluate(()=>scrollY))-savedY)<5,'Closing cart must preserve reading position');", """  await manualScroll(page,'rice');const savedY=await page.evaluate(()=>scrollY);
-            // A user taps the already-visible sticky control. Avoid locator.click's automatic scrolling.
+            // Tap the visible sticky control, without an automation-induced scrollIntoView.
             const cartBox=await page.locator('.header-cart').boundingBox();assert.ok(cartBox.y>=0&&cartBox.y+cartBox.height<height);
             await page.mouse.click(cartBox.x+cartBox.width/2,cartBox.y+cartBox.height/2);
             await page.waitForFunction(()=>document.querySelector('dialog.cart-modal[open]'));
-            const openedY=await page.evaluate(()=>scrollY);
             const closeBox=await page.getByRole('button',{name:'إغلاق السلة',exact:true}).boundingBox();
             await page.mouse.click(closeBox.x+closeBox.width/2,closeBox.y+closeBox.height/2);
             await page.waitForFunction(()=>!document.querySelector('dialog.cart-modal[open]'));
-            console.log('MODAL POSITION',engine,width,{savedY,openedY,closedY:await page.evaluate(()=>scrollY)});
             await selected(page,'rice');assert.ok(Math.abs((await page.evaluate(()=>scrollY))-savedY)<5,'Closing cart must preserve reading position');""")
           replace("if(active)await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});", """if(active){
-           await active.evaluate(()=>({y:scrollY,active:document.querySelector('#category-bar [aria-current="location"]')?.getAttribute('aria-controls'),header:document.querySelector('.site-header')?.getBoundingClientRect().toJSON(),bar:document.getElementById('category-bar')?.getBoundingClientRect().toJSON(),sections:[...document.querySelectorAll('[data-menu-section]')].map(e=>({id:e.dataset.menuSection,top:e.getBoundingClientRect().top})),focus:document.activeElement?.outerHTML})).then(data=>fs.writeFileSync(dir+'/failure-geometry.json',JSON.stringify(data,null,2))).catch(()=>{});
+           await active.evaluate(()=>({y:scrollY,active:document.querySelector('#category-bar [aria-current="location"]')?.getAttribute('aria-controls'),sections:[...document.querySelectorAll('[data-menu-section]')].map(e=>({id:e.dataset.menuSection,top:e.getBoundingClientRect().top}))})).then(data=>fs.writeFileSync(dir+'/failure-geometry.json',JSON.stringify(data,null,2))).catch(()=>{});
            await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});
           }""")
+          p.write_text(s)
+          p=Path('tests/polish-browser.mjs');s=p.read_text()
+          replace('async function aligned(page){', 'async function aligned(page){\n // Allow the click handler frame to start before accepting a previously aligned section.\n await page.waitForTimeout(250);')
           p.write_text(s)
           p=Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json');paths=json.loads(p.read_text());paths.append('src/components/primitives.tsx');p.write_text(json.dumps(paths))
           PY
@@ -111,7 +107,6 @@ jobs:
           npm test | tee "$RUNNER_TEMP/unit-tests.log"
           npm run typecheck
           npm run build
-          tar -czf "$RUNNER_TEMP/built-preview.tgz" out tests scripts src package.json
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
@@ -120,20 +115,19 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/qa" --no-audit --no-fund playwright@1.63.0
           "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium webkit firefox
-      - name: Test continuous scrolling and all existing ordering interactions
+      - name: Test continuous scrolling and every preserved ordering interaction
         env:
           BASE_URL: http://127.0.0.1:3000
           PLAYWRIGHT_REQUIRE_FROM: ${{ runner.temp }}/qa/package.json
         run: |
           node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
-          set -o pipefail
-          REPORT_DIR=test-results/continuous-local node tests/continuous-menu-browser.mjs 2>&1 | tee "$RUNNER_TEMP/continuous.log"
+          REPORT_DIR=test-results/continuous-local node tests/continuous-menu-browser.mjs
+          QUICK_SMOKE=1 REPORT_DIR=test-results/polish-local node tests/polish-browser.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/browser-local node tests/browser-smoke.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/checkout-local node tests/checkout-enhancements.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/quick-local node tests/quick-controls.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/photos-local node tests/final-menu-browser.mjs
-          QUICK_SMOKE=1 REPORT_DIR=test-results/polish-local node tests/polish-browser.mjs
           REPORT_DIR=test-results/style-local node tests/production-style.mjs
       - name: Save validated source on review branch, leaving production unchanged
         run: |
@@ -162,7 +156,5 @@ jobs:
             ${{ runner.temp }}/FanFood_Continuous_Menu_Verified.zip
             ${{ runner.temp }}/serve.log
             ${{ runner.temp }}/unit-tests.log
-            ${{ runner.temp }}/continuous.log
-            ${{ runner.temp }}/built-preview.tgz
           if-no-files-found: warn
           retention-days: 14
