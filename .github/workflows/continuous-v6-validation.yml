@@ -54,7 +54,7 @@ jobs:
             print('Updated',change['p'])
           Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json').write_text(json.dumps([c['p'] for c in changes]))
           PY
-      - name: Preserve reading position around native dialog open and close
+      - name: Preserve reading position and cancel stale navigation frames
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -73,7 +73,6 @@ jobs:
                   this.dialog?.close();
                   document.body.style.overflow = this.previousOverflow;
                   this.lastFocus?.focus({preventScroll: true});
-                  // Native dialog focus restoration must not move the continuous menu behind it.
                   this.restorePagePosition();
                   const position = {...this.previousScroll};
                   requestAnimationFrame(() => {
@@ -81,7 +80,21 @@ jobs:
                   });
               }""")
           p.write_text(s)
+          p=Path('src/components/menu-app.tsx');s=p.read_text()
+          replace('    private interruptNavigation = () => {', '    private interruptNavigation = () => {\n        cancelAnimationFrame(this.menuFrame);')
+          p.write_text(s)
           p=Path('tests/continuous-menu-browser.mjs');s=p.read_text()
+          replace("  await manualScroll(page,'rice');const savedY=await page.evaluate(()=>scrollY);await page.locator('.header-cart').click();await page.getByRole('button',{name:'إغلاق السلة',exact:true}).click();await selected(page,'rice');assert.ok(Math.abs((await page.evaluate(()=>scrollY))-savedY)<5,'Closing cart must preserve reading position');", """  await manualScroll(page,'rice');const savedY=await page.evaluate(()=>scrollY);
+            // A user taps the already-visible sticky control. Avoid locator.click's automatic scrolling.
+            const cartBox=await page.locator('.header-cart').boundingBox();assert.ok(cartBox.y>=0&&cartBox.y+cartBox.height<height);
+            await page.mouse.click(cartBox.x+cartBox.width/2,cartBox.y+cartBox.height/2);
+            await page.waitForFunction(()=>document.querySelector('dialog.cart-modal[open]'));
+            const openedY=await page.evaluate(()=>scrollY);
+            const closeBox=await page.getByRole('button',{name:'إغلاق السلة',exact:true}).boundingBox();
+            await page.mouse.click(closeBox.x+closeBox.width/2,closeBox.y+closeBox.height/2);
+            await page.waitForFunction(()=>!document.querySelector('dialog.cart-modal[open]'));
+            console.log('MODAL POSITION',engine,width,{savedY,openedY,closedY:await page.evaluate(()=>scrollY)});
+            await selected(page,'rice');assert.ok(Math.abs((await page.evaluate(()=>scrollY))-savedY)<5,'Closing cart must preserve reading position');""")
           replace("if(active)await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});", """if(active){
            await active.evaluate(()=>({y:scrollY,active:document.querySelector('#category-bar [aria-current="location"]')?.getAttribute('aria-controls'),header:document.querySelector('.site-header')?.getBoundingClientRect().toJSON(),bar:document.getElementById('category-bar')?.getBoundingClientRect().toJSON(),sections:[...document.querySelectorAll('[data-menu-section]')].map(e=>({id:e.dataset.menuSection,top:e.getBoundingClientRect().top})),focus:document.activeElement?.outerHTML})).then(data=>fs.writeFileSync(dir+'/failure-geometry.json',JSON.stringify(data,null,2))).catch(()=>{});
            await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});
@@ -98,6 +111,7 @@ jobs:
           npm test | tee "$RUNNER_TEMP/unit-tests.log"
           npm run typecheck
           npm run build
+          tar -czf "$RUNNER_TEMP/built-preview.tgz" out tests scripts src package.json
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
@@ -113,7 +127,8 @@ jobs:
         run: |
           node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
-          REPORT_DIR=test-results/continuous-local node tests/continuous-menu-browser.mjs
+          set -o pipefail
+          REPORT_DIR=test-results/continuous-local node tests/continuous-menu-browser.mjs 2>&1 | tee "$RUNNER_TEMP/continuous.log"
           QUICK_SMOKE=1 REPORT_DIR=test-results/browser-local node tests/browser-smoke.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/checkout-local node tests/checkout-enhancements.mjs
           QUICK_SMOKE=1 REPORT_DIR=test-results/quick-local node tests/quick-controls.mjs
@@ -147,5 +162,7 @@ jobs:
             ${{ runner.temp }}/FanFood_Continuous_Menu_Verified.zip
             ${{ runner.temp }}/serve.log
             ${{ runner.temp }}/unit-tests.log
+            ${{ runner.temp }}/continuous.log
+            ${{ runner.temp }}/built-preview.tgz
           if-no-files-found: warn
           retention-days: 14
