@@ -54,10 +54,46 @@ jobs:
             print('Updated',change['p'])
           Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json').write_text(json.dumps([c['p'] for c in changes]))
           PY
+      - name: Preserve reading position around native dialog open and close
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path('src/components/primitives.tsx');s=p.read_text()
+          def replace(a,b):
+            global s
+            assert s.count(a)==1, a
+            s=s.replace(a,b)
+          replace("    private previousOverflow = '';", "    private previousOverflow = '';\n    private previousScroll = {left: 0, top: 0};\n    private restorePagePosition = () => window.scrollTo({...this.previousScroll, behavior: 'instant'});")
+          replace('        this.previousOverflow = document.body.style.overflow;', '        this.previousOverflow = document.body.style.overflow;\n        this.previousScroll = {left: window.scrollX, top: window.scrollY};')
+          replace("        this.dialog?.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true});", "        this.dialog?.querySelector<HTMLElement>('[data-dialog-heading]')?.focus({preventScroll: true});\n        this.restorePagePosition();")
+          replace("    componentWillUnmount() { this.dialog?.removeEventListener('cancel', this.cancel); this.dialog?.removeEventListener('keydown', this.trapTab); this.dialog?.close(); document.body.style.overflow = this.previousOverflow; this.lastFocus?.focus({ preventScroll: true }); }", """    componentWillUnmount() {
+                  this.dialog?.removeEventListener('cancel', this.cancel);
+                  this.dialog?.removeEventListener('keydown', this.trapTab);
+                  this.dialog?.close();
+                  document.body.style.overflow = this.previousOverflow;
+                  this.lastFocus?.focus({preventScroll: true});
+                  // Native dialog focus restoration must not move the continuous menu behind it.
+                  this.restorePagePosition();
+                  const position = {...this.previousScroll};
+                  requestAnimationFrame(() => {
+                      if (!document.querySelector('dialog[open]')) window.scrollTo({...position, behavior: 'instant'});
+                  });
+              }""")
+          p.write_text(s)
+          p=Path('tests/continuous-menu-browser.mjs');s=p.read_text()
+          replace("if(active)await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});", """if(active){
+           await active.evaluate(()=>({y:scrollY,active:document.querySelector('#category-bar [aria-current="location"]')?.getAttribute('aria-controls'),header:document.querySelector('.site-header')?.getBoundingClientRect().toJSON(),bar:document.getElementById('category-bar')?.getBoundingClientRect().toJSON(),sections:[...document.querySelectorAll('[data-menu-section]')].map(e=>({id:e.dataset.menuSection,top:e.getBoundingClientRect().top})),focus:document.activeElement?.outerHTML})).then(data=>fs.writeFileSync(dir+'/failure-geometry.json',JSON.stringify(data,null,2))).catch(()=>{});
+           await active.screenshot({path:dir+'/failure.png'}).catch(()=>{});
+          }""")
+          p.write_text(s)
+          p=Path(os.environ['RUNNER_TEMP']+'/continuous-paths.json');paths=json.loads(p.read_text());paths.append('src/components/primitives.tsx');p.write_text(json.dumps(paths))
+          PY
       - name: Locked dependencies, unit tests, TypeScript and production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
         run: |
+          set -o pipefail
           npm ci --no-audit --no-fund
           npm test | tee "$RUNNER_TEMP/unit-tests.log"
           npm run typecheck
