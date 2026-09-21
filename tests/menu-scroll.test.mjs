@@ -28,7 +28,7 @@ test('Above the menu keeps the first section active and the footer keeps the las
 test('The active section no longer remounts or filters the product list',()=>{
  const source=fs.readFileSync('src/components/menu-app.tsx','utf8');
  assert.ok(!source.includes('key={category}'));assert.ok(source.includes('data-menu-section={c.id}'));
- assert.ok(source.includes('featured.map(this.renderProduct)'));assert.ok(!source.includes("p.categoryId === category"));
+ assert.ok(!source.includes("p.categoryId === category"));
  assert.ok(source.includes("window.addEventListener('scroll', this.onMenuScroll, {passive: true})"));
  assert.ok(source.includes("window.removeEventListener('scroll', this.onMenuScroll)"));
 });

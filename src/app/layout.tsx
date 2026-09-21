@@ -4,12 +4,12 @@ import './globals.css';
 const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || 'fan-food.vercel.app';
 export const metadata: Metadata = {
     metadataBase: new URL(`https://${productionHost}`),
-    title: 'فن فود | من مطبخنا إلى لمّتكم',
+    title: 'فن فود | المنيو والطلب',
     description: 'منيو فن فود: دولمة، رز وولائم، كبة، معجنات وحلويات. اختار أكلاتك وأحجامها، واجمع طلبك بسلة واحدة وارسله عبر واتساب.',
     applicationName: 'فن فود',
     icons: { icon: '/icon.svg', apple: '/apple-icon.png' },
     manifest: '/manifest.webmanifest',
-    openGraph: { title: 'فن فود — أكل البيت، بروح اليوم.', description: 'اختار سفرتك من منيو فن فود واطلب مباشرة عبر واتساب.', locale: 'ar_IQ', type: 'website', images: [{ url: '/images/hero-v5/table-og.jpg', width: 1200, height: 630, alt: 'فن فود — من مطبخنا إلى لمّتكم' }] },
+    openGraph: { title: 'فن فود — المنيو والطلب', description: 'الأصناف والأحجام والأسعار، والطلب عبر واتساب.', locale: 'ar_IQ', type: 'website', images: [{ url: '/images/hero-v5/table-og.jpg', width: 1200, height: 630, alt: 'فن فود — المنيو والطلب' }] },
     robots: { index: true, follow: true },
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#1F3A29' };
@@ -23,5 +23,6 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
       <link rel="stylesheet" href="/menu-final-v4.css"/>
       <link rel="stylesheet" href="/menu-polish-v5.css"/>
       <link rel="stylesheet" href="/menu-scroll-v6.css"/>
+      <link rel="stylesheet" href="/menu-practical-v7.css"/>
     </head><body>{children}</body></html>;
 }

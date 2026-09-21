@@ -33,3 +33,4 @@ test('Reference and format are deterministic',()=>{assert.equal(makeReference(ne
 test('Full 73-option cart restores and produces no NaN',()=>{let c=[];for(const p of P)for(const v of p.variants)c=addLine(c,p,v.id,1,p.choices[0]||'');const restored=sanitizeCart(JSON.parse(JSON.stringify(c)),P);assert.equal(restored.length,73);assert.ok(Number.isSafeInteger(totals(restored,P).subtotal));assert.equal(expandCart(restored,P).length,73);});
 
 import "./enhancements.test.mjs";
+import "./source-menu.test.mjs";

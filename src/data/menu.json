@@ -3,57 +3,57 @@
     {
       "id": "dolma",
       "name": "الدولمة والمحاشي",
-      "description": "دولمة ومحاشي بطعم البيت.",
-      "image": "/images/menu-v4/p002.webp",
+      "description": "",
+      "image": "/images/menu-sections/dolma.webp",
       "icon": "leaf"
     },
     {
       "id": "rice",
       "name": "أطباق الرز والولائم",
-      "description": "تمن وبرياني وصواني للّمة.",
-      "image": "/images/menu-v4/p007.webp",
+      "description": "",
+      "image": "/images/menu-sections/biryani.webp",
       "icon": "bowl"
     },
     {
       "id": "kubba",
       "name": "الكبة",
-      "description": "كبة عراقية، كل نوع إله طعمه.",
-      "image": "/images/menu-v4/p018.webp",
+      "description": "",
+      "image": "/images/menu-sections/kibbeh.webp",
       "icon": "wheat"
     },
     {
       "id": "pastries",
       "name": "المعجنات والمقبلات",
-      "description": "معجنات ولقمات خفيفة.",
-      "image": "/images/menu-v4/p026.webp",
+      "description": "",
+      "image": "/images/menu-sections/pastries.webp",
       "icon": "bread"
     },
     {
       "id": "samosa",
       "name": "السمبوسة والبورك",
-      "description": "حشوات متنوعة وقرمشة خفيفة.",
-      "image": "/images/menu-v4/p028.webp",
+      "description": "",
+      "image": "/images/menu-sections/samosa.webp",
       "icon": "triangle"
     },
     {
       "id": "grills",
       "name": "اللحوم والمشاوي",
-      "description": "أصناف لحم ودجاج على ذوقك.",
-      "image": "/images/menu-v4/p041.webp",
+      "description": "",
+      "image": "/images/menu-sections/meat.webp",
       "icon": "fire"
     },
     {
       "id": "specials",
       "name": "الأطباق الخاصة",
-      "description": "أكلات تغيّر بيها سفرتك.",
-      "image": "/images/menu-v4/p047.webp",
+      "description": "",
+      "image": "/images/menu-sections/special.webp",
       "icon": "cloche"
     },
     {
       "id": "sweets",
       "name": "الحلويات والمخبوزات",
-      "description": "حلو وكليجة، ويّا استكان چاي.",
-      "image": "/images/menu-v4/p048.webp",
+      "description": "",
+      "image": "/images/menu-sections/desserts.webp",
       "icon": "cookie"
     }
   ],
@@ -502,23 +502,24 @@
     {
       "id": "p017",
       "categoryId": "kubba",
-      "name": "كبة التمن",
+      "name": "كبة بتيتة جاب",
       "image": "/images/menu-v4/p017.webp",
       "imageRepresentative": true,
-      "description": "كبة بعجينة تمن وحشوة لحم وبصل وبهارات.",
+      "description": "بطاطا محشية باللحم ومقلية.",
       "variants": [
         {
           "id": "v033",
           "label": "10 قطع",
           "price": 8000,
-          "sourceName": "كبة التمن",
+          "sourceName": "كبة بتيتة جاب",
           "sourceRow": 33
         }
       ],
       "note": "",
       "choices": [],
-      "searchText": "كبة التمن الكبة كبة بعجينة تمن وحشوة لحم وبصل وبهارات. كبة التمن 10 قطع",
-      "ingredientSource": "dish-type"
+      "searchText": "كبة بتيتة جاب بطاطا محشية باللحم ومقلية. بطاطا بتيتة جاب potato chap",
+      "ingredientSource": "dish-type",
+      "ingredientNote": ""
     },
     {
       "id": "p018",
@@ -585,25 +586,25 @@
     },
     {
       "id": "p021",
-      "categoryId": "pastries",
-      "name": "مثلثات فن فود",
+      "categoryId": "kubba",
+      "name": "كبة فن فود",
       "image": "/images/menu-v4/p021.webp",
       "imageRepresentative": true,
-      "description": "مثلثات عجين محشية بخلطة فن فود الخاصة.",
+      "description": "كبة فن فود — 10 قطع بالعبوة.",
       "variants": [
         {
           "id": "v037",
           "label": "10 قطع",
           "price": 12000,
-          "sourceName": "مثلثات فن فود",
+          "sourceName": "كبة فن فود",
           "sourceRow": 37
         }
       ],
       "note": "",
       "choices": [],
-      "searchText": "مثلثات فن فود المعجنات والمقبلات مثلثات عجين محشية بخلطة فن فود الخاصة. مثلثات فن فود 10 قطع",
+      "searchText": "كبة فن فود كبة فن فود — 10 قطع بالعبوة. ",
       "ingredientSource": "house-confirmation",
-      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
+      "ingredientNote": "تفاصيل الحشوة نأكدها وياك عند الطلب."
     },
     {
       "id": "p022",
@@ -713,7 +714,7 @@
     },
     {
       "id": "p027",
-      "categoryId": "pastries",
+      "categoryId": "samosa",
       "name": "المسخن",
       "image": "/images/menu-v4/p027.webp",
       "imageRepresentative": true,
@@ -724,7 +725,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "المسخن",
-          "sourceRow": 43
+          "sourceRow": 52
         }
       ],
       "note": "",
@@ -745,7 +746,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة لحم",
-          "sourceRow": 44
+          "sourceRow": 43
         }
       ],
       "note": "",
@@ -766,7 +767,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة دجاج بالخضار",
-          "sourceRow": 45
+          "sourceRow": 44
         }
       ],
       "note": "",
@@ -787,7 +788,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة خضار",
-          "sourceRow": 46
+          "sourceRow": 45
         }
       ],
       "note": "",
@@ -808,7 +809,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة جبن",
-          "sourceRow": 47
+          "sourceRow": 46
         }
       ],
       "note": "",
@@ -829,7 +830,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة سبانغ",
-          "sourceRow": 48
+          "sourceRow": 47
         }
       ],
       "note": "",
@@ -850,7 +851,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "سمبوسة مسخن",
-          "sourceRow": 49
+          "sourceRow": 48
         }
       ],
       "note": "",
@@ -871,7 +872,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "بورك لحم",
-          "sourceRow": 50
+          "sourceRow": 49
         }
       ],
       "note": "",
@@ -892,7 +893,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "بورك دجاج",
-          "sourceRow": 51
+          "sourceRow": 50
         }
       ],
       "note": "",
@@ -913,7 +914,7 @@
           "label": "10 قطع",
           "price": 8000,
           "sourceName": "بورك جبن",
-          "sourceRow": 52
+          "sourceRow": 51
         }
       ],
       "note": "",

@@ -23,7 +23,7 @@ async function fits(page,label){
 try {
  for(const [engine,width,height] of profiles){
   console.log(`START ${engine} ${width}x${height}`);
-  const browser=await engines[engine].launch({headless:true});
+  const browser=await engines[engine].launch({headless:true,...(engine==='chromium'&&process.env.CHROME_CHANNEL?{channel:process.env.CHROME_CHANNEL}:{})});
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,locale:'ar-IQ',reducedMotion:'reduce',hasTouch:width<1100});
   const page=await context.newPage(); activePage=page;
   page.setDefaultTimeout(15000);
@@ -32,8 +32,14 @@ try {
   page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)failedAssets.push(`${r.status()} ${r.url()}`);});
   const response=await page.goto(base,{waitUntil:'domcontentloaded',timeout:45000});
   assert.equal(response.status(),200);
-  await hydrate(page);await count(page,menu.products.length+6);
-  await page.locator('.category-nav').getByRole('button',{name:'كل المنيو',exact:true}).click();await count(page,menu.products.length+6);
+  await hydrate(page);await count(page,menu.products.length);
+  assert.equal(await page.locator('.category-directory button').count(),8);
+  assert.equal(await page.locator('.hero,.story-section,.featured-section').count(),0);
+  const initialIds=await page.locator('.product-card').evaluateAll(cards=>cards.map(c=>c.dataset.productId));
+  assert.equal(new Set(initialIds).size,menu.products.length,'Each item appears once');
+  await page.locator('.category-directory button').nth(2).click();
+  await page.waitForFunction(()=>document.querySelector('#category-bar button[aria-current="location"]')?.textContent==='الكبة');
+  await page.locator('.category-nav').getByRole('button',{name:menu.categories[0].name,exact:true}).click();await count(page,menu.products.length);
   assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
   assert.equal(await page.locator('html').getAttribute('lang'),'ar');
   await fits(page,'initial');
@@ -44,23 +50,31 @@ try {
   const nav=page.locator('.category-nav');
   for(const category of menu.categories){
    await nav.getByRole('button',{name:category.name,exact:true}).click();
-   await count(page,menu.products.length+6);
+   await count(page,menu.products.length);
    assert.equal(await page.locator(`#menu-section-${category.id} .product-card`).count(),menu.products.filter(p=>p.categoryId===category.id).length);
    await fits(page,category.name);
   }
-  await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
+  await nav.getByRole('button',{name:menu.categories[0].name,exact:true}).click();
   const search=page.getByRole('searchbox');
   // Search includes category names; use the full dish to test Arabic letter normalization.
   await search.fill('دولمه كورديه');
   await count(page,1);
   assert.equal(await page.locator('.product-card h3').textContent(),'دولمة كوردية');
   await search.fill('zxqnonexistent987');await count(page,0);
-  await search.fill('');await count(page,menu.products.length+6);
+  await search.fill('');await count(page,menu.products.length);
+  const quick=page.locator('[data-product-id="p017"]');
+  await quick.getByRole('button',{name:'أضف كبة بتيتة جاب',exact:true}).click();
+  await quick.locator('[data-action="increase"]').click();
+  assert.equal(await quick.locator('.inline-stepper-number').textContent(),'2');
+  await quick.locator('[data-action="decrease"]').click();
+  assert.equal(await quick.locator('.inline-stepper-number').textContent(),'1');
+  await quick.locator('[data-action="decrease"]').click();
+  await page.waitForFunction(()=>document.querySelector('.header-cart b')?.textContent==='0');
   const first=menu.products[0];
   await page.locator(`[data-product-id="${first.id}"] .favorite-button`).click();
   await nav.getByRole('button',{name:/^المفضلة/}).click();await count(page,1);
   assert.equal(await page.locator('.product-card').getAttribute('data-product-id'),first.id);
-  await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
+  await nav.getByRole('button',{name:menu.categories[0].name,exact:true}).click();
   await page.getByRole('combobox',{name:'ترتيب الأصناف'}).selectOption('low');
   const ids=await page.locator('.product-card').evaluateAll(cards=>cards.map(c=>c.dataset.productId));
   const prices=ids.map(id=>Math.min(...menu.products.find(p=>p.id===id).variants.map(v=>v.price)));
@@ -76,7 +90,7 @@ try {
   await product.waitFor({state:'detached'});
   await page.waitForFunction(()=>document.querySelector('.header-cart b')?.textContent==='2');
   await page.reload({waitUntil:'domcontentloaded'});await hydrate(page);
-  await nav.getByRole('button',{name:'كل المنيو',exact:true}).click();
+  await nav.getByRole('button',{name:menu.categories[0].name,exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('.header-cart b')?.textContent==='2');
   const pasta=menu.products.find(p=>p.choices.length);
   await page.locator(`[data-product-id="${pasta.id}"] .add-button`).click();
@@ -118,7 +132,7 @@ try {
   const stored=await page.evaluate(()=>localStorage.getItem('fanfood:cart:v1'));
   assert.ok(stored&&!stored.includes('اختبار الواجهة'),'Customer data not stored');
   if(engine==='chromium'&&width===390){
-   for(const asset of [...new Set(menu.products.map(p=>p.image)), '/images/logo.png','/images/hero.webp','/images/brand-pattern.webp','/icon.svg','/manifest.webmanifest']){
+   for(const asset of [...new Set(menu.products.map(p=>p.image)), '/images/logo.png',...menu.categories.map(c=>c.image),'/icon.svg','/manifest.webmanifest']){
     const r=await context.request.get(new URL(asset,base).href);assert.equal(r.status(),200,asset);assert.ok((await r.body()).length>0,asset);
    }
   }

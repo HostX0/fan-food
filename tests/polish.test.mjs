@@ -24,6 +24,3 @@ test('No separate area or landmark inputs remain',()=>{
 test('Navigation uses an original-position anchor and horizontal-only active-tab reveal',()=>{
  const src=fs.readFileSync('src/components/menu-app.tsx','utf8');assert.ok(src.includes('id="category-start"'));assert.ok(src.includes('id="category-bar"'));assert.ok(src.includes('bar.scrollBy'));assert.ok(src.includes('ResizeObserver'));assert.ok(!src.includes("getElementById('menu')?.scrollIntoView"));
 });
-test('Hero is a responsive dedicated full-bleed image and respects reduced motion',()=>{
- const src=fs.readFileSync('src/components/menu-app.tsx','utf8');const css=fs.readFileSync('public/menu-polish-v5.css','utf8');assert.ok(src.includes('/images/hero-v5/table-1440.webp'));assert.ok(src.includes('data-testid="hero-photo"'));assert.ok(css.includes('object-fit:cover'));assert.ok(css.includes('prefers-reduced-motion:reduce'));
-});

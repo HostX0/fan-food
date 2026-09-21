@@ -42,12 +42,7 @@ jobs:
           export PLAYWRIGHT_REQUIRE_FROM="$RUNNER_TEMP/qa/package.json"
           PORT=3000 node scripts/serve.mjs out > "$RUNNER_TEMP/serve.log" 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000 >/dev/null && break || sleep 1; done
-          QUICK_SMOKE=1 REPORT_DIR=test-results/local BASE_URL=http://127.0.0.1:3000 node tests/checkout-enhancements.mjs
-          REPORT_DIR=test-results/local-style BASE_URL=http://127.0.0.1:3000 node tests/production-style.mjs
-          REPORT_DIR=test-results/local-quick BASE_URL=http://127.0.0.1:3000 node tests/quick-controls.mjs
-          REPORT_DIR=test-results/local-final BASE_URL=http://127.0.0.1:3000 node tests/final-menu-browser.mjs
-          QUICK_SMOKE=1 REPORT_DIR=test-results/local-polish BASE_URL=http://127.0.0.1:3000 node tests/polish-browser.mjs
-          REPORT_DIR=test-results/local-continuous BASE_URL=http://127.0.0.1:3000 node tests/continuous-menu-browser.mjs
+          REPORT_DIR=test-results/local BASE_URL=http://127.0.0.1:3000 node tests/browser-smoke.mjs
       - name: Verify updated Vercel production, not only a local preview
         env:
           BASE_URL: https://fan-food.vercel.app
@@ -55,16 +50,11 @@ jobs:
           export PLAYWRIGHT_REQUIRE_FROM="$RUNNER_TEMP/qa/package.json"
           ready=0
           for i in $(seq 1 60); do
-            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'continuous-scroll-20260920-v6'; then ready=1; break; fi
+            if curl -fsSL "https://fan-food.vercel.app/release.json?verify=$(date +%s)" | grep -q 'practical-menu-20260921-v7'; then ready=1; break; fi
             sleep 5
           done
           test "$ready" = 1 || { echo 'New production deployment is not ready'; exit 1; }
-          QUICK_SMOKE=1 REPORT_DIR=test-results/live-polish node tests/polish-browser.mjs
-          QUICK_SMOKE=1 REPORT_DIR=test-results/live-continuous node tests/continuous-menu-browser.mjs
-          REPORT_DIR=test-results/live node tests/checkout-enhancements.mjs
-          REPORT_DIR=test-results/live-style node tests/production-style.mjs
-          QUICK_SMOKE=1 REPORT_DIR=test-results/live-quick node tests/quick-controls.mjs
-          QUICK_SMOKE=1 REPORT_DIR=test-results/live-final node tests/final-menu-browser.mjs
+          REPORT_DIR=test-results/live node tests/browser-smoke.mjs
       - name: Package verified repository source
         run: git archive --format=zip --output="$RUNNER_TEMP/FanFood_Production_Source.zip" HEAD
       - name: Save regression evidence
