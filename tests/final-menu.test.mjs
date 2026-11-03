@@ -4,8 +4,8 @@ import fs from 'node:fs';
 import {productImage,smallImage,productSrcSet} from '../src/lib/product-media.mjs';
 import {searchProducts} from '../src/lib/search.mjs';
 const menu=JSON.parse(fs.readFileSync('src/data/menu.json','utf8'));
-test('All 54 dishes use unified, distinct, local responsive images and informative descriptions',()=>{
- assert.equal(menu.products.length,54);assert.equal(new Set(menu.products.map(p=>p.image)).size,54);
+test('All 52 dishes use unified, distinct, local responsive images and informative descriptions',()=>{
+ assert.equal(menu.products.length,52);assert.equal(new Set(menu.products.map(p=>p.image)).size,52);
  for(const p of menu.products){
   assert.match(p.image,/^\/images\/menu-v4\/p\d{3}\.webp$/);assert.equal(p.imageRepresentative,true);
   assert.ok(p.description.length>=18&&p.description.length<115,p.id);assert.ok(!p.description.includes('اختار الحجم'));
@@ -14,7 +14,7 @@ test('All 54 dishes use unified, distinct, local responsive images and informati
  }
 });
 test('House-specific recipes are marked for restaurant confirmation rather than guessed',()=>{
- for(const id of ['p021','p026','p039','p045','p046','p048','p055','p057','p058']){const p=menu.products.find(p=>p.id===id);assert.equal(p.ingredientSource,'house-confirmation');assert.ok(p.ingredientNote.includes('نأكد'));}
+ for(const id of ['p021','p026','p039','p048','p055','p057','p058']){const p=menu.products.find(p=>p.id===id);assert.equal(p.ingredientSource,'house-confirmation');assert.ok(p.ingredientNote.includes('نأكد'));}
 });
 test('Kubba sour stew and jareesh identities are distinct and searchable',()=>{
  const sour=menu.products.find(p=>p.id==='p020'),wheat=menu.products.find(p=>p.id==='p018');
@@ -28,7 +28,7 @@ test('Pasta changes image by meat or chicken without changing its variant or pri
  assert.equal(productImage(p,'toString'),p.image);assert.equal(productImage(p,'unknown'),p.image);
  assert.ok(fs.existsSync('public'+smallImage(productImage(p,'دجاج'))));assert.ok(productSrcSet(p,'دجاج').includes('480w'));
 });
-test('Names, 68 price options and Iraqi checkout remain intact',()=>{
- assert.equal(menu.products.reduce((n,p)=>n+p.variants.length,0),68);assert.equal(menu.categories.length,8);
+test('Names, 66 price options and Iraqi checkout remain intact',()=>{
+ assert.equal(menu.products.reduce((n,p)=>n+p.variants.length,0),66);assert.equal(menu.categories.length,8);
 
 });

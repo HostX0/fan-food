@@ -83,7 +83,7 @@
         {
           "id": "v004",
           "label": "60 حبة",
-          "price": 23000,
+          "price": 24000,
           "sourceName": "ورق عنب",
           "sourceRow": 4
         }
@@ -978,50 +978,6 @@
       "choices": [],
       "searchText": "سكالوب دجاج الأطباق الخاصة شرائح صدر دجاج، مغلّفة بالبقسماط ومحمّرة. سكالوب دجاج 1/2 كيلو",
       "ingredientSource": "dish-type"
-    },
-    {
-      "id": "p045",
-      "categoryId": "specials",
-      "name": "أفخاذ كاذبة",
-      "image": "/images/menu-v4/p045.webp",
-      "imageRepresentative": true,
-      "description": "عجينة محشية بغطاء مقرمش، على شكل أفخاذ صغيرة.",
-      "variants": [
-        {
-          "id": "v061",
-          "label": "10 قطع",
-          "price": 8000,
-          "sourceName": "أفخاذ كاذبة",
-          "sourceRow": 61
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "أفخاذ كاذبة الأطباق الخاصة عجينة محشية بغطاء مقرمش، على شكل أفخاذ صغيرة. أفخاذ كاذبة 10 قطع",
-      "ingredientSource": "house-confirmation",
-      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
-    },
-    {
-      "id": "p046",
-      "categoryId": "specials",
-      "name": "بقجة فن فود",
-      "image": "/images/menu-v4/p046.webp",
-      "imageRepresentative": true,
-      "description": "بقج عجين صغيرة بحشوة فن فود الخاصة.",
-      "variants": [
-        {
-          "id": "v062",
-          "label": "10 قطع",
-          "price": 8000,
-          "sourceName": "بقجة فن فود",
-          "sourceRow": 62
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "بقجة فن فود الأطباق الخاصة بقج عجين صغيرة بحشوة فن فود الخاصة. بقجة فن فود 10 قطع",
-      "ingredientSource": "house-confirmation",
-      "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
       "id": "p047",

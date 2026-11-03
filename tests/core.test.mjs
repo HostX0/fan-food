@@ -9,7 +9,7 @@ import {sanitizeCart,addLine,totals,expandCart,lineKey,normalizePhone,normalizeS
 const menu=JSON.parse(readFileSync(new URL('../src/data/menu.json',import.meta.url),'utf8'));
 const P=menu.products;const dolma=P.find(p=>p.name==='دولمة');const pasta=P.find(p=>p.name.startsWith('معكرونة'));
 const customer={name:'زبون اختبار',phone:'07700000000',city:'بغداد',address:'عنوان تجريبي واضح',note:''};
-test('All 68 source price options, 54 products, eight categories',()=>{assert.equal(P.reduce((n,p)=>n+p.variants.length,0),68);assert.equal(P.length,54);assert.equal(menu.categories.length,8);assert.equal(new Set(P.map(p=>p.id)).size,P.length);assert.equal(new Set(P.flatMap(p=>p.variants.map(v=>v.id))).size,68);});
+test('All 66 source price options, 52 products, eight categories',()=>{assert.equal(P.reduce((n,p)=>n+p.variants.length,0),66);assert.equal(P.length,52);assert.equal(menu.categories.length,8);assert.equal(new Set(P.map(p=>p.id)).size,P.length);assert.equal(new Set(P.flatMap(p=>p.variants.map(v=>v.id))).size,66);});
 test('Every variant has a positive integer IQD price and original row',()=>{for(const p of P)for(const v of p.variants){assert.ok(Number.isInteger(v.price)&&v.price>0);assert.ok(v.sourceRow>=2&&v.sourceRow<=75);}});
 test('Catalog asset references resolve',()=>{for(const p of P){assert.doesNotThrow(()=>readFileSync(new URL('../public'+p.image,import.meta.url)));}});
 test('Create line and calculate integer subtotal',()=>{const cart=addLine([],dolma,dolma.variants[0].id,2);assert.deepEqual(totals(cart,P),{count:2,subtotal:36000});});
@@ -30,7 +30,7 @@ test('Generated WhatsApp message contains items, data, quantity, subtotal and di
 test('WhatsApp URL encoding is a lossless round trip',()=>{const m=buildMessage(addLine([],dolma,dolma.variants[0].id,1),P,customer,'FF-TEST');const u=new URL(whatsappUrl('9647737773444',m));assert.equal(u.hostname,'wa.me');assert.equal(u.pathname,'/9647737773444');assert.equal(u.searchParams.get('text'),m);});
 test('Empty and invalid orders cannot be composed',()=>{assert.throws(()=>buildMessage([],P,customer,'F'),/EMPTY_CART/);assert.throws(()=>buildMessage(addLine([],dolma,dolma.variants[0].id,1),P,{...customer,phone:'bad'},'F'),/INVALID_CUSTOMER/);});
 test('Reference and format are deterministic',()=>{assert.equal(makeReference(new Date('2026-09-17T12:00:00Z'),0),'FF-20260917-0000');assert.equal(formatPrice(18000),'18,000');});
-test('Full 68-option cart restores and produces no NaN',()=>{let c=[];for(const p of P)for(const v of p.variants)c=addLine(c,p,v.id,1,p.choices[0]||'');const restored=sanitizeCart(JSON.parse(JSON.stringify(c)),P);assert.equal(restored.length,68);assert.ok(Number.isSafeInteger(totals(restored,P).subtotal));assert.equal(expandCart(restored,P).length,68);});
+test('Full 66-option cart restores and produces no NaN',()=>{let c=[];for(const p of P)for(const v of p.variants)c=addLine(c,p,v.id,1,p.choices[0]||'');const restored=sanitizeCart(JSON.parse(JSON.stringify(c)),P);assert.equal(restored.length,66);assert.ok(Number.isSafeInteger(totals(restored,P).subtotal));assert.equal(expandCart(restored,P).length,66);});
 
 import "./enhancements.test.mjs";
 import "./source-menu.test.mjs";
