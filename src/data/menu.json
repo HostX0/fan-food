@@ -39,14 +39,14 @@
       "id": "grills",
       "name": "اللحوم والمشاوي",
       "description": "",
-      "image": "/images/menu-sections/meat.webp",
+      "image": "/images/menu-nov2026/meat.webp",
       "icon": "fire"
     },
     {
       "id": "specials",
       "name": "الأطباق الخاصة",
       "description": "",
-      "image": "/images/menu-sections/special.webp",
+      "image": "/images/menu-nov2026/special.webp",
       "icon": "cloche"
     },
     {
@@ -251,14 +251,14 @@
         {
           "id": "v016",
           "label": "وسط • 4-5 أشخاص",
-          "price": 20000,
+          "price": 22000,
           "sourceName": "صينية برياني وسط",
           "sourceRow": 16
         },
         {
           "id": "v017",
           "label": "كبيرة • 6-7 أشخاص",
-          "price": 25000,
+          "price": 27000,
           "sourceName": "صينية برياني كبيرة",
           "sourceRow": 17
         }
@@ -381,48 +381,6 @@
       "ingredientSource": "dish-type"
     },
     {
-      "id": "p012",
-      "categoryId": "rice",
-      "name": "كبسة خليجية بالدجاج",
-      "image": "/images/menu-v4/p012.webp",
-      "imageRepresentative": true,
-      "description": "تمن بصلصة طماطة ولومي وبهارات كبسة، وياه دجاج.",
-      "variants": [
-        {
-          "id": "v026",
-          "label": "الطبق",
-          "price": 25000,
-          "sourceName": "كبسة خليجية بالدجاج",
-          "sourceRow": 26
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "كبسة خليجية بالدجاج أطباق الرز والولائم تمن بصلصة طماطة ولومي وبهارات كبسة، وياه دجاج. كبسة خليجية بالدجاج الطبق",
-      "ingredientSource": "dish-type"
-    },
-    {
-      "id": "p013",
-      "categoryId": "rice",
-      "name": "بخاري عماني بالدجاج",
-      "image": "/images/menu-v4/p013.webp",
-      "imageRepresentative": true,
-      "description": "تمن بالجزر والزبيب وبهارات البخاري، وياه دجاج.",
-      "variants": [
-        {
-          "id": "v027",
-          "label": "الطبق",
-          "price": 25000,
-          "sourceName": "بخاري عماني بالدجاج",
-          "sourceRow": 27
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "بخاري عماني بالدجاج أطباق الرز والولائم تمن بالجزر والزبيب وبهارات البخاري، وياه دجاج. بخاري عماني بالدجاج الطبق",
-      "ingredientSource": "dish-type"
-    },
-    {
       "id": "p014",
       "categoryId": "rice",
       "name": "قوزي لحم",
@@ -433,16 +391,9 @@
         {
           "id": "v028",
           "label": "1 كيلو",
-          "price": 40000,
+          "price": 45000,
           "sourceName": "قوزي لحم",
           "sourceRow": 28
-        },
-        {
-          "id": "v029",
-          "label": "2 كيلو",
-          "price": 75000,
-          "sourceName": "قوزي لحم",
-          "sourceRow": 29
         }
       ],
       "note": "",
@@ -659,7 +610,7 @@
         {
           "id": "v040",
           "label": "10 قطع",
-          "price": 8000,
+          "price": 9000,
           "sourceName": "ميني بيتزا",
           "sourceRow": 40
         }
@@ -987,27 +938,6 @@
       "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
     },
     {
-      "id": "p040",
-      "categoryId": "grills",
-      "name": "كفتة فن فود محشية بالجبن",
-      "image": "/images/menu-v4/p040.webp",
-      "imageRepresentative": true,
-      "description": "كفتة لحم متبّلة، محشية جبن من الداخل.",
-      "variants": [
-        {
-          "id": "v056",
-          "label": "1 كيلو",
-          "price": 30000,
-          "sourceName": "كفتة فن فود محشية بالجبن",
-          "sourceRow": 56
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "كفتة فن فود محشية بالجبن اللحوم والمشاوي كفتة لحم متبّلة، محشية جبن من الداخل. كفتة فن فود محشية بالجبن 1 كيلو",
-      "ingredientSource": "dish-type"
-    },
-    {
       "id": "p041",
       "categoryId": "grills",
       "name": "كباب طاوة",
@@ -1029,48 +959,6 @@
       "ingredientSource": "dish-type"
     },
     {
-      "id": "p042",
-      "categoryId": "grills",
-      "name": "كباب عروق",
-      "image": "/images/menu-v4/p042.webp",
-      "imageRepresentative": true,
-      "description": "لحم وبصل وخضرة ويا طحين، مقلي ومقرمش.",
-      "variants": [
-        {
-          "id": "v058",
-          "label": "1/2 كيلو",
-          "price": 10000,
-          "sourceName": "كباب عروق",
-          "sourceRow": 58
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "كباب عروق اللحوم والمشاوي لحم وبصل وخضرة ويا طحين، مقلي ومقرمش. كباب عروق 1/2 كيلو",
-      "ingredientSource": "dish-type"
-    },
-    {
-      "id": "p043",
-      "categoryId": "specials",
-      "name": "سكالوب لحم",
-      "image": "/images/menu-v4/p043.webp",
-      "imageRepresentative": true,
-      "description": "شرائح لحم رقيقة، مغلّفة بالبقسماط ومحمّرة.",
-      "variants": [
-        {
-          "id": "v059",
-          "label": "1/2 كيلو",
-          "price": 16000,
-          "sourceName": "سكالوب لحم",
-          "sourceRow": 59
-        }
-      ],
-      "note": "",
-      "choices": [],
-      "searchText": "سكالوب لحم الأطباق الخاصة شرائح لحم رقيقة، مغلّفة بالبقسماط ومحمّرة. سكالوب لحم 1/2 كيلو",
-      "ingredientSource": "dish-type"
-    },
-    {
       "id": "p044",
       "categoryId": "specials",
       "name": "سكالوب دجاج",
@@ -1081,7 +969,7 @@
         {
           "id": "v060",
           "label": "1/2 كيلو",
-          "price": 8000,
+          "price": 9000,
           "sourceName": "سكالوب دجاج",
           "sourceRow": 60
         }
@@ -1174,7 +1062,7 @@
         {
           "id": "v064",
           "label": "1 كيلو",
-          "price": 12000,
+          "price": 15000,
           "sourceName": "كليجة مشكل",
           "sourceRow": 64
         }
@@ -1196,7 +1084,7 @@
         {
           "id": "v065",
           "label": "1 كيلو",
-          "price": 10000,
+          "price": 12000,
           "sourceName": "كليجة تمر",
           "sourceRow": 65
         }
@@ -1217,7 +1105,7 @@
         {
           "id": "v066",
           "label": "1 كيلو",
-          "price": 10000,
+          "price": 12000,
           "sourceName": "كليجة حلقوم",
           "sourceRow": 66
         }
@@ -1238,7 +1126,7 @@
         {
           "id": "v067",
           "label": "1 كيلو",
-          "price": 14000,
+          "price": 16000,
           "sourceName": "كليجة جوز",
           "sourceRow": 67
         }
@@ -1259,7 +1147,7 @@
         {
           "id": "v068",
           "label": "1 كيلو",
-          "price": 16000,
+          "price": 18000,
           "sourceName": "كليجة فستق حلبي",
           "sourceRow": 68
         }
@@ -1280,7 +1168,7 @@
         {
           "id": "v069",
           "label": "1 كيلو",
-          "price": 15000,
+          "price": 18000,
           "sourceName": "لفة خميره بالجبن",
           "sourceRow": 69
         }
@@ -1301,7 +1189,7 @@
         {
           "id": "v070",
           "label": "1 كيلو",
-          "price": 10000,
+          "price": 13000,
           "sourceName": "لفة خميرة سادة",
           "sourceRow": 70
         }
@@ -1322,7 +1210,7 @@
         {
           "id": "v071",
           "label": "1 كيلو",
-          "price": 15000,
+          "price": 18000,
           "sourceName": "لفة خميرة فن فود",
           "sourceRow": 71
         }
@@ -1332,6 +1220,27 @@
       "searchText": "لفة خميرة فن فود الحلويات والمخبوزات لفات بعجينة خميرة طرية، بوصفة فن فود الخاصة. لفة خميرة فن فود 1 كيلو",
       "ingredientSource": "house-confirmation",
       "ingredientNote": "تفاصيل الخلطة والحشوات نأكدها وياك عالواتساب."
+    },
+    {
+      "id": "p059",
+      "categoryId": "sweets",
+      "name": "لفة خميرة بالنستلة",
+      "image": "/images/menu-v4/p059.webp",
+      "imageRepresentative": true,
+      "description": "لفة خميرة طرية بحشوة النستلة.",
+      "variants": [
+        {
+          "id": "v075",
+          "label": "1 كيلو",
+          "price": 18000,
+          "sourceName": "لفة خميرة بالنستلة",
+          "sourceRow": 75
+        }
+      ],
+      "note": "",
+      "choices": [],
+      "searchText": "لفة خميرة بالنستلة لفة خميرة طرية بحشوة النستلة. حلويات مخبوزات",
+      "ingredientSource": "dish-type"
     },
     {
       "id": "p056",
